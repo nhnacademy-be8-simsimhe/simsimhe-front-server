@@ -11,6 +11,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        port: [8080, 8081]
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 21
