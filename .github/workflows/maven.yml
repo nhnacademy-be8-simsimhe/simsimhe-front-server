@@ -56,6 +56,20 @@ jobs:
         target: "~/"
         rm: false
 
+
+    - name: Remove port from load balancer
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_IP }}
+        username: ${{ secrets.SSH_ID }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          echo "Removing port ${{ matrix.port }} from load balancer"
+          sed -i '/localhost:${{ matrix.port }}/d' /etc/nginx/nginx.conf
+          sudo nginx -t
+          sudo systemctl reload nginx
+
     - name: execute shell script
       uses: appleboy/ssh-action@master
       with:
@@ -65,3 +79,18 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script_stop: true
         script: "chmod +x ~/script/startup.sh"
+
+
+
+    - name: Add port from load balancer
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_IP }}
+        username: ${{ secrets.SSH_ID }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          echo "Adding port ${{ matrix.port }} back to load balancer"
+          sed -i '/upstream backend {/a \    server localhost:${{ matrix.port }};' /etc/nginx/nginx.conf
+          sudo nginx -t
+          sudo systemctl reload nginx
