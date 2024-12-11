@@ -39,7 +39,6 @@ jobs:
       ssh_ip: ${{ secrets.SSH_IP }}
       ssh_port: ${{ secrets.SSH_PORT }}
       ssh_id: ${{ secrets.SSH_ID }}
-      
 
   deploy_8081:
     needs: deploy_8080
@@ -47,6 +46,6 @@ jobs:
     with:
       port: "8081"
       ssh_key: ${{ secrets.SSH_KEY }}
-      ssh_id: ${{ secrets.SSH_ID }}
       ssh_ip: ${{ secrets.SSH_IP }}
       ssh_port: ${{ secrets.SSH_PORT }}
+      ssh_id: ${{ secrets.SSH_ID }}
