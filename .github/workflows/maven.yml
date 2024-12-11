@@ -32,7 +32,7 @@ jobs:
 
   deploy_8080:
     needs: common_task
-    uses: front-server/.github/workflows/common.yaml@maven  # 정확한 경로 지정
+    uses: front-server/.github/workflows/common.yaml@main  # 정확한 경로 지정
     with:
       port: "8080"
       ssh_key: ${{ secrets.SSH_KEY }}
