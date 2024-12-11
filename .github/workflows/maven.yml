@@ -19,7 +19,7 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-      - name: upload file
+      - name: Upload file
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_IP }}
@@ -34,10 +34,10 @@ jobs:
     needs: common_task
     runs-on: ubuntu-latest
     steps:
-    - uses: nhnacademy-be8-simsimhe/front-server/.github/workflows/common.yaml@main  # 정확한 경로 지정
-      with:
-        port: "8080"
-        ssh_key: ${{ secrets.SSH_KEY }}
-        ssh_id: ${{ secrets.SSH_ID }}
-        ssh_ip: ${{ secrets.SSH_IP }}
-        ssh_port: ${{ secrets.SSH_PORT }}
+      - uses: nhnacademy-be8-simsimhe/front-server/.github/workflows/common.yaml@main
+        with:
+          port: "8080"
+          ssh_key: ${{ secrets.SSH_KEY }}
+          ssh_id: ${{ secrets.SSH_ID }}
+          ssh_ip: ${{ secrets.SSH_IP }}
+          ssh_port: ${{ secrets.SSH_PORT }}
