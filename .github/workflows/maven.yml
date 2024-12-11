@@ -34,7 +34,7 @@ jobs:
     needs: common_task
     runs-on: ubuntu-latest
     steps:
-      - name: Set port
+      - name: set port 
         run: |
           sed -i "s/{PORT}/8080/g" script/deploy.sh
 
