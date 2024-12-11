@@ -12,47 +12,40 @@ on:
       ssh_id:
         required: true
         type: string
-    
       ssh_ip:
         required: true
         type: string
-        
       ssh_port:
         required: true
         type: string
-
-
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: set port 
-      run: |
-        sed -i "s/{PORT}/${{inputs.port}}/g" script/deploy.sh
+      - name: Set port
+        run: |
+          sed -i "s/{PORT}/${{ inputs.port }}/g" script/deploy.sh
 
+      - name: Upload script file
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ inputs.ssh_ip }}
+          username: ${{ inputs.ssh_id }}
+          key: ${{ inputs.ssh_key }}
+          port: ${{ inputs.ssh_port }}
+          source: "script/deploy.sh"
+          target: "~/"
+          rm: false
 
-    - name: upload script file
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ inputs.ssh_ip }}
-        username: ${{ inputs.ssh_id }}
-        key: ${{ inputs.ssh_key }}
-        port: ${{ inputs.ssh_port }}
-        source: "script/deploy.sh"
-        target: "~/"
-        rm: false
-
-
-
-    - name: execute shell script
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ inputs.ssh_ip }}
-        username: ${{ inputs.ssh_id }}
-        key: ${{ inputs.ssh_key }}
-        port: ${{ inputs.ssh_port }}
-        script_stop: true
-        script: "chmod +x ~/script/deploy.sh"
-    
+      - name: Execute shell script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ inputs.ssh_ip }}
+          username: ${{ inputs.ssh_id }}
+          key: ${{ inputs.ssh_key }}
+          port: ${{ inputs.ssh_port }}
+          script_stop: true
+          script: |
+            chmod +x ~/script/deploy.sh
+            ./script/deploy.sh
