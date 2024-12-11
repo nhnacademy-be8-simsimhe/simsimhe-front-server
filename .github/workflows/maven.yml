@@ -32,7 +32,7 @@ jobs:
 
   deploy_8080:
     needs: common_task
-    uses: .github/workflows/common.yaml@main
+    uses: ./.github/workflows/common.yaml
     with:
       port: "8080"
       ssh_key: ${{ secrets.SSH_KEY }}
