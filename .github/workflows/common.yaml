@@ -1,0 +1,42 @@
+name: Common Workflow
+
+on:
+  workflow_call:
+    inputs:
+      port:
+        required: true
+        type: string
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: set port 
+      run: |
+        sed -i "s/{PORT}/${{inputs.port}}/g" script/deploy.sh
+
+
+    - name: upload script file
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SSH_IP }}
+        username: ${{ secrets.SSH_ID }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        source: "script/deploy.sh"
+        target: "~/"
+        rm: false
+
+
+
+    - name: execute shell script
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_IP }}
+        username: ${{ secrets.SSH_ID }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script_stop: true
+        script: "chmod +x ~/script/deploy.sh"
+    
