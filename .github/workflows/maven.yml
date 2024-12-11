@@ -35,7 +35,7 @@ jobs:
     uses: nhnacademy-be8-simsimhe/front-server/.github/workflows/common.yaml@main
     with:
       port: "8080"
-      ssh_key: ${{ secrets.SSH_KEY }}
-      ssh_id: ${{ secrets.SSH_ID }}
       ssh_ip: ${{ secrets.SSH_IP }}
+      ssh_id: ${{ secrets.SSH_ID }}
+      ssh_key: ${{ secrets.SSH_KEY }}
       ssh_port: ${{ secrets.SSH_PORT }}
