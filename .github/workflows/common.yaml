@@ -6,6 +6,21 @@ on:
       port:
         required: true
         type: string
+      ssh_key:
+        required: true
+        type: string
+      ssh_id:
+        required: true
+        type: string
+    
+      ssh_ip:
+        required: true
+        type: string
+        
+      ssh_port:
+        required: true
+        type: string
+
 
 
 jobs:
@@ -21,10 +36,10 @@ jobs:
     - name: upload script file
       uses: appleboy/scp-action@v0.1.7
       with:
-        host: ${{ secrets.SSH_IP }}
-        username: ${{ secrets.SSH_ID }}
-        key: ${{ secrets.SSH_KEY }}
-        port: ${{ secrets.SSH_PORT }}
+        host: ${{ inputs.SSH_IP }}
+        username: ${{ inputs.SSH_ID }}
+        key: ${{ inputs.SSH_KEY }}
+        port: ${{ inputs.SSH_PORT }}
         source: "script/deploy.sh"
         target: "~/"
         rm: false
@@ -34,10 +49,10 @@ jobs:
     - name: execute shell script
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.SSH_IP }}
-        username: ${{ secrets.SSH_ID }}
-        key: ${{ secrets.SSH_KEY }}
-        port: ${{ secrets.SSH_PORT }}
+        host: ${{ inputs.SSH_IP }}
+        username: ${{ inputs.SSH_ID }}
+        key: ${{ inputs.SSH_KEY }}
+        port: ${{ inputs.SSH_PORT }}
         script_stop: true
         script: "chmod +x ~/script/deploy.sh"
     
