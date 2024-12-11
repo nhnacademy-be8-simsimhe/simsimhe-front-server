@@ -10,6 +10,10 @@ jobs:
   common_task:
     runs-on: ubuntu-latest
     steps:
+    
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+      
       - name: upload file
         uses: appleboy/scp-action@v0.1.7
         with:
