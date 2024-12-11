@@ -21,7 +21,7 @@ jobs:
           target: "~/"
           rm: false
 
-          
+
   deploy_8080:
     needs: common_task
     uses: ./.github/workflows/common.yaml
