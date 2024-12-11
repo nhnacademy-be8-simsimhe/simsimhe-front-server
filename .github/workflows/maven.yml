@@ -32,12 +32,10 @@ jobs:
 
   deploy_8080:
     needs: common_task
-    runs-on: ubuntu-latest
-    steps:
-      - uses: nhnacademy-be8-simsimhe/front-server/.github/workflows/common.yaml@main
-        with:
-          port: "8080"
-          ssh_key: ${{ secrets.SSH_KEY }}
-          ssh_id: ${{ secrets.SSH_ID }}
-          ssh_ip: ${{ secrets.SSH_IP }}
-          ssh_port: ${{ secrets.SSH_PORT }}
+    uses: nhnacademy-be8-simsimhe/front-server/.github/workflows/common.yaml@main
+    with:
+      port: "8080"
+      ssh_key: ${{ secrets.SSH_KEY }}
+      ssh_id: ${{ secrets.SSH_ID }}
+      ssh_ip: ${{ secrets.SSH_IP }}
+      ssh_port: ${{ secrets.SSH_PORT }}
