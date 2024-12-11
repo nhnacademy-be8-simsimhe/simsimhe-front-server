@@ -34,7 +34,7 @@ jobs:
     needs: common_task
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/common.yaml
+      - uses: ./common.yaml
         with:
           port: "8080"
           ssh_key: ${{ secrets.SSH_KEY }}
