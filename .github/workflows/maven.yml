@@ -34,8 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: common_task
     steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/common.yaml
+      - uses: nhnacademy-be8-simsimhe/front-server/.github/workflows/common.yaml@main
         with:
           port: "8080"
           ssh_key: ${{ secrets.SSH_KEY }}
