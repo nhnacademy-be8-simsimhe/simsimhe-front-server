@@ -32,10 +32,32 @@ jobs:
 
   deploy_8080:
     needs: common_task
-    uses: nhnacademy-be8-simsimhe/front-server/.github/workflows/common.yaml@main
-    with:
-      port: "8080"
-      ssh_ip: ${{ secrets.SSH_IP }}
-      ssh_id: ${{ secrets.SSH_ID }}
-      ssh_key: ${{ secrets.SSH_KEY }}
-      ssh_port: ${{ secrets.SSH_PORT }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set port
+        run: |
+          sed -i "s/{PORT}/${{ inputs.port }}/g" script/deploy.sh
+
+      - name: Upload script file
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_IP }}
+          username: ${{ secrets.SSH_ID }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "script/deploy.sh"
+          target: "~/"
+          rm: false
+
+          
+      - name: Execute shell script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_IP }}
+          username: ${{ secrets.SSH_ID }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script_stop: true
+          script: |
+            chmod +x ~/script/deploy.sh
+            ./script/deploy.sh
