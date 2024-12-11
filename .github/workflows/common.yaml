@@ -36,10 +36,10 @@ jobs:
     - name: upload script file
       uses: appleboy/scp-action@v0.1.7
       with:
-        host: ${{ inputs.SSH_IP }}
-        username: ${{ inputs.SSH_ID }}
-        key: ${{ inputs.SSH_KEY }}
-        port: ${{ inputs.SSH_PORT }}
+        host: ${{ inputs.ssh_ip }}
+        username: ${{ inputs.ssh_id }}
+        key: ${{ inputs.ssh_key }}
+        port: ${{ inputs.ssh_port }}
         source: "script/deploy.sh"
         target: "~/"
         rm: false
@@ -49,10 +49,10 @@ jobs:
     - name: execute shell script
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ inputs.SSH_IP }}
-        username: ${{ inputs.SSH_ID }}
-        key: ${{ inputs.SSH_KEY }}
-        port: ${{ inputs.SSH_PORT }}
+        host: ${{ inputs.ssh_ip }}
+        username: ${{ inputs.ssh_id }}
+        key: ${{ inputs.ssh_key }}
+        port: ${{ inputs.ssh_port }}
         script_stop: true
         script: "chmod +x ~/script/deploy.sh"
     
