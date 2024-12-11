@@ -32,20 +32,22 @@ jobs:
 
   deploy_8080:
     needs: common_task
-    uses: ./.github/workflows/common.yaml
-    with:
-      port: "8080"
-      ssh_key: ${{ secrets.SSH_KEY }}
-      ssh_id: ${{ secrets.SSH_ID }}
-      ssh_ip: ${{ secrets.SSH_IP }}
-      ssh_port: ${{ secrets.SSH_PORT }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/workflows/common.yaml
+        with:
+          port: "8080"
+          ssh_key: ${{ secrets.SSH_KEY }}
+          ssh_id: ${{ secrets.SSH_ID }}
+          ssh_ip: ${{ secrets.SSH_IP }}
+          ssh_port: ${{ secrets.SSH_PORT }}
 
-  deploy_8081:
-    needs: deploy_8080
-    uses: ./.github/workflows/common.yaml
-    with:
-      port: "8081"
-      ssh_key: ${{ secrets.SSH_KEY }}
-      ssh_id: ${{ secrets.SSH_ID }}
-      ssh_ip: ${{ secrets.SSH_IP }}
-      ssh_port: ${{ secrets.SSH_PORT }}
+  # deploy_8081:
+  #   needs: deploy_8080
+  #   uses: ./.github/workflows/common.yaml
+  #   with:
+  #     port: "8081"
+  #     ssh_key: ${{ secrets.SSH_KEY }}
+  #     ssh_id: ${{ secrets.SSH_ID }}
+  #     ssh_ip: ${{ secrets.SSH_IP }}
+  #     ssh_port: ${{ secrets.SSH_PORT }}
