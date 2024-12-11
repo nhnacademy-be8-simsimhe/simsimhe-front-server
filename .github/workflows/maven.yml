@@ -35,6 +35,7 @@ jobs:
     uses: ./.github/workflows/common.yaml
     with:
       port: "8080"
+    secrets:
       ssh_key: ${{ secrets.SSH_KEY }}
       ssh_ip: ${{ secrets.SSH_IP }}
       ssh_port: ${{ secrets.SSH_PORT }}
@@ -45,6 +46,7 @@ jobs:
     uses: ./.github/workflows/common.yaml
     with:
       port: "8081"
+    secrets:
       ssh_key: ${{ secrets.SSH_KEY }}
       ssh_ip: ${{ secrets.SSH_IP }}
       ssh_port: ${{ secrets.SSH_PORT }}
