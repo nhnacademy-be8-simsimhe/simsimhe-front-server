@@ -86,8 +86,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            ~/script/deploy.sh
             chmod +x ~/script/deploy.sh
+            ~/script/deploy.sh
+        
             
       
       
