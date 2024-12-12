@@ -42,8 +42,7 @@ do
     fi
 
     echo -e "nginx 설정파일에 $ip:$port을 추가합니다."
-    sudo sh -c "sed -i '/upstream loadbalancer {/a server localhost:'\"$port\"';' /etc/nginx/nginx.conf"
-
+    sudo sed -i "/upstream loadbalancer {/ a \    server localhost:$port;" /etc/nginx/nginx.conf
 
     sudo nginx -t
     echo "nginx를 reload합니다."
