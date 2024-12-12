@@ -4,7 +4,7 @@ ip="127.0.0.1"
 for port in "${ports[@]}";
 do
   echo -e "http://$ip:$port/management/health_check"
-  RESPONSE=$(curl -s http://$ip:$port/management/health_check)
+  RESPONSE=$(curl -s https://$ip:$port/management/health_check)
   IS_ACTIVE=$(echo ${RESPONSE} | grep 'UP' | wc -l)
   if [ $IS_ACTIVE -eq 1 ];
   then
@@ -18,11 +18,11 @@ do
     fuser -s -k -TERM $port/tcp
 
     echo -e "jar파일을 $port포트에 실행합니다."
-    java -jar -Dserver.port=${port} ~/target/front-server-0.0.1-SNAPSHOT.jar > log 2>&1 &
+    nohup java -jar -Dserver.port=${port} ~/target/front-server-0.0.1-SNAPSHOT.jar > log 2>&1 &
 
     for retry in {1..10}
     do
-      RESPONSE=$(curl -s http://$ip:$port/management/health_check)
+      RESPONSE=$(curl -s https://$ip:$port/management/health_check)
       PORT_HEALTH=$(echo ${RESPONSE} | grep 'UP' | wc -l)
       if [ $PORT_HEALTH -eq 1 ];
       then

@@ -14,11 +14,11 @@ do
   else
     echo -e "$port에 spring boot가 실행 중이 아닙니다."
     echo -e "$port에 spring boot를 실행시킵니다."
-    java -jar -Dserver.port=$port ~/target/front-server-0.0.1-SNAPSHOT.jar > log 2>&1 &
+    nohup java -jar -Dserver.port=${port} ~/target/front-server-0.0.1-SNAPSHOT.jar > log 2>&1 &
 
     for retry in {1..10}
     do
-      RESPONSE=$(curl -s http://$ip:$port/management/health_check)
+      RESPONSE=$(curl -s https://$ip:$port/management/health_check)
       PORT_HEALTH=$(echo ${RESPONSE} | grep 'UP' | wc -l)
       if [ $PORT_HEALTH -eq 1 ]
       then
