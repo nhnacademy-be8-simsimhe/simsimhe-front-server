@@ -15,9 +15,10 @@ do
     sudo nginx -t
     echo "nginx를 reload합니다."
     sudo nginx -s reload
-    sleep 3
+    sleep 5
 
     fuser -s -k -TERM $port/tcp
+    sleep 5
 
     echo -e "jar파일을 $port포트에 실행합니다."
     nohup java -jar -Dserver.port=${port} ~/target/front-server-0.0.1-SNAPSHOT.jar > log 2>&1 &
@@ -45,12 +46,11 @@ do
 
     echo -e "nginx 설정파일에 $ip:$port을 추가합니다."
     sudo sed -i "/upstream loadbalancer {/ a \    server localhost:$port;" /etc/nginx/nginx.conf
-    sleep 5
 
     sudo nginx -t
     echo "nginx를 reload합니다."
     sudo nginx -s reload
-    sleep 3
+    sleep 5
   else
     echo -e "$port포트에 spring boot가 실행중이 아닙니다."
     exit 0
