@@ -47,6 +47,7 @@ do
     sudo nginx -t
     echo "nginx를 reload합니다."
     sudo nginx -s reload
+    sleep 3
   else
     echo -e "$port포트에 spring boot가 실행중이 아닙니다."
     exit 0
