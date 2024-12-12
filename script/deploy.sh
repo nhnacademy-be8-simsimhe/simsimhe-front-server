@@ -4,7 +4,7 @@ ip="127.0.0.1"
 for port in "${ports[@]}";
 do
   echo -e "http://$ip:$port/management/health_check"
-  RESPONSE=$(curl -s https://$ip:$port/management/health_check)
+  RESPONSE=$(curl -s http://$ip:$port/management/health_check)
   IS_ACTIVE=$(echo ${RESPONSE} | grep 'UP' | wc -l)
   if [ $IS_ACTIVE -eq 1 ];
   then
@@ -22,7 +22,7 @@ do
 
     for retry in {1..10}
     do
-      RESPONSE=$(curl -s https://$ip:$port/management/health_check)
+      RESPONSE=$(curl -s http://$ip:$port/management/health_check)
       PORT_HEALTH=$(echo ${RESPONSE} | grep 'UP' | wc -l)
       if [ $PORT_HEALTH -eq 1 ];
       then
