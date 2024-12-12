@@ -44,16 +44,16 @@ jobs:
           target: "~/"
           rm: false
 
-      # - name: upload deploy script file
-      #   uses: appleboy/scp-action@master
-      #   with:
-      #     host: ${{ secrets.SSH_IP }}
-      #     username: ${{ secrets.SSH_ID }}
-      #     key: ${{ secrets.SSH_KEY }}
-      #     port: ${{ secrets.SSH_PORT }}
-      #     source: "script/deploy.sh"
-      #     target: "~/"
-      #     rm: false
+      - name: upload deploy script file
+        uses: appleboy/scp-action@master
+        with:
+         host: ${{ secrets.SSH_IP }}
+         username: ${{ secrets.SSH_ID }}
+         key: ${{ secrets.SSH_KEY }}
+         port: ${{ secrets.SSH_PORT }}
+         source: "script/deploy.sh"
+         target: "~/"
+         rm: false
 
       - name: execute check shell script
         uses: appleboy/ssh-action@master
