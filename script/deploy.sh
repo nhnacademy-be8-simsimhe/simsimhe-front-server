@@ -14,6 +14,7 @@ do
     sudo nginx -t
     echo "nginx를 reload합니다."
     sudo nginx -s reload
+    sleep 3
 
     fuser -s -k -TERM $port/tcp
 
