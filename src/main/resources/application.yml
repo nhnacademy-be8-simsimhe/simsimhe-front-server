@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: front-server
+  profiles:
+    active: dev
+  data:
+    redis:
+      host: localhost
+      password:
+      port: 6379
+  jwt:
+    secret: super-strong-secret-key-that-is-256-bits-long!
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
+
+server:
+  port: 3000
