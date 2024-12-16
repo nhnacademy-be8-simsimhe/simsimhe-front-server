@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/index").permitAll()
                 .requestMatchers("/users/register").permitAll()
+                .requestMatchers("/management/health_check").permitAll()
                 .anyRequest().authenticated());
 
         http.formLogin(form->form.loginPage("/login"));
