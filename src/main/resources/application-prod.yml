@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: prod
+  devtools:
+    livereload:
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, shutdown
+      base-path: /management
+      path-mapping:
+        health: health_check
+  endpoint:
+    health:
+      show-details: never
+
+gateway:
+  url:  # production server의 Gateway URL
