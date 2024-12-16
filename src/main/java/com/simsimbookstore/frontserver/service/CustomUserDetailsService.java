@@ -25,10 +25,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (Objects.isNull(localUser)) {
             throw new UsernameNotFoundException(String.format("User %s not found", username));
         }
-
         CustomUserDetails customUserDetails = new CustomUserDetails(
                 localUser.getLoginId(),localUser.getPassword()
         );
+
+
 
         return customUserDetails;
     }

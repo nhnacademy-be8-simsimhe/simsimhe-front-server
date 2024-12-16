@@ -1,0 +1,7 @@
+
+
+### 레디스 저장
+POST localhost:8080/redis
+
+### 레디스 get
+GET localhost:8080/redis

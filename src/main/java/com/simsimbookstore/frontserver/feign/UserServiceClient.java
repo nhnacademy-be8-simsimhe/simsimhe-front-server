@@ -5,7 +5,7 @@ import com.simsimbookstore.frontserver.request.LoginRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "userApi", url = "http://localhost:8081/api/users")
+@FeignClient(name = "userApi", url = "http://localhost:8000/api/users")
 public interface UserServiceClient {
 
     @PostMapping
@@ -17,6 +17,6 @@ public interface UserServiceClient {
     @GetMapping("/localUsers/{loginId}")
     LocalUserRequest findByLoginId(@PathVariable String loginId);
 
-    @PostMapping("/localUsers/{loginId}/jwt")
+    @GetMapping("/localUsers/{loginId}/jwt")
     String generateJwt(@PathVariable String loginId);
 }
