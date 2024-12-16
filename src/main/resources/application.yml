@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: front-server
+  profiles:
+    active: dev
+
+server:
+  port: 3000
