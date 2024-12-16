@@ -2,8 +2,11 @@ package com.simsimbookstore.frontserver.config;
 
 
 import com.simsimbookstore.frontserver.security.filter.JwtAuthenticationFilter;
+import com.simsimbookstore.frontserver.security.filter.UserAuthenticationFilter;
+import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
 import com.simsimbookstore.frontserver.service.CustomUserDetailsService;
 import com.simsimbookstore.frontserver.service.UserService;
+import com.simsimbookstore.frontserver.util.JsonUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +17,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
@@ -23,11 +27,13 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
+    private final JsonUtil jsonUtil;
 
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService, UserService userService) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService, UserService userService, JsonUtil jsonUtil) {
         this.userDetailsService = userDetailsService;
         this.userService = userService;
+        this.jsonUtil = jsonUtil;
     }
 
     @Bean
@@ -35,15 +41,19 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers("/login").permitAll()
-                .requestMatchers("/").permitAll()
-                .requestMatchers("/index").permitAll()
-                .requestMatchers("/users/register").permitAll()
-                .anyRequest().authenticated());
+                .requestMatchers("/users/myPage").authenticated()
+                .anyRequest().permitAll());
+
+        http.rememberMe(rememberMe->rememberMe
+                .tokenValiditySeconds(3600)
+                .alwaysRemember(true)
+                .userDetailsService(userDetailsService)
+                .rememberMeParameter("remember-me"));
 
         http.formLogin(form->form.loginPage("/login"));
-        http.addFilterAt(new JwtAuthenticationFilter(authenticationManager(null),userService), UsernamePasswordAuthenticationFilter.class);
-
+        http.logout(logout->logout.addLogoutHandler(new CustomLogoutHandler()));
+        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(null),userService), AnonymousAuthenticationFilter.class);
+//        http.addFilterBefore(new UserAuthenticationFilter(jsonUtil), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

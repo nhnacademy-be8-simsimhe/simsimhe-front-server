@@ -20,7 +20,7 @@ public class UserController {
         return "userRegisterForm";
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{userId}/view")
     public String findUser(@PathVariable Long userId) {
         String s = userService.findUserByUserId(userId);
 
@@ -32,5 +32,12 @@ public class UserController {
         String s = userService.addLocalUser(localUserRequest);
         log.info("user info : {}",s);
         return "index";
+    }
+
+
+    @PostMapping("jwt/{loginId}")
+    public String generateJwt(@PathVariable String loginId) {
+        String jwt = userService.generateJwt(loginId);
+        return jwt;
     }
 }
