@@ -17,6 +17,6 @@ public interface UserServiceClient {
     @GetMapping("/localUsers/{loginId}")
     LocalUserRequest findByLoginId(@PathVariable String loginId);
 
-    @GetMapping("/localUsers/{loginId}/jwt")
+    @PostMapping("/localUsers/{loginId}/jwt")
     String generateJwt(@PathVariable String loginId);
 }
