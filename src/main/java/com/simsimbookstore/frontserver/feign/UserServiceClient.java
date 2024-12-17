@@ -5,7 +5,7 @@ import com.simsimbookstore.frontserver.request.LoginRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "userApi", url = "http://localhost:8081/api/users")
+@FeignClient(name = "userApi", url = "http://localhost:8000/api/users")
 public interface UserServiceClient {
 
     @PostMapping
