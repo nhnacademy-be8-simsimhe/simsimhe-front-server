@@ -1,0 +1,16 @@
+server:
+  shutdown: graceful
+
+
+spring:
+  application:
+    name: front-server
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /management
+      path-mapping:
+        health: health_check

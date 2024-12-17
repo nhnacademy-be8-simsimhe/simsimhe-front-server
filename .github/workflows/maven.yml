@@ -41,30 +41,6 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-
-
-      - name: upload check script file
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SSH_IP }}
-          username: ${{ secrets.SSH_ID }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          source: "script/check.sh"
-          target: "~/"
-          rm: false
-
-      - name: upload deploy script file
-        uses: appleboy/scp-action@master
-        with:
-         host: ${{ secrets.SSH_IP }}
-         username: ${{ secrets.SSH_ID }}
-         key: ${{ secrets.SSH_KEY }}
-         port: ${{ secrets.SSH_PORT }}
-         source: "script/deploy.sh"
-         target: "~/"
-         rm: false
-
       - name: execute check shell script
         uses: appleboy/ssh-action@master
         with:
@@ -74,8 +50,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script_stop: true
           script: |
-            chmod +x ~/script/check.sh
-            ~/script/check.sh
+            chmod +x ~/script/front_check.sh
+            ~/script/front_check.sh
 
       - name: upload jar file
         uses: appleboy/scp-action@master
@@ -96,12 +72,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            chmod +x ~/script/deploy.sh
-            ~/script/deploy.sh
+            chmod +x ~/script/front_deploy.sh
+            ~/script/front_deploy.sh
         
-            
-      
-      
       
       
       
