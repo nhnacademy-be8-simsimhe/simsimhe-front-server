@@ -31,8 +31,6 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-
-
       - name: upload check script file
         uses: appleboy/scp-action@master
         with:
