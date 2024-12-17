@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: dev
   devtools:
     livereload:
       enabled: true  # resource가 바뀌면 자동으로 reload 활성화

@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: prod
   devtools:
     livereload:
       enabled: false
