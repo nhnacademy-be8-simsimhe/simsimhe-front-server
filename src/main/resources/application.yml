@@ -6,6 +6,8 @@ server:
 spring:
   application:
     name: front-server
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
 
   data:
     redis:
@@ -20,8 +22,7 @@ management:
       exposure:
         include: health
       base-path: /management
-      path-mapping:
-        health: health_check
+
 
 jwt:
   security: super-strong-secret-key-that-is-256-bits-long!
