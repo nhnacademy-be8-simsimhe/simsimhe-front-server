@@ -2,13 +2,10 @@ package com.simsimbookstore.frontserver.config;
 
 
 import com.simsimbookstore.frontserver.security.filter.JwtAuthenticationFilter;
-import com.simsimbookstore.frontserver.security.filter.UserAuthenticationFilter;
 import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
-import com.simsimbookstore.frontserver.service.CustomOauth2UserService;
-import com.simsimbookstore.frontserver.service.CustomUserDetailsService;
-import com.simsimbookstore.frontserver.service.UserService;
+import com.simsimbookstore.frontserver.user.service.CustomUserDetailsService;
+import com.simsimbookstore.frontserver.user.service.UserService;
 import com.simsimbookstore.frontserver.util.JsonUtil;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,14 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Map;
 

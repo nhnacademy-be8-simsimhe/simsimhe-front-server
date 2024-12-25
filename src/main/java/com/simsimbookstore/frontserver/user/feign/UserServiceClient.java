@@ -1,13 +1,13 @@
-package com.simsimbookstore.frontserver.feign;
+package com.simsimbookstore.frontserver.user.feign;
 
-import com.simsimbookstore.frontserver.request.LocalUserRequest;
+import com.simsimbookstore.frontserver.user.request.LocalUserRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "userApi", url = "http://localhost:8000/api/users")
 public interface UserServiceClient {
 
-    @PostMapping
+    @PostMapping("/localUsers")
     String addUser(@RequestBody LocalUserRequest localUserRequest);
 
     @GetMapping("/{userId}")

@@ -1,6 +1,6 @@
-package com.simsimbookstore.frontserver.controller;
+package com.simsimbookstore.frontserver.user.controller;
 
-import com.simsimbookstore.frontserver.service.RedisService;
+import com.simsimbookstore.frontserver.user.service.RedisService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

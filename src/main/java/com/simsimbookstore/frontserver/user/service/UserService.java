@@ -1,7 +1,6 @@
-package com.simsimbookstore.frontserver.service;
+package com.simsimbookstore.frontserver.user.service;
 
-import com.simsimbookstore.frontserver.request.LocalUserRequest;
-import com.simsimbookstore.frontserver.request.LoginRequest;
+import com.simsimbookstore.frontserver.user.request.LocalUserRequest;
 
 public interface UserService {
     String addLocalUser(LocalUserRequest localUserRequest);

@@ -1,4 +1,4 @@
-package com.simsimbookstore.frontserver.request;
+package com.simsimbookstore.frontserver.user.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

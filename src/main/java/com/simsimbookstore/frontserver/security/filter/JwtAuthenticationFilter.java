@@ -1,7 +1,7 @@
 package com.simsimbookstore.frontserver.security.filter;
 
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
-import com.simsimbookstore.frontserver.service.UserService;
+import com.simsimbookstore.frontserver.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

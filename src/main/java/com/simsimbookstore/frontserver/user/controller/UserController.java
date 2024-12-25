@@ -1,8 +1,8 @@
-package com.simsimbookstore.frontserver.controller;
+package com.simsimbookstore.frontserver.user.controller;
 
 
-import com.simsimbookstore.frontserver.request.LocalUserRequest;
-import com.simsimbookstore.frontserver.service.UserService;
+import com.simsimbookstore.frontserver.user.request.LocalUserRequest;
+import com.simsimbookstore.frontserver.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
