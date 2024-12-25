@@ -1,4 +1,4 @@
-package com.simsimbookstore.frontserver.security;
+package com.simsimbookstore.frontserver.security.userDetails;
 
 
 import lombok.AllArgsConstructor;

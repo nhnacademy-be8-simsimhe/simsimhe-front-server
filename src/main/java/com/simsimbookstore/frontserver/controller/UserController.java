@@ -34,7 +34,7 @@ public class UserController {
         return "index";
     }
 
-
+    // 테스트 코드
     @PostMapping("jwt/{loginId}")
     public String generateJwt(@PathVariable String loginId) {
         String jwt = userService.generateJwt(loginId);
