@@ -14,3 +14,27 @@ management:
   endpoint:
     health:
       show-details: always
+
+
+
+#payco
+payco:
+  client_id: "3RD97C4xPwwTq5ZOJ1YzohG"
+  redirect_url: "http://jsw.com:3000/auth/paycoLogin/callback"
+  client_secret: "cwpPpLNP1VZzgWohi8EEdc8S"
+
+  security:
+    oauth2:
+      client:
+        registration:
+          payco:
+            client-name: "Payco"
+            client-id: "3RD97C4xPwwTq5ZOJ1YzohG"
+            client-secret: "cwpPpLNP1VZzgWohi8EEdc8S"
+            redirect-uri: "http://jsw.com:3000/auth/paycoLogin/callback"
+            authorization-grant-type: "authorization_code"
+        provider:
+          payco:
+            authorization-uri: "https://id.payco.com/oauth2.0/authorize"
+            token-uri: "https://id.payco.com/oauth2.0/token"
+            user-info-uri: "https://api.payco.com/userinfo"
