@@ -36,8 +36,7 @@ management:
       exposure:
         include: health
       base-path: /management
-      path-mapping:
-        health: health_check
+
 
 jwt:
   security: new-ultra-secure-secret-key-for-jwt!
