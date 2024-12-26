@@ -1,16 +1,34 @@
-server:
-  port: 3000
-  shutdown: graceful
-
 spring:
   application:
     name: front-server
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  profiles:
+    active: dev
+
+  jwt:
+    secret: super-strong-secret-key-that-is-256-bits-long!
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
+
+gateway:
+  url: http://localhost:8080
+
+
+server:
+  port: 3000
+  shutdown: graceful
 
   data:
     redis:
       host: localhost
       port: 6379
       password: ""
+
 
 management:
   endpoints:
@@ -22,11 +40,4 @@ management:
         health: health_check
 
 jwt:
-  security: super-strong-secret-key-that-is-256-bits-long!
-
-logging:
-  level:
-    org.springframework.security: debug
-
-
-
+  security: new-ultra-secure-secret-key-for-jwt!

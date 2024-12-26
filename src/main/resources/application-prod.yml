@@ -1,4 +1,16 @@
-payco:
-    client_id: "prod client id"
-    redirect_url: "prod redirect url"
-    client_secret: "prod client secret"
+spring:
+  devtools:
+    livereload:
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, shutdown
+      base-path: /management
+      path-mapping:
+        health: health_check
+  endpoint:
+    health:
+      show-details: never
