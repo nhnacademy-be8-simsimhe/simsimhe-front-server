@@ -24,8 +24,6 @@ server:
   shutdown: graceful
 
 
-
-
 jwt:
   security: new-ultra-secure-secret-key-for-jwt!
 
