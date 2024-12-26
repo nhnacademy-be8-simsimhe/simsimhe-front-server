@@ -9,8 +9,7 @@ management:
       exposure:
         include: health, beans, conditions, loggers, info, shutdown
       base-path: /management
-      path-mapping:
-        health: health_check
+
   endpoint:
     health:
       show-details: always

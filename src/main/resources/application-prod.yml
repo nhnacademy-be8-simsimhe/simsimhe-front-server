@@ -12,9 +12,8 @@ management:
 
   endpoint:
     health:
-      show-details: always
-      discovery:
-        enabled: false
+      show-details: never
+
 
 
 ##payco

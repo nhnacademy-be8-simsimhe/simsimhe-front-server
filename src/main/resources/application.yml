@@ -23,12 +23,7 @@ server:
   port: 3000
   shutdown: graceful
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health
-      base-path: /management
+
 
 
 jwt:
