@@ -12,7 +12,7 @@ management:
 
   endpoint:
     health:
-      show-details: never
+      show-details: always
 
 
 ##payco
