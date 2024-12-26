@@ -23,21 +23,24 @@ server:
   port: 3000
   shutdown: graceful
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: ""
-
-
 management:
   endpoints:
     web:
       exposure:
         include: health
       base-path: /management
-      path-mapping:
-        health: health_check
+
 
 jwt:
   security: new-ultra-secure-secret-key-for-jwt!
+
+secure-key-manager:
+  password: simsimbook
+  url: https://api-keymanager.nhncloudservice.com
+  path: /keymanager/v1.0/appkey/{appkey}/secrets/{keyid}
+  appKey: qTQNj7LyHhdAazH3
+
+redis:
+  host: 7098f39a110b4eb88c68ffd65f18774f
+  port: 6379
+  password: d183598bca794d998bada10b352f57ad
