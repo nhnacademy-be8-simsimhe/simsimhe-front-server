@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .requestMatchers("/management/health").permitAll()
                 .anyRequest().permitAll());
 
+
         //rememberme
         http.rememberMe(rememberMe->rememberMe
                 .tokenValiditySeconds(3600)
