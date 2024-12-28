@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Contributor List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .pagination a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1>Contributor List</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="contributor : ${allContributorPage.data}">
+        <td th:text="${contributor.contributorId}"></td>
+        <td th:text="${contributor.contributorName}"></td>
+        <td th:text="${contributor.contributorRole}"></td>
+        <td>
+            <!-- Delete 버튼 -->
+            <form th:action="@{'/admin/contributors/' + ${contributor.contributorId}}" method="post">
+                <input type="hidden" name="_method" value="delete"/>
+                <input type="hidden" name="page" th:value="${page}"/>
+                <button type="submit">Delete</button>
+            </form>
+            <!-- Update 버튼 -->
+            <form th:action="@{'/admin/contributors/update/' + ${contributor.contributorId}}" method="get">
+                <input type="hidden" name="page" th:value="${page}"/>
+                <button type="submit">Update</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이지 네비게이션 -->
+<div class="pagination">
+    <span th:text="'Page: ' + ${allContributorPage.currentPage} + ' / ' + ${allContributorPage.totalPage}"></span>
+    <br/>
+    <a th:href="@{'/admin/contributors'(page=${page - 1}, size=${size})}" th:if="${page > 1}">Previous</a>
+    <a th:href="@{'/admin/contributors'(page=${page + 1}, size=${size})}"
+       th:if="${page < allContributorPage.totalPage}">Next</a>
+</div>
+
+</body>
+</html>
