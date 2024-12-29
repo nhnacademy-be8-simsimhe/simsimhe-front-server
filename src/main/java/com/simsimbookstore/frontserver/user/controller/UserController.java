@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -15,29 +16,22 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/register")
-    public String registerForm() {
-        return "userRegisterForm";
-    }
+//    @GetMapping("/{userId}/view")
+//    public String findUser(@PathVariable Long userId) {
+//        String s = userService.findUserByUserId(userId);
+//        return "index";
+//    }
 
-    @GetMapping("/{userId}/view")
-    public String findUser(@PathVariable Long userId) {
-        String s = userService.findUserByUserId(userId);
-
-        return "index";
-    }
-
-    @PostMapping("/register")
-    public String registerUser(@ModelAttribute LocalUserRequest localUserRequest){
+    @PostMapping("localUser/register")
+    public RedirectView registerUser(@ModelAttribute LocalUserRequest localUserRequest){
         String s = userService.addLocalUser(localUserRequest);
-        log.info("user info : {}",s);
-        return "index";
+        return new RedirectView("/index#nav-sign-in");
     }
 
-    // 테스트 코드
-    @PostMapping("jwt/{loginId}")
-    public String generateJwt(@PathVariable String loginId) {
-        String jwt = userService.generateJwt(loginId);
-        return jwt;
-    }
+//    // 테스트 코드
+//    @PostMapping("jwt/{loginId}")
+//    public String generateJwt(@PathVariable String loginId) {
+//        String jwt = userService.generateJwt(loginId);
+//        return jwt;
+//    }
 }
