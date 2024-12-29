@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "api-server", url = "http://localhost:8000/api/admin/contributors")
+@FeignClient(name = "contributor-api-server", url = "http://localhost:8000/api/admin/contributors")
 public interface ContributorClient {
 
     /**

@@ -27,14 +27,17 @@ public class ContributorService {
         return client.getAllContributorPage(page, size);
     }
 
+    @Transactional
     public void createContributor(ContributorRequestDto contributorRequestDto) {
         client.createContributor(contributorRequestDto);
     }
 
+    @Transactional
     public void deleteContributor(Long contributorId) {
         client.deleteContributor(contributorId);
     }
 
+    @Transactional
     public void updateContributor(Long contributorId,ContributorRequestDto contributorRequestDto){
         client.updateContributor(contributorId,contributorRequestDto);
     }
