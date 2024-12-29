@@ -2,10 +2,12 @@ package com.simsimbookstore.frontserver.config;
 
 
 import com.simsimbookstore.frontserver.security.filter.JwtAuthenticationFilter;
+import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
 import com.simsimbookstore.frontserver.user.service.CustomUserDetailsService;
 import com.simsimbookstore.frontserver.user.service.UserService;
 import com.simsimbookstore.frontserver.util.JsonUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,15 +28,11 @@ import java.util.Map;
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
-
-    public SecurityConfig(CustomUserDetailsService userDetailsService, UserService userService, JsonUtil jsonUtil) {
-        this.userDetailsService = userDetailsService;
-        this.userService = userService;
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -65,7 +63,11 @@ public class SecurityConfig {
 
 
         // local login
-        http.formLogin(form->form.loginPage("/login"));
+        http.formLogin(form->form.loginPage("/index")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+                .failureHandler(new CustomAuthFailureHandler())
+        );
         http.logout(logout->logout.addLogoutHandler(new CustomLogoutHandler()));
 
         // filter

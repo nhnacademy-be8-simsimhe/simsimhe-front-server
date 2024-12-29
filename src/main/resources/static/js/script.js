@@ -175,3 +175,103 @@
     });
 
 })(jQuery);
+
+// ---------------------
+
+// 로그인 폼
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+  event.preventDefault(); // 폼 제출을 방지
+
+  // 로그인 시도
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  const rememberMe = document.getElementById('remember-me').checked ? 'true' : 'false';  // remember-me 체크박스 값
+
+  const formData = new FormData();
+  formData.append('username', username);
+  formData.append('password', password);
+  formData.append('remember-me', rememberMe)
+
+
+  // AJAX로 로그인 요청
+  fetch('/login', {
+    method: 'POST',
+    body: formData
+  })
+      .then(response => {
+        if (response.ok) {
+          alert('로그인 성공!')
+
+          window.location.href = `/index?remember-me=${rememberMe}`;
+        } else {
+          // 로그인 실패 (응답 코드 401)
+          return response.json();
+        }
+      })
+      .then(data => {
+          console.log('errorMessage');
+        if (data && data.error) {
+          // 로그인 실패 시 오류 메시지 모달에 표시
+          const errorMessageElement = document.getElementById('loginError');
+          errorMessageElement.textContent = data.error;
+          errorMessageElement.style.display = "block";  // 에러 메시지 표시
+        }
+      })
+      .catch(error => {
+        console.error('Login failed:', error);
+      });
+});
+
+// 회원가입 폼
+document.getElementById('registerForm').addEventListener('submit', function(event) {
+  event.preventDefault(); // 폼 제출을 방지
+
+  // 로그인 시도
+  const form = document.getElementById('registerForm');
+
+  const loginId = form.querySelector('input[name="loginId"]').value;
+  const password = form.querySelector('input[name="password"]').value;
+  const username = form.querySelector('input[name="userName"]').value;
+  const email = form.querySelector('input[name="email"]').value;
+  const mobileNumber = form.querySelector('input[name="mobileNumber"]').value;
+  const birth = form.querySelector('input[name="birth"]').value;
+  const gender = form.querySelector('input[name="gender"]:checked').value;
+
+
+  const formData = new FormData();
+
+  formData.append('loginId', loginId);
+  formData.append('password', password);
+  formData.append('userName', username);
+  formData.append('email', email);
+  formData.append('mobileNumber', mobileNumber);
+  formData.append('birth', birth);
+  formData.append('gender', gender);
+
+  // AJAX로 로그인 요청
+  fetch('/users/localUser/register', {
+    method: 'POST',
+    body: formData
+  })
+      .then(response => {
+        if (response.ok) {
+          alert('회원가입 성공!')
+          window.location.reload();
+        } else {
+          // 회원가입 실패 (응답 코드 409)
+          return response.json();
+        }
+      })
+      .then(data => {
+        if (data && data.error) {
+          // 로그인 실패 시 오류 메시지 모달에 표시
+          const errorMessageElement = document.getElementById('registerError');
+          errorMessageElement.textContent = data.error;
+          errorMessageElement.style.display = "block";  // 에러 메시지 표시
+        }
+      })
+      .catch(error => {
+        console.error('register failed:', error);
+      });
+});
+

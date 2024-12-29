@@ -287,14 +287,17 @@
                     </a>
                   </li>
                   <li class="pe-3">
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#authModal">
                       <svg class="user">
                         <use xlink:href="#user"></use>
                       </svg>
                     </a>
                     <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" style="max-height: 900px; overflow: auto;" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-scrollable" style=" top: 0; left: 0; right: 0; margin-top: 50px; height: auto; max-height: 200vh; overflow-y: auto;">
+                    <!--                    <div class="modal fade" id="exampleModal" style="max-height: 900px; overflow: auto;" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+                    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel"
+                         aria-hidden="true">
+                      <!--                      <div class="modal-dialog modal-dialog-scrollable" style=" top: 0; left: 0; right: 0; margin-top: 50px; height: auto; max-height: 200vh; overflow-y: auto;">-->
+                      <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header border-bottom-0">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -304,90 +307,96 @@
                               <nav>
                                 <div class="nav nav-tabs d-flex justify-content-center" id="nav-tab" role="tablist">
                                   <button class="nav-link text-capitalize active" id="nav-sign-in-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-sign-in" type="button" role="tab" aria-controls="nav-sign-in"
-                                    aria-selected="true">로그인</button>
+                                          data-bs-target="#nav-sign-in" type="button" role="tab" aria-controls="nav-sign-in"
+                                          aria-selected="true">로그인</button>
                                   <button class="nav-link text-capitalize" id="nav-register-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-register" type="button" role="tab" aria-controls="nav-register"
-                                    aria-selected="false">회원가입</button>
+                                          data-bs-target="#nav-register" type="button" role="tab" aria-controls="nav-register"
+                                          aria-selected="false">회원가입</button>
                                 </div>
                               </nav>
                               <div class="tab-content" id="nav-tabContent">
-                                <div class="tab-pane fade active show" id="nav-sign-in" role="tabpanel"
-                                  aria-labelledby="nav-sign-in-tab">
+                                  <div class="tab-pane fade active show" id="nav-sign-in" role="tabpanel"
+                                       aria-labelledby="nav-sign-in-tab">
+                                <form id="loginForm">
 
-                                  <div class="form-group py-3">
-                                    <label class="mb-2" for="sign-in">아이디 *</label>
-                                    <input type="text" minlength="2" name="username" placeholder="아이디"
-                                      class="form-control w-100 rounded-3 p-3" required>
-                                  </div>
-                                  <div class="form-group pb-3">
-                                    <label class="mb-2" for="sign-in">비밀번호 *</label>
-                                    <input type="password" minlength="2" name="password" placeholder="비밀번호"
-                                      class="form-control w-100 rounded-3 p-3" required>
-                                  </div>
-                                  <label class="py-3 d-flex justify-content-between">
-                                    <div>
-                                      <input type="checkbox" required="" class="d-inline">
-                                      <span class="label-body">로그인 상태 유지</span>
+                                    <div class="form-group py-3">
+                                      <label class="mb-2" for="sign-in">아이디 *</label>
+                                      <input type="text" minlength="2" id="username" name="username" placeholder="아이디"
+                                             class="form-control w-100 rounded-3 p-3" required>
                                     </div>
-                                    <span class="label-body"><a href="#" class="fw-bold">비밀번호 찾기</a></span>
-                                  </label>
-                                  <button type="submit" name="submit" class="btn btn-dark w-100 my-3">로그인</button>
-                                </div>
+                                    <div class="form-group pb-3">
+                                      <label class="mb-2" for="sign-in">비밀번호 *</label>
+                                      <input type="password" minlength="2" id="password" name="password" placeholder="비밀번호"
+                                             class="form-control w-100 rounded-3 p-3" required>
+                                    </div>
+                                    <p id="loginError" class="alert alert-danger" style="display: none"></p>
+
+                                    <label class="py-3 d-flex justify-content-between">
+                                      <div>
+                                        <input type="checkbox" class="d-inline" id="remember-me">
+                                        <span class="label-body">로그인 상태 유지</span>
+                                      </div>
+                                      <!--비밀번호 찾기 미구현-->
+<!--                                      <span class="label-body"><a href="#" class="fw-bold">비밀번호 찾기</a></span>-->
+                                    </label>
+                                    <button type="submit" name="submit" class="btn btn-dark w-100 my-3">로그인</button>
+                                </form>
+                                  </div>
                                 <div class="tab-pane fade" id="nav-register" role="tabpanel"
-                                  aria-labelledby="nav-register-tab">
-                                    <form action="/users/localUser/register" method= "POST">
-                                  <div class="form-group py-3">
-                                    <label class="mb-2" for="register">아이디 *</label>
-                                    <input type="text" minlength="2" name="loginId" placeholder="아이디"
-                                           class="form-control w-100 rounded-3 p-3" required>
-                                  </div>
-                                  <div class="form-group pb-3">
-                                    <label class="mb-2" for="register">비밀번호 *</label>
-                                    <input type="password" minlength="2" name="password" placeholder="비밀번호"
-                                           class="form-control w-100 rounded-3 p-3" required>
-                                  </div>
-                                  <div class="form-group pb-3">
-                                    <label class="mb-2" for="register">비밀번호 확인 *</label>
-                                    <input type="password" minlength="2" name="passwordConfirm" placeholder="비밀번호 확인"
-                                           class="form-control w-100 rounded-3 p-3" required>
-                                  </div>
-                                  <div class="form-group pb-3">
-                                    <label class="mb-2" for="register">이름 *</label>
-                                    <input type="text" minlength="2" name="userName" placeholder="이름"
-                                           class="form-control w-100 rounded-3 p-3" required>
-                                  </div>
-                                  <div class="form-group pb-3">
-                                    <label class="mb-2" for="register">이메일 *</label>
-                                    <input type="email" minlength="2" name="email" placeholder="이메일"
-                                      class="form-control w-100 rounded-3 p-3" required>
-                                  </div>
-                                  <div class="form-group pb-3">
-                                    <label class="mb-2" for="register">전화번호 *</label>
+                                     aria-labelledby="nav-register-tab">
+                                  <form id="registerForm">
+                                    <div class="form-group py-3">
+                                      <label class="mb-2" for="register">아이디 *</label>
+                                      <input type="text" minlength="2" name="loginId" placeholder="아이디"
+                                             class="form-control w-100 rounded-3 p-3" required>
+                                    </div>
+                                    <div class="form-group pb-3">
+                                      <label class="mb-2" for="register">비밀번호 *</label>
+                                      <input type="password" minlength="2" name="password" placeholder="비밀번호"
+                                             class="form-control w-100 rounded-3 p-3" required>
+                                    </div>
+                                    <div class="form-group pb-3">
+                                      <label class="mb-2" for="register">비밀번호 확인 *</label>
+                                      <input type="password" minlength="2" name="passwordConfirm" placeholder="비밀번호 확인"
+                                             class="form-control w-100 rounded-3 p-3" required>
+                                    </div>
+                                    <div class="form-group pb-3">
+                                      <label class="mb-2" for="register">이름 *</label>
+                                      <input type="text" minlength="2" name="userName" placeholder="이름"
+                                             class="form-control w-100 rounded-3 p-3" required>
+                                    </div>
+                                    <div class="form-group pb-3">
+                                      <label class="mb-2" for="register">이메일 *</label>
+                                      <input type="email" minlength="2" name="email" placeholder="이메일"
+                                             class="form-control w-100 rounded-3 p-3" required>
+                                    </div>
+                                    <div class="form-group pb-3">
+                                      <label class="mb-2" for="register">전화번호 *</label>
                                       <input type="tel" name="mobileNumber" placeholder="전화번호"
                                              class="form-control w-100 rounded-3 p-3" required
                                              pattern="^\d{10,11}$"
                                              title="전화번호는 10자리 또는 11자리 숫자만 입력 가능합니다.">
-                                  </div>
-                                  <div class="form-group pb-3">
-                                    <label class="mb-2" for="register">생년월일 *</label>
-                                    <input type="date" minlength="2" name="birth" placeholder="생년월일"
-                                           class="form-control w-100 rounded-3 p-3" required>
-                                  </div>
-                                  <div class="form-group pb-3">
-                                    <label class="mb-2" for="register">성별 *</label>
-                                    <div>
-                                      <label class="d-inline me-3">
-                                        <input type="radio" name="gender" value="MALE" required> 남자
-                                      </label>
-                                      <label class="d-inline">
-                                        <input type="radio" name="gender" value="FEMALE" required> 여자
-                                      </label>
                                     </div>
-                                  </div>
+                                    <div class="form-group pb-3">
+                                      <label class="mb-2" for="register">생년월일 *</label>
+                                      <input type="date" minlength="2" name="birth" placeholder="생년월일"
+                                             class="form-control w-100 rounded-3 p-3" required>
+                                    </div>
+                                    <div class="form-group pb-3">
+                                      <label class="mb-2" for="register">성별 *</label>
+                                      <div>
+                                        <label class="d-inline me-3">
+                                          <input type="radio" name="gender" value="MALE" required> 남자
+                                        </label>
+                                        <label class="d-inline">
+                                          <input type="radio" name="gender" value="FEMALE" required> 여자
+                                        </label>
+                                      </div>
+                                      <p id="registerError" class="alert alert-danger" style="display: none"></p>
+                                    </div>
 
-                                  <button type="submit" name="submit" class="btn btn-dark w-100 my-3">회원가입</button>
-                                    </form>
+                                    <button type="submit" name="submit" class="btn btn-dark w-100 my-3">회원가입</button>
+                                  </form>
                                 </div>
                               </div>
                             </div>
