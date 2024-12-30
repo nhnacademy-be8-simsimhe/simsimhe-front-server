@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         LocalUserRequest localUser = userService.findUserByLoginId(username);
 
         if (Objects.isNull(localUser)) {
-            throw new UsernameNotFoundException(String.format("User %s not found", username));
+            throw new UsernameNotFoundException("not founded user with: " + username);
         }
         CustomUserDetails customUserDetails = new CustomUserDetails(
                 localUser.getLoginId(),localUser.getPassword()

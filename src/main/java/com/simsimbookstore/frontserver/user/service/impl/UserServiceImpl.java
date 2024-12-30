@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean existsByLoginId(String loginId){
+        return userServiceClient.existsByLoginId(loginId);
+    }
+
+    @Override
     public String generateJwt(String loginId) {
         return userServiceClient.generateJwt(loginId);
     }
