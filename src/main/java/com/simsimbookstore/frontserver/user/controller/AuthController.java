@@ -23,15 +23,11 @@ public class AuthController {
         this.socialService = socialService;
     }
 
-    @GetMapping("/paycoLogin")
+    @GetMapping("socialUsers/paycoLogin")
     public ResponseEntity<String> authorize() {
         String url = socialService.getPaycoUrl();
 
-        String redirectUrl = "/oauth2/authorization/payco";
-        return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirectUrl).build();
-//        return ResponseEntity
-//                .status(HttpStatus.FOUND)
-//                .header("Location", url).build();
+        return ResponseEntity.status(HttpStatus.FOUND).header("Location", url).build();
     }
 
     @GetMapping("/paycoLogin/callback")
