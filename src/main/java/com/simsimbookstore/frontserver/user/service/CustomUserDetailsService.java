@@ -28,9 +28,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         CustomUserDetails customUserDetails = new CustomUserDetails(
                 localUser.getLoginId(),localUser.getPassword()
         );
-
-
-
         return customUserDetails;
     }
 }

@@ -1,5 +1,6 @@
 package com.simsimbookstore.frontserver.security.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import com.simsimbookstore.frontserver.user.service.UserService;
 import jakarta.servlet.FilterChain;
@@ -15,6 +16,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -42,11 +45,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // 로그인 성공 시 jwt 발급 요청
         CustomUserDetails customUserDetails = (CustomUserDetails) authResult.getPrincipal();
 
-        String jwt = userService.generateJwt(customUserDetails.getUsername());
+        String jsonResponse = userService.generateJwt(customUserDetails.getUsername());
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap<String,String> tokens = objectMapper.readValue(jsonResponse, HashMap.class);
+        String accessToken = tokens.get("accessToken");
+        String refreshToken = tokens.get("refreshToken");
 
-        log.info("jwt : {}", jwt);
-        response.setHeader("Authorization", "Bearer " + jwt);
-        response.addCookie(new Cookie("rememberMe",jwt));
+
+        Cookie accessTokenCookie = new Cookie("accessToken",accessToken);
+        accessTokenCookie.setMaxAge(3600); //1시간
+        response.addCookie(accessTokenCookie);
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken",refreshToken);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setMaxAge(7 * 24 * 3600); //7일
+        response.addCookie(refreshTokenCookie);
 
         super.successfulAuthentication(request, response, chain, authResult);
     }

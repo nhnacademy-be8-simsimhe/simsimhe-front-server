@@ -1,5 +1,6 @@
 package com.simsimbookstore.frontserver.user.service.impl;
 
+import com.simsimbookstore.frontserver.user.feign.JwtServiceClient;
 import com.simsimbookstore.frontserver.user.request.LocalUserRequest;
 import com.simsimbookstore.frontserver.user.feign.UserServiceClient;
 import com.simsimbookstore.frontserver.user.service.UserService;
@@ -10,11 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserServiceClient userServiceClient;
-
+    private final JwtServiceClient jwtServiceClient;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserServiceClient userServiceClient,@Lazy PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserServiceClient userServiceClient, JwtServiceClient jwtServiceClient, @Lazy PasswordEncoder passwordEncoder) {
         this.userServiceClient = userServiceClient;
+        this.jwtServiceClient = jwtServiceClient;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -43,6 +45,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String generateJwt(String loginId) {
-        return userServiceClient.generateJwt(loginId);
+        return jwtServiceClient.generateJwt(loginId);
     }
 }
