@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>포장지 목록</title>
+</head>
+<body>
+<header>
+    <h1>포장지 관리</h1>
+</header>
+<main>
+    <h2>포장지 목록</h2>
+    <a href="/admin/wrap-types/create">새 포장지 추가</a>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>이름</th>
+            <th>가격</th>
+            <th>판매 가능 여부</th>
+            <th>액션</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="wrapType : ${wrapTypes}">
+            <td th:text="${wrapType.packageTypeId}"></td>
+            <td th:text="${wrapType.packageName}"></td>
+            <td th:text="${wrapType.packagePrice}"></td>
+            <td th:text="${wrapType.isAvailable ? '가능' : '불가능'}"></td>
+            <td>
+                <a th:href="@{/admin/wrap-types/update/{id}/availability(id=${wrapType.packageTypeId})}">가용성</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Contributor</title>
+</head>
+<body>
+<h1>Add Contributor</h1>
+
+<form th:action="@{/admin/contributors/create}" th:object="${contributor}" method="post">
+    <div>
+        <label for="contributorName">Name:</label>
+        <input type="text" id="contributorName" name="contributorName" th:field="*{contributorName}">
+        <span th:if="${#fields.hasErrors('contributorName')}" th:errors="*{contributorName}">Error</span>
+    </div>
+    <div>
+        <label for="contributorRole">Role:</label>
+        <input type="text" id="contributorRole" name="contributorRole" th:field="*{contributorRole}">
+        <span th:if="${#fields.hasErrors('contributorRole')}" th:errors="*{contributorRole}">Error</span>
+    </div>
+    <div>
+        <button type="submit">Add Contributor</button>
+    </div>
+</form>
+
+<a href="/admin/contributors">Back to List</a>
+</body>
+</html>
