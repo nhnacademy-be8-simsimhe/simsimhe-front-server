@@ -4,14 +4,14 @@ package com.simsimbookstore.frontserver.config;
 import com.simsimbookstore.frontserver.security.filter.JwtAuthenticationFilter;
 import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
-import com.simsimbookstore.frontserver.user.service.CustomUserDetailsService;
-import com.simsimbookstore.frontserver.user.service.UserService;
-import com.simsimbookstore.frontserver.util.JsonUtil;
+import com.simsimbookstore.frontserver.security.handler.LocalLoginSuccessHandler;
+import com.simsimbookstore.frontserver.users.user.service.CustomUserDetailsService;
+import com.simsimbookstore.frontserver.users.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,7 +21,6 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Map;
@@ -41,9 +40,10 @@ public class SecurityConfig {
 
         //authorize
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers("/users/myPage").authenticated()
+//                .requestMatchers("/users/myPage").authenticated()
                 .requestMatchers("/management/health").permitAll()
                 .anyRequest().permitAll());
+
 
 
         //rememberme
@@ -67,20 +67,23 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
                 .failureHandler(new CustomAuthFailureHandler())
+                .successHandler(new LocalLoginSuccessHandler(userService))
         );
-        http.logout(logout->logout.addLogoutHandler(new CustomLogoutHandler()));
+        http.logout(logout->logout
+                .addLogoutHandler(new CustomLogoutHandler())
+                .logoutUrl("/logout"));
 
         // filter
 //        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(null),userService), AnonymousAuthenticationFilter.class);
-        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(null),userService), UsernamePasswordAuthenticationFilter.class);
+//        http
+//                .addFilterAt(new JwtAuthenticationFilter(authenticationManager(null),userService), UsernamePasswordAuthenticationFilter.class)
+//                .anonymous(AbstractHttpConfigurer::disable);
         return http.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-        return authenticationManagerBuilder.build();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean

@@ -1,4 +1,4 @@
-package com.simsimbookstore.frontserver.user.service;
+package com.simsimbookstore.frontserver.users.user.service;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

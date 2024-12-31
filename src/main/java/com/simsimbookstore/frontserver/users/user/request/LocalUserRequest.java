@@ -1,15 +1,13 @@
-package com.simsimbookstore.frontserver.user.request;
+package com.simsimbookstore.frontserver.users.user.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
