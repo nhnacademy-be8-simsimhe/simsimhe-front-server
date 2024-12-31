@@ -1,5 +1,7 @@
 package com.simsimbookstore.frontserver.config;
 
+import feign.RequestInterceptor;
+import feign.RequestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
@@ -22,4 +24,5 @@ public class WebConfig implements WebMvcConfigurer {
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
         return new HiddenHttpMethodFilter();
     }
+
 }
