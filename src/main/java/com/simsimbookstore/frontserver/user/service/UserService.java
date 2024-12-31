@@ -9,5 +9,7 @@ public interface UserService {
 
     LocalUserRequest findUserByLoginId(String loginId);
 
+    boolean existsByLoginId(String loginId);
+
     String generateJwt(String loginId);
 }

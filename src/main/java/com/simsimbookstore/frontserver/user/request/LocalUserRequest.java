@@ -27,23 +27,13 @@ public class LocalUserRequest {
 
     private Gender gender;
 
-    private UserStatus userStatus = UserStatus.ACTIVE;
-
     private LocalDateTime createdAt = LocalDateTime.now();
-
-    private LocalDateTime latestLoginDate;
 
     private RoleName roleName = RoleName.USER;
 
     private String loginId;
 
     private String password;
-
-    public enum UserStatus {
-        ACTIVE,
-        INACTIVE,
-        SLEEP
-    }
 
     public enum Gender{
         MALE,

@@ -2,10 +2,12 @@ package com.simsimbookstore.frontserver.config;
 
 
 import com.simsimbookstore.frontserver.security.filter.JwtAuthenticationFilter;
+import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
 import com.simsimbookstore.frontserver.user.service.CustomUserDetailsService;
 import com.simsimbookstore.frontserver.user.service.UserService;
 import com.simsimbookstore.frontserver.util.JsonUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,21 +22,18 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Map;
 
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
-
-    public SecurityConfig(CustomUserDetailsService userDetailsService, UserService userService, JsonUtil jsonUtil) {
-        this.userDetailsService = userDetailsService;
-        this.userService = userService;
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -50,7 +49,6 @@ public class SecurityConfig {
         //rememberme
         http.rememberMe(rememberMe->rememberMe
                 .tokenValiditySeconds(3600)
-                .alwaysRemember(true)
                 .userDetailsService(userDetailsService)
                 .rememberMeParameter("remember-me"));
 
@@ -65,13 +63,17 @@ public class SecurityConfig {
 
 
         // local login
-        http.formLogin(form->form.loginPage("/login"));
+        http.formLogin(form->form.loginPage("/index")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+                .failureHandler(new CustomAuthFailureHandler())
+        );
         http.logout(logout->logout.addLogoutHandler(new CustomLogoutHandler()));
 
         // filter
-        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(null),userService), AnonymousAuthenticationFilter.class);
+//        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(null),userService), AnonymousAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(null),userService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
-
     }
 
     @Bean
