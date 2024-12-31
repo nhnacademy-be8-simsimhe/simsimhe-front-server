@@ -1,4 +1,4 @@
-package com.simsimbookstore.frontserver.user.service;
+package com.simsimbookstore.frontserver.users.user.service;
 
 public interface SocialService {
 

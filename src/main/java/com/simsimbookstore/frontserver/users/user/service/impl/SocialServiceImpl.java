@@ -1,11 +1,11 @@
-package com.simsimbookstore.frontserver.user.service.impl;
+package com.simsimbookstore.frontserver.users.user.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.simsimbookstore.frontserver.user.feign.PaycoApiServiceClient;
-import com.simsimbookstore.frontserver.user.feign.PaycoAuthServiceClient;
-import com.simsimbookstore.frontserver.user.service.SocialService;
+import com.simsimbookstore.frontserver.users.user.feign.PaycoApiServiceClient;
+import com.simsimbookstore.frontserver.users.user.feign.PaycoAuthServiceClient;
+import com.simsimbookstore.frontserver.users.user.service.SocialService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

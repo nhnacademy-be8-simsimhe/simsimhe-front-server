@@ -1,9 +1,9 @@
-package com.simsimbookstore.frontserver.user.service.impl;
+package com.simsimbookstore.frontserver.users.user.service.impl;
 
-import com.simsimbookstore.frontserver.user.feign.JwtServiceClient;
-import com.simsimbookstore.frontserver.user.request.LocalUserRequest;
-import com.simsimbookstore.frontserver.user.feign.UserServiceClient;
-import com.simsimbookstore.frontserver.user.service.UserService;
+import com.simsimbookstore.frontserver.users.user.feign.JwtServiceClient;
+import com.simsimbookstore.frontserver.users.user.request.LocalUserRequest;
+import com.simsimbookstore.frontserver.users.user.feign.UserServiceClient;
+import com.simsimbookstore.frontserver.users.user.service.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
-package com.simsimbookstore.frontserver.user.feign;
+package com.simsimbookstore.frontserver.users.user.feign;
 
-import com.simsimbookstore.frontserver.user.request.LocalUserRequest;
+import com.simsimbookstore.frontserver.users.user.request.LocalUserRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

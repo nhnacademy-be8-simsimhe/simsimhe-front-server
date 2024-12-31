@@ -2,7 +2,7 @@ package com.simsimbookstore.frontserver.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
-import com.simsimbookstore.frontserver.user.service.UserService;
+import com.simsimbookstore.frontserver.users.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -13,11 +13,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -61,6 +61,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         refreshTokenCookie.setMaxAge(7 * 24 * 3600); //7일
         response.addCookie(refreshTokenCookie);
 
-        super.successfulAuthentication(request, response, chain, authResult);
+//        super.successfulAuthentication(request, response, chain, authResult);
     }
 }
