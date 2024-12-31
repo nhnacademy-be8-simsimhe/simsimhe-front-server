@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>책 목록</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .pagination a:hover {
+            text-decoration: underline;
+        }
+
+        .pagination span {
+            margin: 0 5px;
+            font-weight: bold;
+        }
+
+        .actions a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .actions a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1>책 목록</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>제목</th>
+        <th>출판사</th>
+        <th>가격</th>
+        <th>판매 가격</th>
+        <th>출판 날짜</th>
+        <th>상태</th>
+        <th>액션</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.bookId}"></td>
+        <td th:text="${book.title}"></td>
+        <td th:text="${book.publisher}"></td>
+        <td th:text="${book.price}"></td>
+        <td th:text="${book.saleprice}"></td>
+        <td th:text="${book.publicationDate}"></td>
+        <td th:text="${book.bookStatus.status}"></td>
+        <td class="actions">
+            <!-- 도서 상태 수정 버튼 -->
+            <a th:href="@{'/admin/books/status/' + ${book.bookId} + '?page=' + ${currentPage}}">도서 상태 수정</a>
+            <!-- 도서 정보 수정 버튼 -->
+            <a th:href="@{'/admin/books/update/' + ${book.bookId} + '?page=' + ${currentPage}}">도서 수정</a>
+            <!-- 도서 포장 여부 수정 버튼 -->
+            <a th:href="@{'/admin/books/gift/' + ${book.bookId} + '?page=' + ${currentPage}}">포장 여부 수정</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이지 네비게이션 -->
+<div class="pagination">
+    <span th:text="'현재 페이지: ' + ${currentPage} + ' / ' + ${totalPages}"></span>
+    <br/>
+    <a th:href="@{'/admin/books/list'(page=${currentPage - 1}, size=${size})}" th:if="${currentPage > 1}">이전</a>
+    <a th:href="@{'/admin/books/list'(page=${currentPage + 1}, size=${size})}"
+       th:if="${currentPage < totalPages}">다음</a>
+</div>
+
+<a href="/admin">관리자 페이지로 돌아가기</a>
+</body>
+</html>

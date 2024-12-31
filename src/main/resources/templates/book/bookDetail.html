@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${book.title} + ' - 상세정보'">Book Details</title>
+</head>
+<body>
+<header>
+    <h3 th:text="${book.title}">도서 제목</h3>
+</header>
+
+<section>
+    <!-- 기본 정보 -->
+    <p><strong>출판사:</strong> <span th:text="${book.publisher}">출판사 이름</span></p>
+    <p><strong>ISBN:</strong> <span th:text="${book.isbn}">ISBN 정보</span></p>
+    <p><strong>페이지 수:</strong> <span th:text="${book.pages}">페이지 수</span></p>
+    <p><strong>목차:</strong> <span th:text="${book.bookIndex}">목차</span></p>
+    <p><strong>설명:</strong> <span th:text="${book.description}">도서 설명</span></p>
+
+    <!-- 가격 -->
+    <p><strong>가격:</strong>
+        <span th:if="${book.saleprice != null}">
+                <s th:text="${book.price}"></s> <span th:text="${book.saleprice}"></span> 원
+            </span>
+        <span th:if="${book.saleprice == null}" th:text="${book.price}">가격</span>
+    </p>
+
+    <!-- 이미지 -->
+    <div>
+        <strong>이미지:</strong>
+        <div>
+            <p>썸네일 이미지:</p>
+            <img th:src="${book.thumbnailImage}" alt="Thumbnail Image" style="max-width: 200px;">
+        </div>
+        <div>
+            <p>디테일 이미지:</p>
+            <img th:src="${book.detailImage}" alt="Detail Image" style="max-width: 400px;">
+        </div>
+    </div>
+
+    <!-- 카테고리 -->
+    <div>
+        <strong>카테고리:</strong>
+        <ul>
+            <li th:each="categoryGroup : ${book.categoryList}">
+                <ul>
+                    <li th:each="category : ${categoryGroup}">
+                        <span th:text="${category.categoryName}">카테고리 이름</span>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 태그 -->
+    <div>
+        <strong>태그:</strong>
+        <ul>
+            <li th:each="tag : ${book.tagList}" th:text="${tag.tagName}">태그</li>
+        </ul>
+    </div>
+
+    <!-- 기여자 -->
+    <div>
+        <strong>기여자:</strong>
+        <ul>
+            <li th:each="contributor : ${book.contributorResponsDtos}">
+                <span th:text="${contributor.contributorName}">기여자 이름</span> -
+                <span th:text="${contributor.contributorRole}">역할</span>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<!-- 좋아요 버튼 -->
+<form th:action="@{'/books/' + ${book.bookId} + '/like'}" method="post">
+    <button type="submit" th:text="${book.isLiked ? '좋아요 취소' : '좋아요'}"></button>
+</form>
+</body>
+</html>

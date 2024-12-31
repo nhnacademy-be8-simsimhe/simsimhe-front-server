@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Book</title>
+    <script>
+        function addSelectedItem(selectElementId, listElementId) {
+            const selectElement = document.getElementById(selectElementId);
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const listElement = document.getElementById(listElementId);
+
+            if (selectedOption.value) {
+                const li = document.createElement("li");
+                li.textContent = selectedOption.text;
+                li.setAttribute("data-id", selectedOption.value);
+
+                const hiddenInput = document.createElement("input");
+                hiddenInput.type = "hidden";
+                hiddenInput.name = listElementId;
+                hiddenInput.value = selectedOption.value;
+
+                li.appendChild(hiddenInput);
+
+                const removeButton = document.createElement("button");
+                removeButton.type = "button";
+                removeButton.textContent = "Remove";
+                removeButton.onclick = function() {
+                    listElement.removeChild(li);
+                };
+
+                li.appendChild(removeButton);
+                listElement.appendChild(li);
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Register Book</h1>
+<form th:action="@{/admin/books/create}" method="post" th:object="${book}">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" th:field="*{title}" required />
+    <br />
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" th:field="*{description}" required></textarea>
+    <br />
+
+    <label for="bookIndex">Book Index:</label>
+    <textarea id="bookIndex" name="bookIndex" th:field="*{bookIndex}" required></textarea>
+    <br />
+
+    <label for="publisher">Publisher:</label>
+    <input type="text" id="publisher" name="publisher" th:field="*{publisher}" required />
+    <br />
+
+    <label for="isbn">ISBN:</label>
+    <input type="text" id="isbn" name="isbn" th:field="*{isbn}" required />
+    <br />
+
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" th:field="*{quantity}" required />
+    <br />
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" th:field="*{price}" required />
+    <br />
+
+    <label for="saleprice">Sale Price:</label>
+    <input type="number" id="saleprice" name="saleprice" th:field="*{saleprice}" required />
+    <br />
+
+    <label for="publicationDate">Publication Date:</label>
+    <input type="date" id="publicationDate" name="publicationDate" th:field="*{publicationDate}" required />
+    <br />
+
+    <label for="pages">Pages:</label>
+    <input type="number" id="pages" name="pages" th:field="*{pages}" required />
+    <br />
+
+    <label for="bookStatus">Book Status:</label>
+    <select id="bookStatus" name="bookStatus" th:field="*{bookStatus}" required>
+        <option value="ONSALE">On Sale</option>
+        <option value="OUTOFSTOCK">Out of Stock</option>
+        <option value="DISCONTINUED">Discontinued</option>
+    </select>
+    <br />
+
+    <label for="giftPackaging">Gift Packaging:</label>
+    <input type="checkbox" id="giftPackaging" name="giftPackaging" th:field="*{giftPackaging}" />
+    <br />
+
+    <h2>Contributors</h2>
+    <select id="contributors" th:id="contributors" th:field="*{contributoridList}">
+        <option th:each="contributor : ${contributorList}" th:value="${contributor.contributorId}" th:text="${contributor.contributorName + ' (' + contributor.contributorRole + ')'}"></option>
+    </select>
+    <button type="button" onclick="addSelectedItem('contributors', 'contributorIdList')">Add Contributor</button>
+    <ul id="contributorIdList"></ul>
+
+    <h2>Categories</h2>
+    <select id="categories" th:id="categories" th:field="*{categoryIdList}">
+        <option th:each="category : ${categoryList}" th:value="${category.categoryId}" th:text="${category.categoryName}"></option>
+    </select>
+    <button type="button" onclick="addSelectedItem('categories', 'categoryIdList')">Add Category</button>
+    <ul id="categoryIdList"></ul>
+
+    <h2>Tags</h2>
+    <select id="tags" th:id="tags" th:field="*{tagIdList}">
+        <option th:each="tag : ${tagList}" th:value="${tag.tagId}" th:text="${tag.tagName}"></option>
+    </select>
+    <button type="button" onclick="addSelectedItem('tags', 'tagIdList')">Add Tag</button>
+    <ul id="tagIdList"></ul>
+
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
