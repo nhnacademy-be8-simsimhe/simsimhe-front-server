@@ -1,6 +1,6 @@
-package com.simsimbookstore.frontserver.user.controller;
+package com.simsimbookstore.frontserver.users.user.controller;
 
-import com.simsimbookstore.frontserver.user.service.SocialService;
+import com.simsimbookstore.frontserver.users.user.service.SocialService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.simsimbookstore.frontserver.user.feign;
+package com.simsimbookstore.frontserver.users.user.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;

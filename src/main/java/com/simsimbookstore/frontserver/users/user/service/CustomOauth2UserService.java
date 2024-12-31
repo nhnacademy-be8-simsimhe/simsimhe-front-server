@@ -1,4 +1,4 @@
-package com.simsimbookstore.frontserver.user.service;
+package com.simsimbookstore.frontserver.users.user.service;
 
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

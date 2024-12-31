@@ -1,6 +1,6 @@
-package com.simsimbookstore.frontserver.user.service;
+package com.simsimbookstore.frontserver.users.user.service;
 
-import com.simsimbookstore.frontserver.user.request.LocalUserRequest;
+import com.simsimbookstore.frontserver.users.user.request.LocalUserRequest;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package com.simsimbookstore.frontserver;
+package com.simsimbookstore.frontserver.controller.home;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
