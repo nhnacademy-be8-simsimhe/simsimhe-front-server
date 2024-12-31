@@ -21,6 +21,9 @@ public interface ContributorClient {
     @GetMapping
     PageResponse<ContributorResponseDto> getAllContributorPage(@RequestParam("page") int page, @RequestParam("size") int size);
 
+    @GetMapping("/list")
+    List<ContributorResponseDto> getAllContributers();
+
     /**
      * 기여자 등록
      *

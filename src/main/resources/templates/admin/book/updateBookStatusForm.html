@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>도서 상태 및 정보 수정</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+
+        input[readonly], textarea[readonly] {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1>도서 상태만 수정해주세요</h1>
+
+<!-- 상태 및 정보 수정 폼 -->
+<form th:action="@{'/admin/books/status/' + ${bookId} + '?page=' + ${page}}" method="post">
+    <input type="hidden" name="_method" value="put"/> <!-- PUT 메서드 지원 -->
+
+    <!-- 도서 상태 수정 -->
+    <label for="bookStatus">도서 상태:</label>
+    <select id="bookStatus" name="bookStatus" required>
+        <option th:each="status : ${T(com.simsimbookstore.frontserver.books.book.dto.BookListResponse$BookStatus).values()}"
+                th:value="${status.name()}"
+                th:text="${status.status}"
+                th:selected="${currentStatus == status.name()}">
+        </option>
+    </select>
+
+    <!-- 도서 정보 수정 가능 -->
+    <label for="title">책 이름:</label>
+    <input type="text" id="title" name="title" th:value="${book.title}" required/>
+
+    <label for="description">책 설명:</label>
+    <textarea id="description" name="description" rows="3" th:text="${book.description}" required></textarea>
+
+    <label for="bookIndex">목차:</label>
+    <textarea id="bookIndex" name="bookIndex" rows="3" th:text="${book.bookIndex}" required></textarea>
+
+    <label for="publisher">출판사:</label>
+    <input type="text" id="publisher" name="publisher" th:value="${book.publisher}" required/>
+
+    <label for="isbn">ISBN:</label>
+    <input type="text" id="isbn" name="isbn" th:value="${book.isbn}" required/>
+
+    <label for="quantity">수량:</label>
+    <input type="number" id="quantity" name="quantity" th:value="${book.quantity}" required/>
+
+    <label for="price">정가:</label>
+    <input type="number" id="price" name="price" th:value="${book.price}" required/>
+
+    <label for="saleprice">판매가:</label>
+    <input type="number" id="saleprice" name="saleprice" th:value="${book.saleprice}" required/>
+
+    <label for="publicationDate">출판일:</label>
+    <input type="date" id="publicationDate" name="publicationDate" th:value="${book.publicationDate}" required/>
+
+    <label for="pages">페이지 수:</label>
+    <input type="number" id="pages" name="pages" th:value="${book.pages}" required/>
+
+
+    <button type="submit">수정하기</button>
+</form>
+
+<a href="/admin/books/list">목록으로 돌아가기</a>
+</body>
+</html>

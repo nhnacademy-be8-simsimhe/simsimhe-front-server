@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Category List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .pagination {
+            margin-top: 20px;
+        }
+        .pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .pagination a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1>Category List</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="category : ${categories}">
+        <td th:text="${category.categoryId}"></td>
+        <td th:text="${category.categoryName}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이지 네비게이션 -->
+<div class="pagination">
+    <span th:text="'Page: ' + ${currentPage} + ' / ' + ${totalPages}"></span>
+    <br/>
+    <a th:href="@{'/admin/categories'(page=${currentPage - 1}, size=${size})}" th:if="${currentPage > 1}">Previous</a>
+    <a th:href="@{'/admin/categories'(page=${currentPage + 1}, size=${size})}"
+       th:if="${currentPage < totalPages}">Next</a>
+</div>
+
+<a href="/admin">Back to Admin Page</a>
+</body>
+</html>
