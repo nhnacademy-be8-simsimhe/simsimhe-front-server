@@ -1,7 +1,7 @@
 package com.simsimbookstore.frontserver.security.userDetails;
 
 
-import com.simsimbookstore.frontserver.users.user.dto.RoleName;
+import com.simsimbookstore.frontserver.users.role.dto.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.simsimbookstore.frontserver.users.localUser.dto;
 
-import com.simsimbookstore.frontserver.users.user.dto.RoleName;
+import com.simsimbookstore.frontserver.users.role.dto.RoleName;
 import lombok.*;
 
 import java.util.List;

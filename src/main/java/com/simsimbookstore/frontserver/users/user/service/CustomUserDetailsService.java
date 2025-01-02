@@ -3,7 +3,7 @@ package com.simsimbookstore.frontserver.users.user.service;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserResponse;
 import com.simsimbookstore.frontserver.users.localUser.service.LocalUserService;
-import com.simsimbookstore.frontserver.users.user.dto.RoleName;
+import com.simsimbookstore.frontserver.users.role.dto.RoleName;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
