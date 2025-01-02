@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Delivery Policies</title>
+</head>
+<body>
+<h1>Delivery Policies</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Standard Price</th>
+        <th>Standard Policy</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="policy : ${deliveryPolicies}">
+        <td th:text="${policy.deliveryPolicyId}"></td>
+        <td th:text="${policy.deliveryPolicyName}"></td>
+        <td th:text="${policy.deliveryPrice}"></td>
+        <td th:text="${policy.policyStandardPrice}"></td>
+        <td>
+            <span th:text="${policy.standardPolicy} ? 'Yes' : 'No'"></span>
+            <form th:action="@{/admin/delivery-policies/toggle/{id}(id=${policy.deliveryPolicyId})}" method="post" style="display:inline;">
+                <button type="submit" th:text="${policy.standardPolicy} ? '' : 'Set as Default'"></button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/admin/delivery-policies/delete/{id}(id=${policy.deliveryPolicyId})}" method="post" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div>
+    <a th:href="@{/admin/delivery-policies/create}">Add New Delivery Policy</a>
+</div>
+
+
+<div>
+    <a th:href="@{/admin}">
+        <button type="button">어드민 메인 페이지</button>
+    </a>
+</div>
+
+</body>
+</html>
