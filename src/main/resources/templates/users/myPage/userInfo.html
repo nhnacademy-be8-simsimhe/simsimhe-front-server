@@ -46,16 +46,36 @@
       <div class="card-body">
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
-            <strong>이메일:</strong> honggildong@example.com
+            <strong>유저 아이디:</strong> <span th:text="${user.getUserId()}"></span>
           </li>
           <li class="list-group-item">
-            <strong>가입일:</strong> 2024년 1월 1일
+            <strong>유저 이름:</strong> <span th:text="${user.getUserName()}"></span>
           </li>
           <li class="list-group-item">
-            <strong>최근 로그인:</strong> 2024년 12월 30일
+            <strong>전화번호:</strong> <span th:text="${user.getMobileNumber()}"></span>
           </li>
           <li class="list-group-item">
-            <strong>비밀번호 변경:</strong> <a href="change-password.html">비밀번호 변경</a>
+            <strong>이메일:</strong> <span th:text="${user.getEmail()}"></span>
+          </li>
+          <li class="list-group-item">
+            <strong>생일:</strong> <span th:text="${user.getBirth()}"></span>
+          </li>
+          <li class="list-group-item">
+            <strong>성별:</strong> <span th:text="${user.getGender()}"></span>
+          </li>
+          <li class="list-group-item">
+            <strong>생성일:</strong> <span th:text="${user.getCreatedAt()}"></span>
+          </li>
+
+          <li class="list-group-item">
+            <strong>생성일:</strong> <span th:text="${user.getCreatedAt()}"></span>
+          </li>
+
+          <li class="list-group-item">
+            <strong>역할:</strong>
+            <ul>
+              <li th:each="role : ${user.getRoles()}" th:text="${role}"></li>
+            </ul>
           </li>
         </ul>
       </div>

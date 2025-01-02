@@ -1,7 +1,6 @@
 package com.simsimbookstore.frontserver.config;
 
 
-import com.simsimbookstore.frontserver.security.filter.JwtAuthenticationFilter;
 import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
 import com.simsimbookstore.frontserver.security.handler.LocalLoginSuccessHandler;
@@ -21,7 +20,6 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Map;
 
@@ -40,7 +38,7 @@ public class SecurityConfig {
 
         //authorize
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-//                .requestMatchers("/users/myPage").authenticated()
+                .requestMatchers("/users/myPage/**").authenticated()
                 .requestMatchers("/management/health").permitAll()
                 .anyRequest().permitAll());
 
@@ -63,7 +61,7 @@ public class SecurityConfig {
 
 
         // local login
-        http.formLogin(form->form.loginPage("/index")
+        http.formLogin(form->form.loginPage("/index?showLoginModal=true")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
                 .failureHandler(new CustomAuthFailureHandler())
