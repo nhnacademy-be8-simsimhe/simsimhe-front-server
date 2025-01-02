@@ -48,25 +48,25 @@ public class BookGetController {
         return "book/booksByCategory"; // 카테고리별 도서 목록을 보여줄 뷰 이름
     }
 
-
-    @GetMapping
-    public String getNewBooks(Model model) {
-        List<BookListResponse> newBooks = bookGetService.getNewBooks();
-        List<TagResponseDto> tags = tagService.getAllTags();
-        List<CategoryResponseDto> categorys = categoryService.getALlCategorys();
-
-        // 카테고리를 6개씩 그룹화
-        List<List<CategoryResponseDto>> groupedCategories = new ArrayList<>();
-        int groupSize = 6;
-        for (int i = 0; i < categorys.size(); i += groupSize) {
-            groupedCategories.add(categorys.subList(i, Math.min(i + groupSize, categorys.size())));
-        }
-
-        model.addAttribute("newBooks", newBooks);
-        model.addAttribute("tags", tags);
-        model.addAttribute("groupedCategories", groupedCategories);
-        return "main/index";
-    }
+//
+//    @GetMapping
+//    public String getNewBooks(Model model) {
+//        List<BookListResponse> newBooks = bookGetService.getNewBooks();
+//        List<TagResponseDto> tags = tagService.getAllTags();
+//        List<CategoryResponseDto> categorys = categoryService.getALlCategorys();
+//
+//        // 카테고리를 6개씩 그룹화
+//        List<List<CategoryResponseDto>> groupedCategories = new ArrayList<>();
+//        int groupSize = 6;
+//        for (int i = 0; i < categorys.size(); i += groupSize) {
+//            groupedCategories.add(categorys.subList(i, Math.min(i + groupSize, categorys.size())));
+//        }
+//
+//        model.addAttribute("newBooks", newBooks);
+//        model.addAttribute("tags", tags);
+//        model.addAttribute("groupedCategories", groupedCategories);
+//        return "main/index";
+//    }
 
     @GetMapping("/{bookId}")
     public String getBookDetails(@PathVariable Long bookId,

@@ -275,3 +275,10 @@ document.getElementById('registerForm').addEventListener('submit', function(even
       });
 });
 
+
+const urlParams = new URLSearchParams(window.location.search);
+const showModal = urlParams.get('showLoginModal');
+
+if (showModal === 'true'){
+  new bootstrap.Modal(document.getElementById('authModal')).show()
+}
