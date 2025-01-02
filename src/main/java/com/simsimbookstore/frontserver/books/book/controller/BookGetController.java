@@ -3,6 +3,10 @@ package com.simsimbookstore.frontserver.books.book.controller;
 import com.simsimbookstore.frontserver.books.book.dto.BookListResponse;
 import com.simsimbookstore.frontserver.books.book.dto.BookResponseDto;
 import com.simsimbookstore.frontserver.books.book.service.BookGetService;
+import com.simsimbookstore.frontserver.books.category.dto.CategoryResponseDto;
+import com.simsimbookstore.frontserver.books.category.service.CategoryService;
+import com.simsimbookstore.frontserver.books.tag.dto.TagResponseDto;
+import com.simsimbookstore.frontserver.books.tag.service.TagService;
 import com.simsimbookstore.frontserver.util.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,7 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/books")
@@ -20,21 +26,84 @@ import java.util.List;
 public class BookGetController {
 
     private final BookGetService bookGetService;
+    private final TagService tagService;
+    private final CategoryService categoryService;
 
-    @GetMapping
-    public String getNewBooks(Model model) {
-        List<BookListResponse> newBooks = bookGetService.getNewBooks();
-        model.addAttribute("newBooks", newBooks);
-        return "main/index";
+    @GetMapping("/category/{categoryId}")
+    public String getBooksByCategory(@PathVariable(name = "categoryId") Long categoryId,
+                                     @RequestParam(required = false) Long userId,
+                                     @RequestParam(defaultValue = "1") int page,
+                                     @RequestParam(defaultValue = "10") int size,
+                                     Model model) {
+        // 카테고리와 관련된 도서 조회
+        PageResponse<BookListResponse> booksPage = bookGetService.getBooksByCategory(categoryId, userId, page, size);
+
+
+        model.addAttribute("books", booksPage.getData()); // 도서 리스트
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute("currentPage", page); // 현재 페이지 번호
+        model.addAttribute("totalPages", booksPage.getTotalPage()); // 총 페이지 수
+        model.addAttribute("size", size); // 페이지 크기
+
+        return "book/booksByCategory"; // 카테고리별 도서 목록을 보여줄 뷰 이름
     }
+
+//
+//    @GetMapping
+//    public String getNewBooks(Model model) {
+//        List<BookListResponse> newBooks = bookGetService.getNewBooks();
+//        List<TagResponseDto> tags = tagService.getAllTags();
+//        List<CategoryResponseDto> categorys = categoryService.getALlCategorys();
+//
+//        // 카테고리를 6개씩 그룹화
+//        List<List<CategoryResponseDto>> groupedCategories = new ArrayList<>();
+//        int groupSize = 6;
+//        for (int i = 0; i < categorys.size(); i += groupSize) {
+//            groupedCategories.add(categorys.subList(i, Math.min(i + groupSize, categorys.size())));
+//        }
+//
+//        model.addAttribute("newBooks", newBooks);
+//        model.addAttribute("tags", tags);
+//        model.addAttribute("groupedCategories", groupedCategories);
+//        return "main/index";
+//    }
 
     @GetMapping("/{bookId}")
     public String getBookDetails(@PathVariable Long bookId,
                                  @RequestParam(required = false) Long userId,
                                  Model model) {
         BookResponseDto book = bookGetService.getBook(bookId, userId);
+        // 도서의 카테고리 ID 리스트 변환
+        List<Long> categoryIdList = book.getCategoryList().stream()
+                .flatMap(List::stream)
+                .map(CategoryResponseDto::getCategoryId) // 각 CategoryResponseDto에서 ID 추출
+                .collect(Collectors.toList());
+        // 추천 도서 조회
+        List<BookListResponse> recommendBooks = bookGetService.getRecommendBooks(bookId, categoryIdList);
+
         model.addAttribute("book", book);
+        model.addAttribute("recommendBooks", recommendBooks);
         return "book/bookDetail";
+    }
+
+    @GetMapping("/tag/{tagId}")
+    public String getBooksByTag(@PathVariable Long tagId,
+                                @RequestParam(required = false) Long userId,
+                                @RequestParam(defaultValue = "1") int page,
+                                @RequestParam(defaultValue = "16") int size,
+                                Model model) {
+        // 태그에 맞는 도서 목록 조회
+        PageResponse<BookListResponse> booksByTag = bookGetService.getBooksByTag(tagId, userId, page, size);
+        List<TagResponseDto> tags = tagService.getAllTags();
+
+        model.addAttribute("books", booksByTag.getData()); // 도서 목록
+        //model.addAttribute("tags", tags);                 // 모든 태그
+        model.addAttribute("currentTagId", tagId);        // 현재 선택된 태그 ID
+        model.addAttribute("currentPage", page); // 현재 페이지 번호
+        model.addAttribute("totalPages", booksByTag.getTotalPage()); // 총 페이지 수
+        model.addAttribute("size", size); // 한 페이지에 표시할 항목 수
+
+        return "book/bookListByTag"; // 태그별 도서 목록 뷰
     }
 
 
