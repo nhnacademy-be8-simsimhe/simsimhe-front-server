@@ -1,15 +1,10 @@
 package com.simsimbookstore.frontserver.users.user.service;
 
-import com.simsimbookstore.frontserver.users.user.request.LocalUserRequest;
+import com.simsimbookstore.frontserver.users.user.dto.UserResponse;
 
 public interface UserService {
-    String addLocalUser(LocalUserRequest localUserRequest);
 
-    String findUserByUserId(Long userId);
-
-    LocalUserRequest findUserByLoginId(String loginId);
-
-    boolean existsByLoginId(String loginId);
+    UserResponse findUserByUserId(Long userId);
 
     String generateJwt(String loginId);
 }

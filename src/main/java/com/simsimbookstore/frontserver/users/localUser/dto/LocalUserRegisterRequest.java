@@ -1,19 +1,17 @@
-package com.simsimbookstore.frontserver.users.user.request;
+package com.simsimbookstore.frontserver.users.localUser.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.simsimbookstore.frontserver.users.role.dto.RoleName;
+import com.simsimbookstore.frontserver.users.user.dto.Gender;
+import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
-public class LocalUserRequest {
+public class LocalUserRegisterRequest {
     private String userName;
 
     private String mobileNumber;
@@ -25,23 +23,15 @@ public class LocalUserRequest {
 
     private Gender gender;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
-
     private RoleName roleName = RoleName.USER;
 
     private String loginId;
 
     private String password;
 
-    public enum Gender{
-        MALE,
-        FEMALE
-    }
-
-    public enum RoleName{
-        USER,
-        ADMIN,
-        GUEST
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }
+
 
