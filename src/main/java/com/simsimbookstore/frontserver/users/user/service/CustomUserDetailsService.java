@@ -35,9 +35,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .authorities(new ArrayList<>())
                 .build();
 
-        for (RoleName role : localUserResponse.getRoles()){
-            customUserDetails.addRole(role);
-        }
+//        for (RoleName role : localUserResponse.getRoles()){
+//            customUserDetails.addRole(role);
+//        }
         return customUserDetails;
     }
 }
