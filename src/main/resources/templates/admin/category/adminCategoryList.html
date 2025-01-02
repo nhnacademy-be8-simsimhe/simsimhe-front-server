@@ -40,12 +40,21 @@
     <tr>
         <th>ID</th>
         <th>Name</th>
+        <th>하위 카테고리</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="category : ${categories}">
         <td th:text="${category.categoryId}"></td>
         <td th:text="${category.categoryName}"></td>
+        <td>
+            <!-- 자식 카테고리가 없으면 "없음" 표시 -->
+            <span th:if="${category.children == null || category.children.isEmpty()}" th:text="'하위 카테고리 없음'"></span>
+            <!-- 자식 카테고리가 있으면 목록 표시 -->
+            <ul th:if="${category.children != null && !category.children.isEmpty()}">
+                <li th:each="child : ${category.children}" th:text="${child.categoryName}"></li>
+            </ul>
+        </td>
     </tr>
     </tbody>
 </table>
@@ -62,3 +71,5 @@
 <a href="/admin">Back to Admin Page</a>
 </body>
 </html>
+
+
