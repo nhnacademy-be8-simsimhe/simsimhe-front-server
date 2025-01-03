@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Comments</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      height: 80vh;
+    }
+    .comments-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .comment {
+      margin-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 10px;
+    }
+    .comment:last-child {
+      border-bottom: none;
+    }
+    .comment-author {
+      font-weight: bold;
+    }
+    .comment-date {
+      font-size: 0.85rem;
+      color: #888;
+    }
+    .comment-content {
+      margin-top: 5px;
+    }
+    .like-btn, .reply-btn {
+      color: #007bff;
+      cursor: pointer;
+      margin-right: 10px;
+      font-size: 0.9rem;
+    }
+    .like-btn:hover, .reply-btn:hover {
+      text-decoration: underline;
+    }
+    .comment-input {
+      border-top: 1px solid #e0e0e0;
+      padding: 15px;
+    }
+    textarea {
+      resize: none;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h5 class="p-3">댓글 <span th:text="${size}"></span></h5>
+  <div class="comments-list">
+    <div th:each="comment : ${comments}" class="comment">
+
+      <div class="d-flex justify-content-between">
+        <span class="comment-date" th:text="${comment.userName}"></span>
+        <span class="comment-date" th:text="${comment.createdAt}"></span>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div class="comment-content" th:text="${comment.content}"></div>
+        <form class="comment-input" th:action="@{/reviews/{reviewId}/comments/{commentId}(reviewId=${reviewId}, commentId=${comment.reviewCommentId})}" th:method="delete">
+          <div class="text-end mt-2">
+            <button type="submit" class="btn btn-primary">삭제</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">수정</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  <form class="comment-input" th:action="@{/reviews/{reviewId}/comments(reviewId=${reviewId})}" method="post">
+    <textarea class="form-control" name="content" rows="2" placeholder="댓글 입력"></textarea>
+    <div class="text-end mt-2">
+      <button type="submit" class="btn btn-primary">등록</button>
+    </div>
+  </form>
+
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Review</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Edit Form -->
+          <form id="editReviewForm">
+            <div class="mb-3">
+              <label for="reviewTitle" class="form-label">Title</label>
+              <input type="text" class="form-control" id="reviewTitle" name="title">
+            </div>
+            <div class="mb-3">
+              <label for="reviewContent" class="form-label">Content</label>
+              <textarea class="form-control" id="reviewContent" name="content" rows="4"></textarea>
+            </div>
+            <input type="hidden" id="reviewId">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveReviewButton">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+</body>
+</html>

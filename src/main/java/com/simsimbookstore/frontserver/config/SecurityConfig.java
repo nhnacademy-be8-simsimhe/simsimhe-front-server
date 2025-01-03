@@ -43,6 +43,7 @@ public class SecurityConfig {
         //authorize
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 .requestMatchers("/users/myPage").authenticated()
+                .requestMatchers("/reviews").permitAll()
                 .requestMatchers("/management/health").permitAll()
                 .anyRequest().permitAll());
 
