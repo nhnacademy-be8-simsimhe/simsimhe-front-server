@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>포장지 판매 가능 여부 수정</title>
+</head>
+<body>
+<header>
+  <h1>포장지 판매 가능 여부 수정</h1>
+</header>
+<main>
+  <form th:action="@{/admin/wrap-types/update/{id}/availability(id=${wrapType.packageTypeId})}" method="post">
+    <p>포장지 이름: <span th:text="${wrapType.packageName}"></span></p>
+    <label for="isAvailable">판매 가능 여부:</label>
+    <select id="isAvailable" name="isAvailable">
+      <option value="true" th:selected="${wrapType.isAvailable}">가능</option>
+      <option value="false" th:selected="${wrapType.isAvailable}">불가능</option>
+    </select>
+    <button type="submit">저장</button>
+  </form>
+</main>
+</body>
+</html>

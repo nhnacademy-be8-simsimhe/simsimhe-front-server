@@ -1,15 +1,16 @@
 package com.simsimbookstore.frontserver.config;
 
 
-import com.simsimbookstore.frontserver.security.filter.JwtAuthenticationFilter;
+//import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
-import com.simsimbookstore.frontserver.user.service.CustomUserDetailsService;
-import com.simsimbookstore.frontserver.user.service.UserService;
-import com.simsimbookstore.frontserver.util.JsonUtil;
+//import com.simsimbookstore.frontserver.security.handler.LocalLoginSuccessHandler;
+import com.simsimbookstore.frontserver.users.user.service.CustomUserDetailsService;
+import com.simsimbookstore.frontserver.users.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,22 +20,17 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 
 import java.util.Map;
 
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
-
-    public SecurityConfig(CustomUserDetailsService userDetailsService, UserService userService, JsonUtil jsonUtil) {
-        this.userDetailsService = userDetailsService;
-        this.userService = userService;
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,15 +38,15 @@ public class SecurityConfig {
 
         //authorize
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers("/users/myPage").authenticated()
-                .requestMatchers("/reviews").permitAll()
+                .requestMatchers("/users/myPage/**").authenticated()
                 .requestMatchers("/management/health").permitAll()
                 .anyRequest().permitAll());
+
+
 
         //rememberme
         http.rememberMe(rememberMe->rememberMe
                 .tokenValiditySeconds(3600)
-                .alwaysRemember(true)
                 .userDetailsService(userDetailsService)
                 .rememberMeParameter("remember-me"));
 
@@ -65,20 +61,27 @@ public class SecurityConfig {
 
 
         // local login
-        http.formLogin(form->form.loginPage("/login"));
-        http.logout(logout->logout.addLogoutHandler(new CustomLogoutHandler()));
+        http.formLogin(form->form.loginPage("/index?showLoginModal=true")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+//                .failureHandler(new CustomAuthFailureHandler())
+//                .successHandler(new LocalLoginSuccessHandler(userService))
+        );
+        http.logout(logout->logout
+                .addLogoutHandler(new CustomLogoutHandler())
+                .logoutUrl("/logout"));
 
         // filter
-        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(null),userService), AnonymousAuthenticationFilter.class);
+//        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(null),userService), AnonymousAuthenticationFilter.class);
+//        http
+//                .addFilterAt(new JwtAuthenticationFilter(authenticationManager(null),userService), UsernamePasswordAuthenticationFilter.class)
+//                .anonymous(AbstractHttpConfigurer::disable);
         return http.build();
-
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-        return authenticationManagerBuilder.build();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean

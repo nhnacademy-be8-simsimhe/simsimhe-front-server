@@ -208,6 +208,8 @@
             </div>
         </div>
     </div>
+    </div>
+    </div>
 
     <nav id="header-nav" class="navbar navbar-expand-lg py-3">
         <div class="container">
@@ -215,8 +217,7 @@
                 <img src="/images/main-logo.png" class="logo">
             </a>
             <button class="navbar-toggler d-flex d-lg-none order-3 p-2" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false"
-                    aria-label="Toggle navigation">
+                    data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <svg class="navbar-icon">
                     <use xlink:href="#navbar-icon"></use>
                 </svg>
@@ -226,8 +227,7 @@
                     <a class="navbar-brand" href="index.html">
                         <img src="/images/main-logo.png" class="logo">
                     </a>
-                    <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas"
-                            aria-label="Close"
+                    <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas" aria-label="Close"
                             data-bs-target="#bdNavbar"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -245,53 +245,6 @@
                         <li class="nav-item">
                             <a class="nav-link me-4" href="index.html">Blogs</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link me-4" href="/admin">Admin</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <!-- 태그 메뉴 -->
-                            <a class="nav-link me-4 dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                               aria-expanded="false">Tags</a>
-                            <ul class="dropdown-menu animate slide border">
-                                <li th:each="tag : ${tags}">
-                                    <a th:href="@{'/books/tag/' + ${tag.tagId}}"
-                                       th:text="${tag.tagName}"
-                                       class="dropdown-item fw-light">
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link me-4 dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                               aria-expanded="false">Categories</a>
-                            <div class="dropdown-menu p-4 border" style="min-width: 600px;">
-                                <div class="row">
-                                    <div class="col-md-4" th:each="categoryGroup : ${groupedCategories}">
-                                        <ul class="list-unstyled">
-                                            <li th:each="category : ${categoryGroup}">
-                                                <a th:href="@{'/books/category/' + ${category.categoryId}}"
-                                                   th:text="${category.categoryName}"
-                                                   class="dropdown-item fw-light">
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-
-                        <style>
-                            .dropdown-menu {
-                                max-height: 400px;
-                                overflow-y: auto;
-                            }
-
-                            .dropdown-item:hover {
-                                background-color: #f8f9fa;
-                            }
-                        </style>
-
-
                         <li class="nav-item dropdown">
                             <a class="nav-link me-4 dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                                aria-expanded="false">Pages</a>
@@ -320,7 +273,6 @@
                                 <li>
                                     <a href="index.html" class="dropdown-item fw-light">Contact</a>
                                 </li>
-
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -461,8 +413,7 @@
                                 </div>
                             </li>
                             <li class="wishlist-dropdown dropdown pe-3">
-                                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button"
-                                   aria-expanded="false">
+                                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
                                     <svg class="wishlist">
                                         <use xlink:href="#heart"></use>
                                     </svg>
@@ -479,8 +430,7 @@
                                                     <a href="index.html">The Emerald Crown</a>
                                                 </h5>
                                                 <small>Special discounted price.</small>
-                                                <a href="#" class="d-block fw-medium text-capitalize mt-2">Add to
-                                                    cart</a>
+                                                <a href="#" class="d-block fw-medium text-capitalize mt-2">Add to cart</a>
                                             </div>
                                             <span class="text-primary">$2000</span>
                                         </li>
@@ -490,8 +440,7 @@
                                                     <a href="index.html">The Last Enchantment</a>
                                                 </h5>
                                                 <small>Perfect for enlightened people.</small>
-                                                <a href="#" class="d-block fw-medium text-capitalize mt-2">Add to
-                                                    cart</a>
+                                                <a href="#" class="d-block fw-medium text-capitalize mt-2">Add to cart</a>
                                             </div>
                                             <span class="text-primary">$400</span>
                                         </li>
@@ -511,8 +460,7 @@
                                    aria-expanded="false">
                                     <svg class="cart">
                                         <use xlink:href="#cart"></use>
-                                    </svg>
-                                    <span class="fs-6 fw-light">(02)</span>
+                                    </svg><span class="fs-6 fw-light">(02)</span>
                                 </a>
                                 <div class="dropdown-menu animate slide dropdown-menu-start dropdown-menu-lg-end p-3">
                                     <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -545,8 +493,7 @@
                                     </ul>
                                     <div class="d-flex flex-wrap justify-content-center">
                                         <a href="index.html" class="w-100 btn btn-dark mb-1" type="submit">View Cart</a>
-                                        <a href="index.html" class="w-100 btn btn-primary" type="submit">Go to
-                                            checkout</a>
+                                        <a href="index.html" class="w-100 btn btn-primary" type="submit">Go to checkout</a>
                                     </div>
                                 </div>
                             </li>
@@ -638,7 +585,7 @@
                 <div class="icon-box d-flex">
                     <div class="icon-box-icon pe-3 pb-3">
                         <svg class="cart-outline">
-                            <use xlink:href="#cart-outline"/>
+                            <use xlink:href="#cart-outline" />
                         </svg>
                     </div>
                     <div class="icon-box-content">
@@ -651,7 +598,7 @@
                 <div class="icon-box d-flex">
                     <div class="icon-box-icon pe-3 pb-3">
                         <svg class="quality">
-                            <use xlink:href="#quality"/>
+                            <use xlink:href="#quality" />
                         </svg>
                     </div>
                     <div class="icon-box-content">
@@ -664,7 +611,7 @@
                 <div class="icon-box d-flex">
                     <div class="icon-box-icon pe-3 pb-3">
                         <svg class="price-tag">
-                            <use xlink:href="#price-tag"/>
+                            <use xlink:href="#price-tag" />
                         </svg>
                     </div>
                     <div class="icon-box-content">
@@ -677,7 +624,7 @@
                 <div class="icon-box d-flex">
                     <div class="icon-box-icon pe-3 pb-3">
                         <svg class="shield-plus">
-                            <use xlink:href="#shield-plus"/>
+                            <use xlink:href="#shield-plus" />
                         </svg>
                     </div>
                     <div class="icon-box-content">
@@ -697,14 +644,12 @@
             <a href="index.html" class="btn">View All</a>
         </div>
         <div class="position-absolute top-50 end-0 pe-0 pe-xxl-5 me-0 me-xxl-5 swiper-next product-slider-button-next">
-            <svg class="chevron-forward-circle d-flex justify-content-center align-items-center p-2" width="80"
-                 height="80">
+            <svg class="chevron-forward-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
                 <use xlink:href="#alt-arrow-right-outline"></use>
             </svg>
         </div>
         <div class="position-absolute top-50 start-0 ps-0 ps-xxl-5 ms-0 ms-xxl-5 swiper-prev product-slider-button-prev">
-            <svg class="chevron-back-circle d-flex justify-content-center align-items-center p-2" width="80"
-                 height="80">
+            <svg class="chevron-back-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
                 <use xlink:href="#alt-arrow-left-outline"></use>
             </svg>
         </div>
@@ -740,8 +685,7 @@
                         </div>
                         <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
                         <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-                            <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
+                            <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
                                     data-bs-title="Tooltip on top">
                                 <svg class="cart">
                                     <use xlink:href="#cart"></use>
@@ -785,8 +729,7 @@
 
                         <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
                         <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-                            <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
+                            <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
                                     data-bs-title="Tooltip on top">
                                 <svg class="cart">
                                     <use xlink:href="#cart"></use>
@@ -830,8 +773,7 @@
 
                         <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
                         <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-                            <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
+                            <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
                                     data-bs-title="Tooltip on top">
                                 <svg class="cart">
                                     <use xlink:href="#cart"></use>
@@ -878,8 +820,7 @@
 
                         <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
                         <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-                            <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
+                            <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
                                     data-bs-title="Tooltip on top">
                                 <svg class="cart">
                                     <use xlink:href="#cart"></use>
@@ -923,8 +864,7 @@
 
                         <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
                         <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-                            <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
+                            <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
                                     data-bs-title="Tooltip on top">
                                 <svg class="cart">
                                     <use xlink:href="#cart"></use>
@@ -968,8 +908,7 @@
 
                         <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
                         <div class="card-concern position-absolute start-0 end-0 d-flex gap-2">
-                            <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
+                            <button type="button" href="#" class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top"
                                     data-bs-title="Tooltip on top">
                                 <svg class="cart">
                                     <use xlink:href="#cart"></use>
@@ -1029,44 +968,386 @@
     </div>
     </div>
 </section>
+
 <section id="items-listing" class="padding-large">
-    <div class="container mt-5">
-        <h3 class="text-center mb-4">최근 출판된 8개 국내도서</h3>
+    <div class="container">
         <div class="row">
-            <!-- 신규 도서 목록 렌더링 -->
-            <div class="col-md-3 mb-4" th:each="book : ${newBooks}">
-                <div class="card h-100">
-                    <img th:src="${book.imagePath}" class="card-img-top" alt="도서 이미지"
-                         th:alt="'이미지 없음 - ' + ${book.title}" style="width: 300px; height: 400px;">
-
-                    <div class="card-body">
-                        <!-- 도서 제목 -->
-                        <h5 class="card-title" th:text="${book.title ?: '제목 미정'}" style="font-size: 18px;"></h5>
+            <div class="col-md-6 mb-4 mb-lg-0 col-lg-3">
+                <div class="featured border rounded-3 p-4">
+                    <div class="section-title overflow-hidden mb-5 mt-2">
+                        <h3 class="d-flex flex-column mb-0">Featured</h3>
                     </div>
+                    <div class="items-lists">
+                        <div class="item d-flex">
+                            <img src="/images/product-item2.png" class="img-fluid shadow-sm" alt="product item">
+                            <div class="item-content ms-3">
+                                <h6 class="mb-0 fw-bold"><a href="index.html">Echoes of the Ancients</a></h6>
+                                <div class="review-content d-flex">
+                                    <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
 
-                    <!-- 출판사 -->
-                    <p class="card-text">출판사:
-                        <span th:text="${book.publisher ?: '미정'}"></span>
-                    </p>
+                                    <div class="rating text-warning d-flex align-items-center">
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+                            </div>
+                        </div>
+                        <hr class="gray-400">
+                        <div class="item d-flex">
+                            <img src="/images/product-item1.png" class="img-fluid shadow-sm" alt="product item">
+                            <div class="item-content ms-3">
+                                <h6 class="mb-0 fw-bold"><a href="index.html">The Midnight Garden</a></h6>
+                                <div class="review-content d-flex">
+                                    <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                                    <div class="rating text-warning d-flex align-items-center">
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="item d-flex">
+                            <img src="/images/product-item3.png" class="img-fluid shadow-sm" alt="product item">
+                            <div class="item-content ms-3">
+                                <h6 class="mb-0 fw-bold"><a href="index.html">Shadow of the Serpent</a></h6>
+                                <div class="review-content d-flex">
+                                    <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
 
-                    <!-- 가격 -->
-                    <p class="card-text">가격:
-                        <span class="text-decoration-line-through text-secondary"
-                              th:if="${book.saleprice != null}"
-                              th:text="${book.price}"></span>
-                        <span class="fw-bold text-primary"
-                              th:text="${book.saleprice != null ? book.saleprice : book.price}"></span>
-                        원
-                    </p>
-
-                    <!-- 상세보기 버튼 -->
-                    <a href="#" class="btn btn-primary w-100 mt-2" th:href="@{'/books/' + ${book.bookId}}">상세보기</a>
+                                    <div class="rating text-warning d-flex align-items-center">
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4 mb-lg-0 col-lg-3">
+                <div class="latest-items border rounded-3 p-4">
+                    <div class="section-title overflow-hidden mb-5 mt-2">
+                        <h3 class="d-flex flex-column mb-0">Latest items</h3>
+                    </div>
+                    <div class="items-lists">
+                        <div class="item d-flex">
+                            <img src="/images/product-item4.png" class="img-fluid shadow-sm" alt="product item">
+                            <div class="item-content ms-3">
+                                <h6 class="mb-0 fw-bold"><a href="index.html">Whispering Winds</a></h6>
+                                <div class="review-content d-flex">
+                                    <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                                    <div class="rating text-warning d-flex align-items-center">
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+                            </div>
+                        </div>
+                        <hr class="gray-400">
+                        <div class="item d-flex">
+                            <img src="/images/product-item5.png" class="img-fluid shadow-sm" alt="product item">
+                            <div class="item-content ms-3">
+                                <h6 class="mb-0 fw-bold"><a href="index.html">The Forgotten Realm</a></h6>
+                                <div class="review-content d-flex">
+                                    <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                                    <div class="rating text-warning d-flex align-items-center">
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="item d-flex">
+                            <img src="/images/product-item6.png" class="img-fluid shadow-sm" alt="product item">
+                            <div class="item-content ms-3">
+                                <h6 class="mb-0 fw-bold"><a href="index.html">Moonlit Secrets</a></h6>
+                                <div class="review-content d-flex">
+                                    <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                                    <div class="rating text-warning d-flex align-items-center">
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4 mb-lg-0 col-lg-3">
+                <div class="best-reviewed border rounded-3 p-4">
+                    <div class="section-title overflow-hidden mb-5 mt-2">
+                        <h3 class="d-flex flex-column mb-0">Best reviewed</h3>
+                    </div>
+                    <div class="items-lists">
+                        <div class="item d-flex">
+                            <img src="/images/product-item7.png" class="img-fluid shadow-sm" alt="product item">
+                            <div class="item-content ms-3">
+                                <h6 class="mb-0 fw-bold"><a href="index.html">The Crystal Key</a></h6>
+                                <div class="review-content d-flex">
+                                    <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                                    <div class="rating text-warning d-flex align-items-center">
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+                            </div>
+                        </div>
+                        <hr class="gray-400">
+                        <div class="item d-flex">
+                            <img src="/images/product-item8.png" class="img-fluid shadow-sm" alt="product item">
+                            <div class="item-content ms-3">
+                                <h6 class="mb-0 fw-bold"><a href="index.html">Starlight Sonata</a></h6>
+                                <div class="review-content d-flex">
+                                    <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                                    <div class="rating text-warning d-flex align-items-center">
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="item d-flex">
+                            <img src="/images/product-item9.png" class="img-fluid shadow-sm" alt="product item">
+                            <div class="item-content ms-3">
+                                <h6 class="mb-0 fw-bold"><a href="index.html">Tales of the Enchanted Forest</a></h6>
+                                <div class="review-content d-flex">
+                                    <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                                    <div class="rating text-warning d-flex align-items-center">
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="price text-primary fw-bold mb-2 fs-5">$870</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4 mb-lg-0 col-lg-3">
+                <div class="on-sale border rounded-3 p-4">
+                    <div class="section-title overflow-hidden mb-5 mt-2">
+                        <h3 class="d-flex flex-column mb-0">On sale</h3>
+                    </div>
+                    <div class="items-lists">
+                        <div class="item d-flex">
+                            <img src="/images/product-item10.png" class="img-fluid shadow-sm" alt="product item">
+                            <div class="item-content ms-3">
+                                <h6 class="mb-0 fw-bold"><a href="index.html">The Phoenix Chronicles</a></h6>
+                                <div class="review-content d-flex">
+                                    <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                                    <div class="rating text-warning d-flex align-items-center">
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="price text-primary fw-bold mb-2 fs-5"><s class="text-black-50">$1666</s>
+                      $999</span>
+                            </div>
+                        </div>
+                        <hr class="gray-400">
+                        <div class="item d-flex">
+                            <img src="/images/product-item11.png" class="img-fluid shadow-sm" alt="product item">
+                            <div class="item-content ms-3">
+                                <h6 class="mb-0 fw-bold"><a href="index.html">Dreams of Avalon</a></h6>
+                                <div class="review-content d-flex">
+                                    <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                                    <div class="rating text-warning d-flex align-items-center">
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="price text-primary fw-bold mb-2 fs-5"><s class="text-black-50">$500</s>
+                      $410</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="item d-flex">
+                            <img src="/images/product-item12.png" class="img-fluid shadow-sm" alt="product item">
+                            <div class="item-content ms-3">
+                                <h6 class="mb-0 fw-bold"><a href="index.html">Legends of the Dragon Isles</a></h6>
+                                <div class="review-content d-flex">
+                                    <p class="my-2 me-2 fs-6 text-black-50">Lauren Asher</p>
+                                    <div class="rating text-warning d-flex align-items-center">
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                        <svg class="star star-fill">
+                                            <use xlink:href="#star-fill"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="price text-primary fw-bold mb-2 fs-5"><s class="text-black-50">$600</s>
+                      $500</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
 
 <section id="categories" class="padding-large pt-0">
     <div class="container">
@@ -1079,8 +1360,7 @@
                     <a href="index.html">
                         <img src="/images/category1.jpg" class="img-fluid rounded-3" alt="cart item">
                         <h6 class=" position-absolute bottom-0 bg-primary m-4 py-2 px-3 rounded-3"><a href="index.html"
-                                                                                                      class="text-white">Romance</a>
-                        </h6>
+                                                                                                      class="text-white">Romance</a></h6>
                     </a>
                 </div>
             </div>
@@ -1089,8 +1369,7 @@
                     <a href="index.html">
                         <img src="/images/category2.jpg" class="img-fluid rounded-3" alt="cart item">
                         <h6 class=" position-absolute bottom-0 bg-primary m-4 py-2 px-3 rounded-3"><a href="index.html"
-                                                                                                      class="text-white">Lifestyle</a>
-                        </h6>
+                                                                                                      class="text-white">Lifestyle</a></h6>
                     </a>
                 </div>
             </div>
@@ -1099,8 +1378,7 @@
                     <a href="index.html">
                         <img src="/images/category3.jpg" class="img-fluid rounded-3" alt="cart item">
                         <h6 class=" position-absolute bottom-0 bg-primary m-4 py-2 px-3 rounded-3"><a href="index.html"
-                                                                                                      class="text-white">Recipe</a>
-                        </h6>
+                                                                                                      class="text-white">Recipe</a></h6>
                     </a>
                 </div>
             </div>
@@ -1112,14 +1390,12 @@
          style="background-image: url(/images/banner-image-bg.jpg); background-size: cover; background-repeat: no-repeat; background-position: center; height: 600px;">
     <div class="container offset-md-3 col-md-6 ">
         <div class="position-absolute top-50 end-0 pe-0 pe-xxl-5 me-0 me-xxl-5 swiper-next testimonial-button-next">
-            <svg class="chevron-forward-circle d-flex justify-content-center align-items-center p-2" width="80"
-                 height="80">
+            <svg class="chevron-forward-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
                 <use xlink:href="#alt-arrow-right-outline"></use>
             </svg>
         </div>
         <div class="position-absolute top-50 start-0 ps-0 ps-xxl-5 ms-0 ms-xxl-5 swiper-prev testimonial-button-prev">
-            <svg class="chevron-back-circle d-flex justify-content-center align-items-center p-2" width="80"
-                 height="80">
+            <svg class="chevron-back-circle d-flex justify-content-center align-items-center p-2" width="80" height="80">
                 <use xlink:href="#alt-arrow-left-outline"></use>
             </svg>
         </div>
@@ -1130,10 +1406,7 @@
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <div class="card position-relative text-left p-5 border rounded-3">
-                        <blockquote>"I stumbled upon this bookstore while visiting the city, and it instantly became my
-                            favorite spot. The cozy atmosphere, friendly staff, and wide selection of books make every
-                            visit a delight!"
-                        </blockquote>
+                        <blockquote>"I stumbled upon this bookstore while visiting the city, and it instantly became my favorite spot. The cozy atmosphere, friendly staff, and wide selection of books make every visit a delight!"</blockquote>
                         <div class="rating text-warning d-flex align-items-center">
                             <svg class="star star-fill">
                                 <use xlink:href="#star-fill"></use>
@@ -1156,10 +1429,7 @@
                 </div>
                 <div class="swiper-slide">
                     <div class="card position-relative text-left p-5 border rounded-3">
-                        <blockquote>"As an avid reader, I'm always on the lookout for new releases, and this bookstore
-                            never disappoints. They always have the latest titles, and their recommendations have
-                            introduced me to some incredible reads!"
-                        </blockquote>
+                        <blockquote>"As an avid reader, I'm always on the lookout for new releases, and this bookstore never disappoints. They always have the latest titles, and their recommendations have introduced me to some incredible reads!"</blockquote>
                         <div class="rating text-warning d-flex align-items-center">
                             <svg class="star star-fill">
                                 <use xlink:href="#star-fill"></use>
@@ -1182,10 +1452,7 @@
                 </div>
                 <div class="swiper-slide">
                     <div class="card position-relative text-left p-5 border rounded-3">
-                        <blockquote>"I ordered a few books online from this store, and I was impressed by the quick
-                            delivery and careful packaging. It's clear that they prioritize customer satisfaction, and
-                            I'll definitely be shopping here again!"
-                        </blockquote>
+                        <blockquote>"I ordered a few books online from this store, and I was impressed by the quick delivery and careful packaging. It's clear that they prioritize customer satisfaction, and I'll definitely be shopping here again!"</blockquote>
                         <div class="rating text-warning d-flex align-items-center">
                             <svg class="star star-fill">
                                 <use xlink:href="#star-fill"></use>
@@ -1208,12 +1475,9 @@
                 </div>
                 <div class="swiper-slide">
                     <div class="card position-relative text-left p-5 border rounded-3">
-                        <blockquote>“I stumbled upon this tech store while searching for a new laptop, and I couldn't be
-                            happier
-                            with my experience! The staff was incredibly knowledgeable and guided me through the process
-                            of choosing
-                            the perfect device for my needs. Highly recommended!”
-                        </blockquote>
+                        <blockquote>“I stumbled upon this tech store while searching for a new laptop, and I couldn't be happier
+                            with my experience! The staff was incredibly knowledgeable and guided me through the process of choosing
+                            the perfect device for my needs. Highly recommended!”</blockquote>
                         <div class="rating text-warning d-flex align-items-center">
                             <svg class="star star-fill">
                                 <use xlink:href="#star-fill"></use>
@@ -1236,12 +1500,9 @@
                 </div>
                 <div class="swiper-slide">
                     <div class="card position-relative text-left p-5 border rounded-3">
-                        <blockquote>“I stumbled upon this tech store while searching for a new laptop, and I couldn't be
-                            happier
-                            with my experience! The staff was incredibly knowledgeable and guided me through the process
-                            of choosing
-                            the perfect device for my needs. Highly recommended!”
-                        </blockquote>
+                        <blockquote>“I stumbled upon this tech store while searching for a new laptop, and I couldn't be happier
+                            with my experience! The staff was incredibly knowledgeable and guided me through the process of choosing
+                            the perfect device for my needs. Highly recommended!”</blockquote>
                         <div class="rating text-warning d-flex align-items-center">
                             <svg class="star star-fill">
                                 <use xlink:href="#star-fill"></use>
@@ -1277,28 +1538,22 @@
             <div class="col-md-3 posts mb-4">
                 <img src="/images/post-item1.jpg" alt="post image" class="img-fluid rounded-3">
                 <a href="blog.html" class="fs-6 text-primary">Books</a>
-                <h4 class="card-title mb-2 text-capitalize text-dark"><a href="index.html">10 Must-Read Books of the
-                    Year: Our Top Picks!</a></h4>
-                <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we
-                    highlight
+                <h4 class="card-title mb-2 text-capitalize text-dark"><a href="index.html">10 Must-Read Books of the Year: Our Top Picks!</a></h4>
+                <p class="mb-2">Dive into the world of cutting-edge technology with our latest blog post, where we highlight
                     five essential gadge. <span><a class="text-decoration-underline text-black-50" href="index.html">Read More</a></span>
                 </p>
             </div>
             <div class="col-md-3 posts mb-4">
                 <img src="/images/post-item2.jpg" alt="post image" class="img-fluid rounded-3">
                 <a href="blog.html" class="fs-6 text-primary">Books</a>
-                <h4 class="card-title mb-2 text-capitalize text-dark"><a href="index.html">The Fascinating Realm of
-                    Science Fiction</a></h4>
-                <p class="mb-2">Explore the intersection of technology and sustainability in our latest blog post. Learn
-                    about
-                    the innovative <span><a class="text-decoration-underline text-black-50"
-                                            href="index.html">Read More</a></span></p>
+                <h4 class="card-title mb-2 text-capitalize text-dark"><a href="index.html">The Fascinating Realm of Science Fiction</a></h4>
+                <p class="mb-2">Explore the intersection of technology and sustainability in our latest blog post. Learn about
+                    the innovative <span><a class="text-decoration-underline text-black-50" href="index.html">Read More</a></span> </p>
             </div>
             <div class="col-md-3 posts mb-4">
                 <img src="/images/post-item3.jpg" alt="post image" class="img-fluid rounded-3">
                 <a href="blog.html" class="fs-6 text-primary">Books</a>
-                <h4 class="card-title mb-2 text-capitalize text-dark"><a href="index.html">Finding Love in the Pages of
-                    a Book</a></h4>
+                <h4 class="card-title mb-2 text-capitalize text-dark"><a href="index.html">Finding Love in the Pages of a Book</a></h4>
                 <p class="mb-2">Stay ahead of the curve with our insightful look into the rapidly evolving landscape of
                     wearable technology. <span><a class="text-decoration-underline text-black-50" href="index.html">Read More</a></span>
                 </p>
@@ -1306,10 +1561,8 @@
             <div class="col-md-3 posts mb-4">
                 <img src="/images/post-item4.jpg" alt="post image" class="img-fluid rounded-3">
                 <a href="blog.html" class="fs-6 text-primary">Books</a>
-                <h4 class="card-title mb-2 text-capitalize text-dark"><a href="index.html">Reading for Mental Health:
-                    How Books Can Heal and Inspire</a></h4>
-                <p class="mb-2">In today's remote work environment, productivity is key. Discover the top apps and tools
-                    that
+                <h4 class="card-title mb-2 text-capitalize text-dark"><a href="index.html">Reading for Mental Health: How Books Can Heal and Inspire</a></h4>
+                <p class="mb-2">In today's remote work environment, productivity is key. Discover the top apps and tools that
                     can help you stay <span><a class="text-decoration-underline text-black-50" href="index.html">Read More</a></span>
                 </p>
             </div>
@@ -1407,43 +1660,42 @@
                     <div class="col-lg-3 col-sm-6 pb-3">
                         <div class="footer-menu">
                             <img src="/images/main-logo.png" alt="logo" class="img-fluid mb-2">
-                            <p>Nisi, purus vitae, ultrices nunc. Sit ac sit suscipit hendrerit. Gravida massa volutpat
-                                aenean odio
+                            <p>Nisi, purus vitae, ultrices nunc. Sit ac sit suscipit hendrerit. Gravida massa volutpat aenean odio
                                 erat nullam fringilla.</p>
                             <div class="social-links">
                                 <ul class="d-flex list-unstyled">
                                     <li>
                                         <a href="#">
                                             <svg class="facebook">
-                                                <use xlink:href="#facebook"/>
+                                                <use xlink:href="#facebook" />
                                             </svg>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#">
                                             <svg class="instagram">
-                                                <use xlink:href="#instagram"/>
+                                                <use xlink:href="#instagram" />
                                             </svg>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#">
                                             <svg class="twitter">
-                                                <use xlink:href="#twitter"/>
+                                                <use xlink:href="#twitter" />
                                             </svg>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#">
                                             <svg class="linkedin">
-                                                <use xlink:href="#linkedin"/>
+                                                <use xlink:href="#linkedin" />
                                             </svg>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#">
                                             <svg class="youtube">
-                                                <use xlink:href="#youtube"/>
+                                                <use xlink:href="#youtube" />
                                             </svg>
                                         </a>
                                     </li>
@@ -1499,10 +1751,8 @@
                         <div class="footer-menu contact-item">
                             <h5 class="widget-title text-capitalize pb-2">Contact Us</h5>
                             <p>Do you have any queries or suggestions? <a href="mailto:"
-                                                                          class="text-decoration-underline">yourinfo@gmail.com</a>
-                            </p>
-                            <p>If you need support? Just give us a call. <a href="#" class="text-decoration-underline">+55
-                                111 222
+                                                                          class="text-decoration-underline">yourinfo@gmail.com</a></p>
+                            <p>If you need support? Just give us a call. <a href="#" class="text-decoration-underline">+55 111 222
                                 333 44</a></p>
                         </div>
                     </div>

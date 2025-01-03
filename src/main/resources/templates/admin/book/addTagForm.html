@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Tag</title>
+    <style>
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>Create Tag</h1>
+<form th:action="@{/admin/tags/create}" th:object="${tag}" method="post">
+    <div>
+        <label for="tagName">Tag Name</label>
+        <input type="text" id="tagName" th:field="*{tagName}" placeholder="Enter tag name">
+        <!-- 에러 메시지 -->
+        <div th:if="${#fields.hasErrors('tagName')}" th:errors="*{tagName}" class="error"></div>
+    </div>
+    <button type="submit">Create Tag</button>
+</form>
+</body>
+</html>

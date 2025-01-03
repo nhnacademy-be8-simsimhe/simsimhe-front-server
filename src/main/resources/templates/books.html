@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<tbody>
+<tr th:each="book : ${books}">
+    <td th:text="${book.bookId}"></td>
+    <td th:text="${book.title}"></td>
+    <td th:text="${book.publicationDate}"></td>
+    <td th:text="${book.price}"></td>
+    <td th:text="${book.saleprice}"></td>
+    <td th:text="${book.publisher}"></td>
+    <td th:text="${book.bookStatus}"></td>
+    <td th:text="${book.quantity}"></td>
+    <td th:text="${book.isLiked ? 'Yes' : 'No'}"></td>
+    <td>
+<!--        <ul>-->
+<!--            <li th:each="contributor : ${book.contributorRoleList}"-->
+<!--                th:text="${contributor.contributorName} + ' - ' + ${contributor.contributorRole}"></li>-->
+<!--        </ul>-->
+    </td>
+</tr>
+</tbody>
+
+</html>

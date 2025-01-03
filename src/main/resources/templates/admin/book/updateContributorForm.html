@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Contributor</title>
+</head>
+<body>
+<h1>Update Contributor</h1>
+
+<form th:action="@{'/admin/contributors/update/' + ${contributor.contributorId}}" method="post">
+    <input type="hidden" name="_method" value="put"/>
+    <input type="hidden" name="page" th:value="${page}"/>
+
+    <label for="contributorName">Name:</label>
+    <input type="text" id="contributorName" name="contributorName" th:value="${contributor.contributorName}" required/>
+    <br/>
+
+    <label for="contributorRole">Role:</label>
+    <input type="text" id="contributorRole" name="contributorRole" th:value="${contributor.contributorRole}" required/>
+    <br/>
+
+    <button type="submit">Update</button>
+</form>
+
+<a th:href="@{'/admin/contributors?page=' + ${page}}">Back to List</a>
+</body>
+</html>
