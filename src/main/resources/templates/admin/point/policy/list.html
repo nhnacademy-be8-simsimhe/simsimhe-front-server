@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Point Policies</title>
+</head>
+<body>
+<h1>Point Policies</h1>
+<a href="/admin/pointPolicies/create">Create New Policy</a>
+<table border="1">
+  <thead>
+  <tr>
+    <th>Earning Method</th>
+    <th>Earning Type</th>
+    <th>Earning Value</th>
+    <th>Description</th>
+    <th>Is Available</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="policy : ${policies}">
+    <td th:text="${policy.earningMethod}"></td>
+    <td th:text="${policy.earningType}"></td>
+    <td th:text="${policy.earningValue}"></td>
+    <td th:text="${policy.description}"></td>
+    <td th:text="${policy.available ? 'Yes' : 'No'}"></td>
+    <td>
+      <a th:href="@{/admin/pointPolicies/edit/{id}(id=${policy.pointPolicyId})}">Edit</a> |
+      <form th:action="@{/admin/pointPolicies/delete/{id}(id=${policy.pointPolicyId})}" method="post">
+        <button type="submit">Delete</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div>
+  <a th:href="@{/admin}">
+    <button type="button">어드민 메인 페이지</button>
+  </a>
+</div>
+</body>
+</html>

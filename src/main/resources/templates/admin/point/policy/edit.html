@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Point Policy</title>
+</head>
+<body>
+<h1>Edit Point Policy</h1>
+
+<!--
+    th:object="${policy}"
+    -> 컨트롤러에서 model.addAttribute("policy", dto) 형태로 전달된 객체
+-->
+<form th:object="${policy}"
+      th:action="@{/admin/pointPolicies/update/{id}(id=${policy.pointPolicyId})}"
+      method="post">
+
+    <!-- pointPolicyId 필드는 필요하다면 hidden으로 처리 -->
+    <input type="hidden" th:field="*{pointPolicyId}" />
+
+    <!-- Earning Method -->
+    <label for="earningMethod">Earning Method:</label>
+    <select id="earningMethod" th:field="*{earningMethod}">
+        <option th:each="method : ${earningMethods}"
+                th:value="${method}"
+                th:text="${method}">
+        </option>
+    </select>
+    <br/>
+
+    <!-- Earning Type -->
+    <label for="earningType">Earning Type:</label>
+    <select id="earningType" th:field="*{earningType}">
+        <option th:each="type : ${earningTypes}"
+                th:value="${type}"
+                th:text="${type}">
+        </option>
+    </select>
+    <br/>
+
+    <!-- Earning Value -->
+    <label for="earningValue">Earning Value:</label>
+    <input id="earningValue" type="number" step="0.01" th:field="*{earningValue}" required />
+    <br/>
+
+    <!-- Description -->
+    <label for="description">Description:</label>
+    <input id="description" type="text" th:field="*{description}" required />
+    <br/>
+
+    <!-- Is Available (체크박스) -->
+    <label for="isAvailable">Is Available:</label>
+    <input id="isAvailable" type="checkbox" th:field="*{available}" />
+    <br/>
+
+    <button type="submit">Update</button>
+</form>
+
+<!-- 목록 페이지로 돌아가기 -->
+<a th:href="@{/admin/pointPolicies}">Back to List</a>
+
+<div>
+    <a th:href="@{/admin}">
+        <button type="button">어드민 메인 페이지</button>
+    </a>
+</div>
+</body>
+</html>
