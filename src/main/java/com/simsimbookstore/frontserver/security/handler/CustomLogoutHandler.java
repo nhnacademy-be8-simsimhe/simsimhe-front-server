@@ -9,9 +9,14 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 public class CustomLogoutHandler implements LogoutHandler {
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        Cookie cookie = new Cookie("rememberMe", null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        Cookie accessToken = new Cookie("accessToken", null);
+        accessToken.setMaxAge(0);
+        accessToken.setPath("/");
+        response.addCookie(accessToken);
+
+        Cookie refreshToken = new Cookie("refreshToken", null);
+        refreshToken.setMaxAge(0);
+        refreshToken.setPath("/");
+        response.addCookie(refreshToken);
     }
 }
