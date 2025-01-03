@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class LocalUserResponse {
+public class LocalUserResponseDto {
     private Long userId;
 
     private List<RoleName> roles;

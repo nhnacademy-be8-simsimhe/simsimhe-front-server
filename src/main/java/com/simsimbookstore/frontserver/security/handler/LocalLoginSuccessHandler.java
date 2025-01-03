@@ -2,6 +2,8 @@ package com.simsimbookstore.frontserver.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
+import com.simsimbookstore.frontserver.users.user.dto.UserLateLoginDateUpdateRequestDto;
+import com.simsimbookstore.frontserver.users.user.dto.UserResponse;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 @RequiredArgsConstructor
@@ -26,6 +29,7 @@ public class LocalLoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        // 토큰 발급
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
         String jsonResponse = userService.generateJwt(customUserDetails.getUsername());
@@ -43,5 +47,11 @@ public class LocalLoginSuccessHandler implements AuthenticationSuccessHandler {
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setMaxAge(7 * 24 * 3600); //7일
         response.addCookie(refreshTokenCookie);
+
+        // 마지막 로그인 시간 업데이트
+        UserLateLoginDateUpdateRequestDto requestDto = UserLateLoginDateUpdateRequestDto.builder()
+                .latestLoginDate(LocalDateTime.now())
+                .build();
+        userService.updateUserLatestLoginDate(customUserDetails.getUserId(), requestDto);
     }
 }

@@ -1,7 +1,7 @@
 package com.simsimbookstore.frontserver.users.localUser.feign;
 
-import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserRegisterRequest;
-import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserResponse;
+import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserRegisterRequestDto;
+import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface LocalUserServiceClient {
 
     @PostMapping
-    String addUser(@RequestBody LocalUserRegisterRequest localUserRequest);
+    String addUser(@RequestBody LocalUserRegisterRequestDto localUserRequest);
 
     @GetMapping("/{loginId}")
-    LocalUserResponse findByLoginId(@PathVariable String loginId);
+    LocalUserResponseDto findByLoginId(@PathVariable String loginId);
 
     @GetMapping("/{loginId}/exists")
     boolean existsByLoginId(@PathVariable String loginId);

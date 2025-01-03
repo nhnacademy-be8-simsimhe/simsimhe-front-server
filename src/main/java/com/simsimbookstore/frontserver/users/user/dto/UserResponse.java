@@ -1,6 +1,7 @@
 package com.simsimbookstore.frontserver.users.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.simsimbookstore.frontserver.users.grade.dto.Tier;
 import com.simsimbookstore.frontserver.users.role.dto.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,5 +32,9 @@ public class UserResponse {
 
     private LocalDateTime createdAt;
 
+    private LocalDateTime latestLoginDate;
+
     private List<RoleName> roles;
+
+    private Tier tier;
 }

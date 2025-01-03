@@ -1,7 +1,7 @@
 package com.simsimbookstore.frontserver.users.localUser.service.impl;
 
-import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserRegisterRequest;
-import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserResponse;
+import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserRegisterRequestDto;
+import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserResponseDto;
 import com.simsimbookstore.frontserver.users.localUser.feign.LocalUserServiceClient;
 import com.simsimbookstore.frontserver.users.localUser.service.LocalUserService;
 import lombok.RequiredArgsConstructor;
@@ -19,18 +19,18 @@ public class LocalUserServiceImpl implements LocalUserService {
 
 
     @Override
-    public String addLocalUser(LocalUserRegisterRequest localUserRequest) {
+    public String addLocalUser(LocalUserRegisterRequestDto localUserRequest) {
         String encode = passwordEncoder.encode(localUserRequest.getPassword());
         localUserRequest.updatePassword(encode);
         return localUserServiceClient.addUser(localUserRequest);
     }
 
     @Override
-    public LocalUserResponse findUserByLoginId(String loginId) {
+    public LocalUserResponseDto findUserByLoginId(String loginId) {
         if (Objects.isNull(loginId)){
             throw new IllegalArgumentException("loginId cannot be null");
         }
-        LocalUserResponse localUserResponse = localUserServiceClient.findByLoginId(loginId);
+        LocalUserResponseDto localUserResponse = localUserServiceClient.findByLoginId(loginId);
         return localUserResponse;
     }
 

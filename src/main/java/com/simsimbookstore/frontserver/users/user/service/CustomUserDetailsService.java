@@ -1,7 +1,8 @@
 package com.simsimbookstore.frontserver.users.user.service;
 
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
-import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserResponse;
+import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserResponseDto;
+import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserResponseDto;
 import com.simsimbookstore.frontserver.users.localUser.service.LocalUserService;
 import com.simsimbookstore.frontserver.users.role.dto.RoleName;
 import org.springframework.context.annotation.Lazy;
@@ -23,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        LocalUserResponse localUserResponse = localUserService.findUserByLoginId(username);
+        LocalUserResponseDto localUserResponse = localUserService.findUserByLoginId(username);
 
         if (Objects.isNull(localUserResponse)) {
             throw new UsernameNotFoundException("not founded user with: " + username);
@@ -35,9 +36,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .authorities(new ArrayList<>())
                 .build();
 
-//        for (RoleName role : localUserResponse.getRoles()){
-//            customUserDetails.addRole(role);
-//        }
+        for (RoleName role : localUserResponse.getRoles()){
+            customUserDetails.addRole(role);
+        }
         return customUserDetails;
     }
 }

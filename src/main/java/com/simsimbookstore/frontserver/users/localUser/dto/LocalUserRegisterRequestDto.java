@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Setter
 @Getter
-public class LocalUserRegisterRequest {
+public class LocalUserRegisterRequestDto {
     private String userName;
 
     private String mobileNumber;
