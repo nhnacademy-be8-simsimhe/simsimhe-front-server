@@ -1,14 +1,13 @@
 package com.simsimbookstore.frontserver.users.localUser.service;
 
-import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserRegisterRequest;
-import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserResponse;
-import org.springframework.stereotype.Service;
+import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserRegisterRequestDto;
+import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserResponseDto;
 
 public interface LocalUserService {
 
-    LocalUserResponse findUserByLoginId(String loginId);
+    LocalUserResponseDto findUserByLoginId(String loginId);
 
-    String addLocalUser(LocalUserRegisterRequest localUserRequest);
+    String addLocalUser(LocalUserRegisterRequestDto localUserRequest);
 
     boolean existsByLoginId(String loginId);
 }

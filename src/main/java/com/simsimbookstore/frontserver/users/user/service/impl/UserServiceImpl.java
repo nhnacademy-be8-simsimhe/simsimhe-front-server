@@ -1,6 +1,9 @@
 package com.simsimbookstore.frontserver.users.user.service.impl;
 
+import com.simsimbookstore.frontserver.users.user.dto.UserLateLoginDateUpdateRequestDto;
 import com.simsimbookstore.frontserver.users.user.dto.UserResponse;
+import com.simsimbookstore.frontserver.users.user.dto.UserStatus;
+import com.simsimbookstore.frontserver.users.user.dto.UserStatusUpdateRequestDto;
 import com.simsimbookstore.frontserver.users.user.feign.JwtServiceClient;
 import com.simsimbookstore.frontserver.users.user.feign.UserServiceClient;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
@@ -22,4 +25,16 @@ public class UserServiceImpl implements UserService {
     public String generateJwt(String loginId) {
         return jwtServiceClient.generateJwt(loginId);
     }
+
+    @Override
+    public UserResponse updateUserLatestLoginDate(Long loginId, UserLateLoginDateUpdateRequestDto requestDto) {
+        return userServiceClient.updateLatestLoginDate(loginId,requestDto);
+    }
+
+    @Override
+    public UserResponse updateUserStatus(Long loginId, UserStatusUpdateRequestDto userStatusUpdateRequestDto) {
+        return userServiceClient.updateUserStatus(loginId,userStatusUpdateRequestDto);
+    }
+
+
 }

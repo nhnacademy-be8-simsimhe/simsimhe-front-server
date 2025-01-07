@@ -34,6 +34,7 @@ public class HomeController {
         List<BookListResponse> newBooks = bookGetService.getNewBooks();
         List<TagResponseDto> tags = tagService.getAllTags();
         List<CategoryResponseDto> categorys = categoryService.getALlCategorys();
+        List<BookListResponse> popularityBooks = bookGetService.getPopularityBook();
 
         // 카테고리를 6개씩 그룹화
         List<List<CategoryResponseDto>> groupedCategories = new ArrayList<>();
@@ -43,6 +44,7 @@ public class HomeController {
         }
 
         modelAndView.addObject("newBooks", newBooks);
+        modelAndView.addObject("popularityBooks",popularityBooks);
         modelAndView.addObject("tags", tags);
         modelAndView.addObject("groupedCategories", groupedCategories);
         return modelAndView;

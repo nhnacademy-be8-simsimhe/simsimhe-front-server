@@ -40,9 +40,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 .requestMatchers("/users/myPage/**").authenticated()
                 .requestMatchers("/management/health").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll());
-
-
 
         //rememberme
         http.rememberMe(rememberMe->rememberMe
@@ -64,9 +63,10 @@ public class SecurityConfig {
         http.formLogin(form->form.loginPage("/index?showLoginModal=true")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
-                .failureHandler(new CustomAuthFailureHandler())
                 .successHandler(new LocalLoginSuccessHandler(userService))
+                .failureHandler(new CustomAuthFailureHandler())
         );
+
         http.logout(logout->logout
                 .addLogoutHandler(new CustomLogoutHandler())
                 .logoutUrl("/logout"));

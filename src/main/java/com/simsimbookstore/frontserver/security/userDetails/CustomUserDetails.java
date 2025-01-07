@@ -2,6 +2,7 @@ package com.simsimbookstore.frontserver.security.userDetails;
 
 
 import com.simsimbookstore.frontserver.users.role.dto.RoleName;
+import com.simsimbookstore.frontserver.users.user.dto.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     private String password;
     private Long userId;
     private List<GrantedAuthority> authorities;
+    private UserStatus userStatus;
 
 
     @Override
@@ -50,5 +52,10 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
 
     public void addRole(RoleName role) {
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return userStatus.equals(UserStatus.ACTIVE);
     }
 }

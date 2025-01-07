@@ -7,8 +7,10 @@ import com.simsimbookstore.frontserver.books.category.dto.CategoryResponseDto;
 import com.simsimbookstore.frontserver.books.category.service.CategoryService;
 import com.simsimbookstore.frontserver.books.tag.dto.TagResponseDto;
 import com.simsimbookstore.frontserver.books.tag.service.TagService;
+import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import com.simsimbookstore.frontserver.util.PageResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +30,38 @@ public class BookGetController {
     private final BookGetService bookGetService;
     private final TagService tagService;
     private final CategoryService categoryService;
+
+    /**
+     * 사용자가 좋아요를누른 도서 조회
+     *
+     * @param page
+     * @param size
+     * @param model
+     * @param customUserDetails
+     * @return
+     */
+    @GetMapping("/user/like")
+    public String getUserLikeBook(@RequestParam(defaultValue = "1") int page,
+                                  @RequestParam(defaultValue = "10") int size,
+                                  Model model,
+                                  @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+
+        // 로그인 여부 확인
+        if (customUserDetails == null || customUserDetails.getUserId() == null) {
+            model.addAttribute("message", "로그인 부탁드립니다.");
+            return "book/wishlist"; // 동일한 화면으로 이동
+        }
+        Long userId = customUserDetails.getUserId();
+        PageResponse<BookListResponse> userLikeBook = bookGetService.getUserLikeBook(page, size, userId);
+        model.addAttribute("books", userLikeBook.getData()); // 도서 리스트
+        model.addAttribute("userId", userId);
+        model.addAttribute("currentPage", page); // 현재 페이지 번호
+        model.addAttribute("totalPages", userLikeBook.getTotalPage()); // 총 페이지 수
+        model.addAttribute("size", size); // 페이지 크기
+
+        return "book/wishlist";
+    }
+
 
     @GetMapping("/category/{categoryId}")
     public String getBooksByCategory(@PathVariable(name = "categoryId") Long categoryId,

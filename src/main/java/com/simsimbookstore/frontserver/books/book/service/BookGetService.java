@@ -19,6 +19,22 @@ public class BookGetService {
     private final BookClient bookClient;
 
 
+    public List<BookListResponse> getPopularityBook(){
+        return bookClient.getPopularityBook();
+    }
+
+    /**
+     * 사용자가 좋아요누른 도서조회
+     * @param page
+     * @param size
+     * @param userId
+     * @return
+     */
+    public PageResponse<BookListResponse> getUserLikeBook(int page, int size, Long userId) {
+        return bookClient.getUserLikeBook(page, size, userId);
+    }
+
+
     //특정 도서를 제외한 동일 카테고리 내 인기 도서 추천 기능
     public List<BookListResponse> getRecommendBooks(Long bookId, List<Long> categoryIdList) {
         return bookClient.getRecommendBooks(bookId, categoryIdList);
