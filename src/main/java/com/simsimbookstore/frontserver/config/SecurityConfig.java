@@ -64,9 +64,10 @@ public class SecurityConfig {
         http.formLogin(form->form.loginPage("/index?showLoginModal=true")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
-                .failureHandler(new CustomAuthFailureHandler())
                 .successHandler(new LocalLoginSuccessHandler(userService))
+                .failureHandler(new CustomAuthFailureHandler())
         );
+
         http.logout(logout->logout
                 .addLogoutHandler(new CustomLogoutHandler())
                 .logoutUrl("/logout"));

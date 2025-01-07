@@ -1,6 +1,7 @@
 package com.simsimbookstore.frontserver.users.localUser.dto;
 
 import com.simsimbookstore.frontserver.users.role.dto.RoleName;
+import com.simsimbookstore.frontserver.users.user.dto.UserStatus;
 import lombok.*;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public class LocalUserResponseDto {
     private String loginId;
 
     private String password;
+
+    private UserStatus status;
 }
