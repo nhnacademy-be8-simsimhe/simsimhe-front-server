@@ -9,8 +9,6 @@
 </head>
 <body>
 
-
-
 <div th:replace="~{users/myPage/myPageNav.html}"></div>
 
 <!-- 마이페이지 프로필 정보 -->
@@ -19,7 +17,14 @@
   <div class="col-md-8">
     <div class="card">
       <div class="card-header">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
         <h4>내 계정</h4>
+          <form action="/users/myPage/user/userInfo/withdrawal" method="post">
+            <input type="hidden" id="userStatus" name="userStatus" value="INACTIVE">
+          <button class="btn btn-danger">회원 탈퇴</button>
+          </form>
+        </div>
+
       </div>
       <div class="card-body">
         <ul class="list-group list-group-flush">

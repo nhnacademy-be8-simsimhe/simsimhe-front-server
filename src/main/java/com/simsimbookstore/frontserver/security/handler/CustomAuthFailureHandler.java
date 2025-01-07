@@ -4,8 +4,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -23,8 +23,9 @@ public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHand
             errorMessage = "아이디 또는 비밀번호가 옳바르지 않습니다.";
         }else if (exception instanceof UsernameNotFoundException){
             errorMessage = "아이디가 존재하지 않습니다.";
-        }
-        else if (exception instanceof InternalAuthenticationServiceException){
+        }else if (exception instanceof DisabledException){
+            errorMessage = "탈퇴한 유저 입니다.";
+        }else if (exception instanceof InternalAuthenticationServiceException){
             errorMessage = "내부적으로 발생한 시스템 문제로 요청을 처리할 수 없습니다. 관리자에게 문의하세요.";
         }
         else{
