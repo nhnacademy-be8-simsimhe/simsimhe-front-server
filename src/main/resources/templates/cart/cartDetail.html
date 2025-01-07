@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>장바구니</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <!-- 메시지 표시 -->
+    <div th:if="${message}" class="alert alert-warning text-center">
+        <span th:text="${message}">로그인 부탁드립니다.</span>
+    </div>
+    <!-- 장바구니 제목 -->
+    <header class="text-center mb-4">
+        <h1>장바구니</h1>
+    </header>
+
+    <!-- 장바구니 목록 -->
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>이미지</th>
+                    <th>책 제목</th>
+                    <th>수량</th>
+                    <th>가격</th>
+                    <th>총 가격</th>
+                    <th>삭제</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- 장바구니 항목 반복 -->
+                <tr th:each="cart : ${cartList}" th:data-book-id="${cart.bookId}">
+                    <td>
+                        <img th:src="${cart.imagePath}" alt="도서 이미지" style="width: 100px; height: auto;">
+                    </td>
+                    <td th:text="${cart.title}">도서 제목</td>
+                    <td>
+                        <input type="number" th:value="${cart.quantity}" class="form-control quantity-input"
+                               style="width: 70px;" min="1">
+                    </td>
+                    <td th:text="${cart.price} + '원'">가격</td>
+                    <td th:text="${cart.price * cart.quantity} + '원'" class="total-price">총 가격</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm delete-btn">삭제</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 총 금액 -->
+    <div class="row mt-4">
+        <div class="col-12 text-end">
+            <h4>총 금액: <span id="total-price" th:text="${totalPrice} + '원'">0원</span></h4>
+        </div>
+    </div>
+
+    <!-- 버튼 -->
+    <div class="row mt-4">
+        <div class="col-12 text-end">
+            <a href="/" class="btn btn-secondary">계속 쇼핑하기</a>
+            <button class="btn btn-primary">결제하기</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 수량 변경 이벤트
+        document.querySelectorAll('.quantity-input').forEach(input => {
+            input.addEventListener('change', (event) => {
+                const row = event.target.closest('tr');
+                const bookId = row.dataset.bookId;
+                const quantity = event.target.value;
+
+                fetch('/carts', {
+                    method: 'PATCH',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({bookId, quantity})
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('수량 변경 실패');
+                        return response.json();
+                    })
+                    .then(data => {
+                        // 수량 변경 성공 시 UI 업데이트
+                        row.querySelector('.total-price').textContent = (data.price * data.quantity) + '원';
+                        updateTotalPrice();
+                    })
+                    .catch(error => console.error('Error updating quantity:', error));
+            });
+        });
+
+        // 삭제 버튼 이벤트
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const row = event.target.closest('tr');
+                const bookId = row.dataset.bookId;
+
+                fetch(`/carts/book/${bookId}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('삭제 실패');
+                        return response.json();
+                    })
+                    .then(() => {
+                        // 삭제 성공 시 행 제거
+                        row.remove();
+                        updateTotalPrice();
+                    })
+                    .catch(error => console.error('Error deleting item:', error));
+            });
+        });
+
+        // 총 금액 업데이트
+        function updateTotalPrice() {
+            const totalPrice = Array.from(document.querySelectorAll('.total-price'))
+                .map(cell => parseInt(cell.textContent.replace('원', ''), 10))
+                .reduce((sum, price) => sum + price, 0);
+
+            document.getElementById('total-price').textContent = totalPrice + '원';
+        }
+    });
+</script>
+</body>
+</html>

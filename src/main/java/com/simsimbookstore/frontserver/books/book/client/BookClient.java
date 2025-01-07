@@ -14,6 +14,26 @@ import java.util.List;
 @FeignClient(name = "book-api-server", url = "http://localhost:8000/api/shop/books")
 public interface BookClient {
 
+
+    /**
+     * 주문량이 많은 도서조회 -> 인기있는 도서조회
+     * @return
+     */
+    @GetMapping("/popularity")
+    List<BookListResponse> getPopularityBook();
+
+    /**
+     * 사용자가 좋아요를 누른 도서 조회
+     * @param page
+     * @param size
+     * @param userId
+     * @return
+     */
+    @GetMapping("/like/user/{userId}")
+    PageResponse<BookListResponse> getUserLikeBook(@RequestParam(defaultValue = "1") int page,
+                                                   @RequestParam(defaultValue = "5") int size,
+                                                   @PathVariable(name = "userId") Long userId);
+
     /**
      * 카테고리와 하위 카테고리에 해당하는 책을 조회
      *

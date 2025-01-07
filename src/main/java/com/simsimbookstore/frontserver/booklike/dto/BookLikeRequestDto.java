@@ -18,6 +18,5 @@ public class BookLikeRequestDto {
     @NotNull
     private Long bookId;
 
-    private boolean isLiked;
 
 }
