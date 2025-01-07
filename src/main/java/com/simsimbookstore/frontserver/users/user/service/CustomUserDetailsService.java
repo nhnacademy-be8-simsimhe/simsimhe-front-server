@@ -36,7 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .loginId(localUserResponse.getLoginId())
                 .password(localUserResponse.getPassword())
                 .authorities(new ArrayList<>())
-                .userStatus(localUserResponse.getStatus())
+                .userStatus(localUserResponse.getUserStatus())
                 .build();
 
         for (RoleName role : localUserResponse.getRoles()){
