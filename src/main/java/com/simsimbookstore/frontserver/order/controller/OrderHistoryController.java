@@ -3,6 +3,7 @@ package com.simsimbookstore.frontserver.order.controller;
 
 import com.simsimbookstore.frontserver.order.dto.OrderHistoryResponseDto;
 import com.simsimbookstore.frontserver.order.service.OrderService;
+import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,13 +21,16 @@ public class OrderHistoryController {
     private final OrderService orderService;
 
     @GetMapping("/shop/users/orders")
-    public String viewOrderHistory(@AuthenticationPrincipal Long userId,
+    public String viewOrderHistory(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                    @PageableDefault(size = 10) Pageable pageable,
                                    Model model) {
 
-        if (userId == null) {
+        if (customUserDetails == null) {
             return "redirect:/";
         }
+
+        Long userId = customUserDetails.getUserId();
+
         Page<OrderHistoryResponseDto> orderHistoryPage = orderService.getOrderHistory(userId, pageable);
 
         model.addAttribute("orderHistories", orderHistoryPage.getContent());
