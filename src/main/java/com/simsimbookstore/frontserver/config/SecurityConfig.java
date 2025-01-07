@@ -40,9 +40,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 .requestMatchers("/users/myPage/**").authenticated()
                 .requestMatchers("/management/health").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll());
-
-
 
         //rememberme
         http.rememberMe(rememberMe->rememberMe
