@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@RequiredArgsConstructor
 public class PaymentController {
+
+    private final PaymentService paymentService;
 
     @GetMapping("/api/fail")
     public String failUrl(HttpServletRequest request, Model model) {
@@ -29,14 +32,6 @@ public class PaymentController {
         }
         return "payment/fail";
     }
-}
-
-@Controller
-@RequiredArgsConstructor
-public class PaymentController {
-
-    private final PaymentService paymentService;
-
 
     @PostMapping
     @RequestMapping("/shop/payment")
@@ -45,4 +40,3 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.payment(dto));
     }
 }
-
