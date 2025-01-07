@@ -25,7 +25,7 @@ public class AddressController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             HttpServletRequest request
     ) {
-        ModelAndView modelAndView = new ModelAndView("/users/myPage/address/addressInfo");
+        ModelAndView modelAndView = new ModelAndView("users/myPage/address/addressInfo");
         List<AddressResponseDto> address = addressService.getAddress(customUserDetails.getUserId());
 
         modelAndView.addObject("addresses", address);
@@ -36,7 +36,7 @@ public class AddressController {
     // 주소 추가 폼
     @GetMapping("/register")
     public String registerForm() {
-        return "/users/myPage/address/addressRegisterForm";
+        return "users/myPage/address/addressRegisterForm";
     }
 
     // 주소 추가

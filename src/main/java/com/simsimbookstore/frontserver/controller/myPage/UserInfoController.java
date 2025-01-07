@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @RequiredArgsConstructor
-@RequestMapping("users/myPage/user")
+@RequestMapping("/users/myPage/user")
 @Controller
 public class UserInfoController {
     private final UserService userService;
@@ -23,7 +23,7 @@ public class UserInfoController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             HttpServletRequest request
     ) {
-        ModelAndView modelAndView = new ModelAndView("/users/myPage/user/userInfo");
+        ModelAndView modelAndView = new ModelAndView("users/myPage/user/userInfo");
 
 
         UserResponse user = userService.findUserByUserId(customUserDetails.getUserId());
