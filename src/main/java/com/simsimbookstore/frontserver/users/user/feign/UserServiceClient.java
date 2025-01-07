@@ -1,21 +1,23 @@
 package com.simsimbookstore.frontserver.users.user.feign;
 
-import com.simsimbookstore.frontserver.users.user.request.LocalUserRequest;
+import com.simsimbookstore.frontserver.users.user.dto.UserLateLoginDateUpdateRequestDto;
+import com.simsimbookstore.frontserver.users.user.dto.UserResponse;
+import com.simsimbookstore.frontserver.users.user.dto.UserStatus;
+import com.simsimbookstore.frontserver.users.user.dto.UserStatusUpdateRequestDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @FeignClient(name = "userApi", url = "http://localhost:8000/api/users")
 public interface UserServiceClient {
 
-    @PostMapping("/localUsers")
-    String addUser(@RequestBody LocalUserRequest localUserRequest);
-
     @GetMapping("/{userId}")
-    String findByUserId(@PathVariable Long userId);
+    UserResponse findByUserId(@PathVariable Long userId);
 
-    @GetMapping("/localUsers/{loginId}")
-    LocalUserRequest findByLoginId(@PathVariable String loginId);
+    @PutMapping("/{userId}/latestLoginDate")
+    UserResponse updateLatestLoginDate(@PathVariable Long userId, @RequestBody UserLateLoginDateUpdateRequestDto requestDto);
 
-    @GetMapping("/localUsers/{loginId}/exists")
-    boolean existsByLoginId(@PathVariable String loginId);
+    @PutMapping("{userId}/status")
+    UserResponse updateUserStatus(@PathVariable Long userId, UserStatusUpdateRequestDto userStatusUpdateRequestDto);
 }
