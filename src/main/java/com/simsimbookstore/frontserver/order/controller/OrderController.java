@@ -8,6 +8,7 @@ import com.simsimbookstore.frontserver.order.dto.TotalResponseDto;
 import com.simsimbookstore.frontserver.order.service.OrderService;
 import com.simsimbookstore.frontserver.point.service.PointHistoryService;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
+import com.simsimbookstore.frontserver.users.address.service.AddressService;
 import com.simsimbookstore.frontserver.users.user.dto.UserResponse;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
 import com.simsimbookstore.frontserver.wrap.service.WrapService;
@@ -35,6 +36,7 @@ public class OrderController {
     private final WrapService wrapService;
     private final UserService userService;
     private final PointHistoryService pointHistoryService;
+    private final AddressService addressService;
 
     @GetMapping("/shop/order")
     public String showOrderPage(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
@@ -58,7 +60,7 @@ public class OrderController {
         redirectAttributes.addFlashAttribute("bookOrderList", responseDtos);
         redirectAttributes.addFlashAttribute("wrapTypes", wrapService.getAllAvailableWrapTypes());
         redirectAttributes.addFlashAttribute("availablePoints", pointHistoryService.getPoints(userId));
-        redirectAttributes.addFlashAttribute("addresses", null);
+        redirectAttributes.addFlashAttribute("addresses", addressService.getAddress(userId));
 
         return "redirect:/shop/order";
     }

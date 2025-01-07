@@ -21,6 +21,15 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
+    @PostMapping
+    @RequestMapping("/shop/payment")
+    @ResponseBody
+    public ResponseEntity<?> paymentInitiate(@RequestBody OrderFacadeRequestDto dto) {
+        return ResponseEntity.ok(paymentService.payment(dto));
+    }
+
+
+
     @GetMapping("/api/fail")
     public String failUrl(HttpServletRequest request, Model model) {
         // 1. PAY_PROCESS_CANCELED : 구매자에 의한 취소 + orderId X -> 아무 처리 X
@@ -31,12 +40,5 @@ public class PaymentController {
             model.addAttribute("message", request.getParameter("message"));
         }
         return "payment/fail";
-    }
-
-    @PostMapping
-    @RequestMapping("/shop/payment")
-    @ResponseBody
-    public ResponseEntity<?> paymentInitiate(@RequestBody OrderFacadeRequestDto dto) {
-        return ResponseEntity.ok(paymentService.payment(dto));
     }
 }
