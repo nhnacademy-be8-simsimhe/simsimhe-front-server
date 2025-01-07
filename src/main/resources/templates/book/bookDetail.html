@@ -47,6 +47,13 @@
         </div>
     </div>
 
+    <form th:action="@{/shop/order}" method="post">
+        <input type="hidden" name="bookId" th:value="${book.bookId}">
+        <input type="hidden" name="quantity" value="1">
+        <button type="submit">주문하기</button>
+    </form>
+
+
     <!-- 카테고리 및 태그 -->
     <div class="row mt-4">
         <div class="col-md-6">
@@ -147,5 +154,9 @@
         });
     });
 </script>
+
+
+
+
 </body>
 </html>
