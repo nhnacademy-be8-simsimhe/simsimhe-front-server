@@ -4,12 +4,13 @@ package com.simsimbookstore.frontserver.config;
 import com.simsimbookstore.frontserver.cart.service.CartService;
 import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
-import com.simsimbookstore.frontserver.security.handler.LocalLoginSuccessHandler;
+//import com.simsimbookstore.frontserver.security.handler.LocalLoginSuccessHandler;
 import com.simsimbookstore.frontserver.users.user.service.CustomUserDetailsService;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,10 +42,11 @@ public class SecurityConfig {
         //authorize
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 .requestMatchers("/users/myPage/**").authenticated()
+                .requestMatchers("/reviews/create").authenticated()
+                .requestMatchers(HttpMethod.POST,"/reviews/*/likes").authenticated()
                 .requestMatchers("/management/health").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll());
-
         //rememberme
         http.rememberMe(rememberMe->rememberMe
                 .tokenValiditySeconds(3600)

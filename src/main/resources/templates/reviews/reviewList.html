@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reviews</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    .review-container {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+    }
+    .review-header {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    .review-date {
+      color: #888;
+      font-size: 0.9em;
+    }
+    .review-actions {
+      margin-top: 10px;
+    }
+    .like-btn {
+      color: #007bff;
+      cursor: pointer;
+    }
+    .like-btn:hover {
+      text-decoration: underline;
+    }
+    .review-content {
+      margin-top: 10px;
+    }
+    .review-likes {
+      font-weight: bold;
+    }
+    .review-image {
+      margin-top: 10px;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <h1>Reviews</h1>
+  <div th:each="review : ${reviews.content}" class="review-container">
+    <div class="d-flex justify-content-between">
+      <div class="review-header" th:text="${review.title}">Review Title</div>
+      <div class="review-date" th:text="${review.createdAt}">2025-01-01</div>
+    </div>
+    <div class="review-content" th:text="${review.content}">This is the review content.</div>
+
+    <!-- 이미지 표시 -->
+    <div>
+      <img th:src="${review.imagePaths[0]}" alt="Review Image" class="review-image" th:if="${review.imagePaths != null}">
+    </div>
+
+    <div class="review-actions d-flex justify-content-between align-items-center">
+      <div>
+        <!-- Like count -->
+        <span class="review-likes" th:text="'Likes: ' + ${review.likeCount}">Likes: 0</span>
+        <button class="btn btn-link like-btn p-0"
+                th:attr="onclick='likeReview(' + ${review.reviewId} + ')'">Like</button>
+
+        <button class="btn btn-link like-btn p-0"
+                th:attr="onclick='unlikeReview(' + ${review.reviewId} + ')'">Unlike</button>
+      </div>
+      <div>
+        <a th:href="@{/reviews/{reviewId}/comments(reviewId=${review.reviewId})}" class="btn btn-secondary btn-sm">Comments</a>
+        <a th:href="@{/reviews/edit/{reviewId}(reviewId=${review.reviewId})}" class="btn btn-primary btn-sm">Edit</a>
+        <form th:action="@{/reviews/{reviewId}(reviewId=${review.reviewId})}" method="post" style="display:inline;">
+          <input type="hidden" name="_method" value="DELETE" />
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="pagination justify-content-center">
+  <ul class="pagination">
+    <!-- Previous Button -->
+    <li class="page-item" th:classappend="${reviews.hasPrevious()} ? '' : 'disabled'">
+      <a class="page-link" th:href="@{/reviews(page=${reviews.number - 1})}" th:if="${reviews.hasPrevious()}">Previous</a>
+      <span class="page-link" th:unless="${reviews.hasPrevious()}">Previous</span>
+    </li>
+
+    <!-- Page Numbers -->
+    <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, reviews.totalPages - 1)}"
+        th:classappend="${pageNum == reviews.number} ? 'active' : ''">
+      <a class="page-link" th:href="@{/reviews(page=${pageNum})}" th:text="${pageNum + 1}"></a>
+    </li>
+
+    <!-- Next Button -->
+    <li class="page-item" th:classappend="${reviews.hasNext()} ? '' : 'disabled'">
+      <a class="page-link" th:href="@{/reviews(page=${reviews.number + 1})}" th:if="${reviews.hasNext()}">Next</a>
+      <span class="page-link" th:unless="${reviews.hasNext()}">Next</span>
+    </li>
+  </ul>
+</div>
+
+
+
+
+
+<!-- Like button script -->
+<script th:inline="javascript">
+  function likeReview(reviewId) {
+    fetch(`/reviews/${reviewId}/likes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+            .then(response => {
+              if (response.ok) {
+                location.reload(); // Refresh the page to show updated like count
+              } else {
+                alert('Failed to like the review.');
+              }
+            })
+            .catch(error => console.error('Error:', error));
+  }
+
+
+  function unlikeReview(reviewId) {
+    fetch(`/reviews/${reviewId}/likes`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+            .then(response => {
+              if (response.ok) {
+                location.reload(); // Refresh the page to show updated like count
+              } else {
+                alert('Failed to like the review.');
+              }
+            })
+            .catch(error => console.error('Error:', error));
+  }
+</script>
+</body>
+</html>

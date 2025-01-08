@@ -7,6 +7,13 @@ import com.simsimbookstore.frontserver.books.category.dto.CategoryResponseDto;
 import com.simsimbookstore.frontserver.books.category.service.CategoryService;
 import com.simsimbookstore.frontserver.books.tag.dto.TagResponseDto;
 import com.simsimbookstore.frontserver.books.tag.service.TagService;
+import com.simsimbookstore.frontserver.reviews.review.domain.ReviewLikeCountDTO;
+import com.simsimbookstore.frontserver.reviews.review.service.ReviewService;
+import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
+import com.simsimbookstore.frontserver.util.PageResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import com.simsimbookstore.frontserver.util.PageResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +27,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 @RequestMapping("/books")
 @RequiredArgsConstructor
@@ -30,6 +39,7 @@ public class BookGetController {
     private final BookGetService bookGetService;
     private final TagService tagService;
     private final CategoryService categoryService;
+    private final ReviewService reviewService;
 
     /**
      * 사용자가 좋아요를누른 도서 조회
@@ -103,7 +113,8 @@ public class BookGetController {
 //    }
 
     @GetMapping("/{bookId}")
-    public String getBookDetails(@PathVariable Long bookId,
+    public String getBookDetails(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                 @PathVariable Long bookId,
                                  @RequestParam(required = false) Long userId,
                                  Model model) {
         BookResponseDto book = bookGetService.getBook(bookId, userId);
@@ -112,11 +123,25 @@ public class BookGetController {
                 .flatMap(List::stream)
                 .map(CategoryResponseDto::getCategoryId) // 각 CategoryResponseDto에서 ID 추출
                 .collect(Collectors.toList());
+
         // 추천 도서 조회
         List<BookListResponse> recommendBooks = bookGetService.getRecommendBooks(bookId, categoryIdList);
 
+
+        Long loginUserId = -1L;
+        if (customUserDetails != null){
+            loginUserId = customUserDetails.getUserId();
+        }
+
+        // 해당 도서 리뷰 조회
+        Page<ReviewLikeCountDTO> reviews = reviewService.getAllReviewsOrderByRecent(bookId, loginUserId,0, 10);
+
         model.addAttribute("book", book);
         model.addAttribute("recommendBooks", recommendBooks);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("loginUserId",loginUserId);
+
+
         return "book/bookDetail";
     }
 
