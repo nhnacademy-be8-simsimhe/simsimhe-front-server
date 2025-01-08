@@ -1,6 +1,7 @@
 package com.simsimbookstore.frontserver.config;
 
 
+import com.simsimbookstore.frontserver.cart.service.CartService;
 import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
 import com.simsimbookstore.frontserver.security.handler.LocalLoginSuccessHandler;
@@ -31,6 +32,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
+    private final CartService cartService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -68,7 +70,7 @@ public class SecurityConfig {
         );
 
         http.logout(logout->logout
-                .addLogoutHandler(new CustomLogoutHandler())
+                .addLogoutHandler(new CustomLogoutHandler(cartService))
                 .logoutUrl("/logout"));
 
         // filter
