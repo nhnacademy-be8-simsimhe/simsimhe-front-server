@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order History</title>
+</head>
+<body>
+<h1>Order History</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Order Number</th>
+        <th>Order Date</th>
+        <th>Order Name</th>
+        <th>Order Amount</th>
+        <th>Order State</th>
+        <th>Tracking Number</th>
+        <th>Order User Name</th>
+        <th>Receiver Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orderHistories}">
+        <td th:text="${order.orderNumber}"></td>
+        <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td th:text="${order.orderName}"></td>
+        <td th:text="${order.orderAmount}"></td>
+        <td th:text="${order.orderState}"></td>
+        <td th:text="${order.trackingNumber}"></td>
+        <td th:text="${order.orderUserName}"></td>
+        <td th:text="${order.receiverName}"></td>
+    </tr>
+
+    </tbody>
+</table>
+
+<!-- Pagination -->
+<div>
+    <ul>
+        <!-- 첫 페이지 -->
+        <li th:if="${page.hasPrevious()}" th:classappend="${page.number == 0} ? 'disabled'">
+            <a th:href="@{/shop/users/{userId}/orders(userId=${userId},page=${0},size=${page.size})}">First</a>
+        </li>
+        <!-- 이전 페이지 -->
+        <li th:if="${page.hasPrevious()}" th:classappend="${!page.hasPrevious()} ? 'disabled'">
+            <a th:href="@{/shop/users/{userId}/orders(userId=${userId},page=${page.number - 1},size=${page.size})}">Previous</a>
+        </li>
+        <!-- 페이지 번호 목록 -->
+        <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" th:classappend="${i == page.number} ? 'active'">
+            <a th:href="@{/shop/users/{userId}/orders(userId=${userId},page=${i},size=${page.size})}" th:text="${i + 1}"></a>
+        </li>
+        <!-- 다음 페이지 -->
+        <li th:if="${page.hasNext()}" th:classappend="${!page.hasNext()} ? 'disabled'">
+            <a th:href="@{/shop/users/{userId}/orders(userId=${userId},page=${page.number + 1},size=${page.size})}">Next</a>
+        </li>
+        <!-- 마지막 페이지 -->
+        <li th:if="${page.hasNext()}" th:classappend="${page.number + 1 == page.totalPages} ? 'disabled'">
+            <a th:href="@{/shop/users/{userId}/orders(userId=${userId},page=${page.totalPages - 1},size=${page.size})}">Last</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

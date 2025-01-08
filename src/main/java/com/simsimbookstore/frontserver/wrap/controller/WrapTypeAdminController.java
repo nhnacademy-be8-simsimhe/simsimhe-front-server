@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/wrap-types")
-public class WrapTypeController {
+public class WrapTypeAdminController {
 
     private final WrapService wrapService;
 

@@ -1,7 +1,8 @@
 package com.simsimbookstore.frontserver.wrap.service;
 
 
-import com.simsimbookstore.frontserver.wrap.client.WrapClient;
+import com.simsimbookstore.frontserver.wrap.client.WrapAdminClient;
+import com.simsimbookstore.frontserver.wrap.client.WrapOrderClient;
 import com.simsimbookstore.frontserver.wrap.dto.WrapTypeRequestDto;
 import com.simsimbookstore.frontserver.wrap.dto.WrapTypeResponseDto;
 import java.util.List;
@@ -13,22 +14,26 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class WrapService {
-    private final WrapClient wrapClient;
-
+    private final WrapAdminClient wrapAdminClient;
+    private final WrapOrderClient wrapOrderClient;
 
     public WrapTypeResponseDto getWrapType(Long id) {
-        return wrapClient.getWrapTypeId(id);
+        return wrapAdminClient.getWrapTypeId(id);
     }
 
     public List<WrapTypeResponseDto> getAllWrapTypes() {
-        return wrapClient.getAllWrapTypes();
+        return wrapAdminClient.getAllWrapTypes();
     }
 
     public WrapTypeResponseDto createWrapType(WrapTypeRequestDto requestDto) {
-        return wrapClient.createWrapType(requestDto);
+        return wrapAdminClient.createWrapType(requestDto);
     }
 
     public WrapTypeResponseDto updateWrapType(Long id, Boolean isAvailable) {
-        return wrapClient.updateAvailability(id, isAvailable);
+        return wrapAdminClient.updateAvailability(id, isAvailable);
+    }
+
+    public List<WrapTypeResponseDto> getAllAvailableWrapTypes() {
+        return wrapOrderClient.findAll();
     }
 }
