@@ -12,6 +12,7 @@ import com.simsimbookstore.frontserver.users.address.service.AddressService;
 import com.simsimbookstore.frontserver.users.user.dto.UserResponse;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
 import com.simsimbookstore.frontserver.wrap.service.WrapService;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,11 +48,15 @@ public class OrderController {
     @PostMapping("/shop/order")
     public String createOrder(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestParam Long bookId,
-            @RequestParam int quantity,
+            @RequestParam("bookId") List<Long> bookIdList,
+            @RequestParam("quantity") List<Integer> quantityList,
             RedirectAttributes redirectAttributes
     ) {
-        List<BookListRequestDto> dtos = List.of(new BookListRequestDto(bookId, quantity));
+        List<BookListRequestDto> dtos = new ArrayList<>();
+        for (int i = 0; i < bookIdList.size(); i++) {
+            dtos.add(new BookListRequestDto(bookIdList.get(i), quantityList.get(i)));
+        }
+
         List<BookListResponseDto> responseDtos = orderService.doOrder(dtos);
         Long userId = customUserDetails.getUserId();
         redirectAttributes.addFlashAttribute("bookOrderList", responseDtos);
