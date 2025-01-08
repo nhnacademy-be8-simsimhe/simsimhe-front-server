@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(value = "reviewImageApi", url = "http://localhost:8020/api/reviews")
+@FeignClient(value = "reviewImageApi", url = "http://localhost:8000/api/shop/reviews")
 public interface ReviewImageServcieClient {
 
     @PostMapping("/{reviewId}/images")

@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "reviewApi", url = "http://localhost:8020/api/books")
+@FeignClient(name = "review-api-server", url = "http://localhost:8000/api/shop/books")
 public interface ReviewServiceClient {
 
     // 리뷰 등록 요청
@@ -29,7 +29,7 @@ public interface ReviewServiceClient {
     public Page<Review> getAllReviewsOrderByLike(@PathVariable Long bookId, @RequestParam int page, @RequestParam int size);
 
     @GetMapping("/{bookId}/reviews/recent")
-    public Page<ReviewLikeCountDTO> getAllReviewsOrderByRecent(@PathVariable Long bookId, @RequestParam int page, @RequestParam int size);
+    public Page<ReviewLikeCountDTO> getAllReviewsOrderByRecent(@PathVariable Long bookId, @RequestParam Long userId, @RequestParam int page, @RequestParam int size);
 
     @PostMapping("/{bookId}/reviews/{reviewId}")
     public Review updateReview(@PathVariable Long bookId, @PathVariable Long reviewId, @RequestBody ReviewRequestDTO reviewRequestDTO);

@@ -75,7 +75,7 @@
       <div class="d-flex justify-content-between">
         <div class="comment-content" th:text="${comment.content}"></div>
         <form class="comment-input" th:action="@{/reviews/{reviewId}/comments/{commentId}(reviewId=${reviewId}, commentId=${comment.reviewCommentId})}" th:method="delete">
-          <div class="text-end mt-2">
+          <div class="text-end mt-2" th:if="${comment.userId == loginUserId}">
             <button type="submit" class="btn btn-primary">삭제</button>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">수정</button>
           </div>

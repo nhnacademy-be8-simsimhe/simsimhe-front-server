@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@FeignClient(value = "objectApi", url = "http://localhost:8020/api/objects")
+@FeignClient(value = "objectApi", url = "http://localhost:8000/api/shop/objects")
 public interface ObjectServiceClient {
 
     @PostMapping(value = "/upload-file" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

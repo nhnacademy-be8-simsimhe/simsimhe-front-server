@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(value = "reviewCommentApi", url = "http://localhost:8020/api/reviews")
+@FeignClient(value = "reviewCommentApi", url = "http://localhost:8000/api/shop/reviews")
 public interface ReviewCommentServiceClient {
 
 
@@ -23,7 +23,7 @@ public interface ReviewCommentServiceClient {
     public Page<ReviewComment> getReviewComment(@PathVariable Long reviewId, @PathVariable Long commentId);
 
     @PutMapping("/{reviewId}/comments/{commentId}")
-    public ReviewComment updateReviewComment(@PathVariable Long reviewId, @PathVariable Long commentId);
+    public ReviewComment updateReviewComment(@PathVariable Long reviewId, @PathVariable Long commentId, @RequestBody ReviewCommentRequestDTO requestDTO);
 
     @DeleteMapping("/{reviewId}/comments/{commentId}")
     public void deleteReviewComment(@PathVariable Long reviewId, @PathVariable Long commentId);

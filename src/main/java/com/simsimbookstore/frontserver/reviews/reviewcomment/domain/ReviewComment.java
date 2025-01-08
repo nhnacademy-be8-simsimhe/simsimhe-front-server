@@ -19,8 +19,7 @@ public class ReviewComment {
 
     private Long reviewId;
 
-    private Long userId;
-
     private String userName;
 
+    private Long userId;
 }

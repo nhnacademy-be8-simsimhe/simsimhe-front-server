@@ -18,6 +18,9 @@ public class ReviewLikeCountDTO {
     private long likeCount;
     private long commentCount;
     private List<String> imagePaths;
+    private boolean editable;
+    private boolean deletable;
+    private boolean userLiked;
 
 
 }

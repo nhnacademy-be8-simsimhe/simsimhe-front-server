@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(value = "reviewLikeApi", url = "http://localhost:8020/api")
+@FeignClient(value = "reviewLikeApi", url = "http://localhost:8000/api/shop")
 public interface ReviewLikeServiceClient {
 
     // 리뷰 좋아요

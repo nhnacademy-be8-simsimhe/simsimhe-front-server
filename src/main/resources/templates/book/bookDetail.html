@@ -3,8 +3,168 @@
 <head>
     <title th:text="${book.title} + ' - 상세정보'">Book Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+        .review-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 20px 10px;
+            background-color: #f9f9f9;
+        }
+        .review-content {
+            flex: 1;
+            padding-right: 20px;
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .review-date {
+            font-size: 0.9rem;
+            color: #888;
+        }
+        .review-userName {
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .review-actions {
+            margin-top: 10px;
+        }
+        .review-likes, .review-comments {
+            font-size: 0.9rem;
+            color: #007bff;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .review-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-left: 10px;
+        }
+
+
+        .review-like-button, .like-button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .heart-icon {
+            width: 24px;
+            height: 24px;
+            transition: fill 0.3s;
+            stroke: #aaa; /* 기본 색상 */
+            fill: none;
+        }
+
+        .book-heart-icon {
+            width: 36px;
+            height: 36px;
+            transition: fill 0.3s;
+            stroke: #aaa; /* 기본 색상 */
+            fill: none;
+        }
+
+        .review-like-button[data-liked="true"] .heart-icon, .like-button[data-is-liked="true"] .book-heart-icon {
+            stroke: #e63946; /* 좋아요 상태 색상 */
+            fill: #e63946;  /* 좋아요 상태 색상 */
+        }
+
+
+
+        .star-rating {
+            direction: rtl; /* 오른쪽에서 왼쪽으로 별 채우기 */
+            font-size: 1.5rem; /* 별 크기 조절 */
+            unicode-bidi: bidi-override; /* 별의 시각적 방향 유지 */
+            display: inline-flex;
+        }
+
+        .star-rating input[type="radio"] {
+            display: none; /* 라디오 버튼 숨기기 */
+        }
+
+        .star-rating label {
+            color: #ccc; /* 기본 별 색상 */
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .star-rating input[type="radio"]:checked ~ label {
+            color: #f5c518; /* 선택된 별 색상 (노란색) */
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #f5c518; /* 마우스를 올릴 때 색상 */
+        }
+
+        /*로그인 이동 모달창 스타일 지정*/
+        .custom-modal {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            max-width: 400px;
+            margin: auto;
+        }
+        .custom-modal-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .custom-modal-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .custom-modal-button {
+            width: 48%;
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+        }
+        .cancel-button {
+            background-color: #e0e0e0;
+            color: black;
+        }
+        .redirect-button {
+            background-color: #6f42c1;
+            color: white;
+        }
+
+
+
+        .review-score {
+            display: flex;
+            gap: 2px; /* 별 사이 간격 */
+        }
+
+        .star {
+            font-size: 1.5rem; /* 별 크기 */
+            color: #ccc; /* 기본 비활성 상태 색상 */
+        }
+
+        .star.filled {
+            color: #f5c518; /* 채워진 별 색상 (노란색) */
+        }
+
+
+
+    </style>
 </head>
 <body>
+<input type="hidden" id="loginUserId" th:value="${loginUserId}" />
 <div class="container mt-5">
     <!-- 도서 제목 -->
     <header class="text-center mb-4">
@@ -37,13 +197,23 @@
                 <span th:if="${book.saleprice == null}" class="fw-bold small" th:text="${book.price}">가격</span>
             </p>
 
-            <!-- 좋아요 버튼 -->
-            <div class="mt-3">
-                <button type="button" class="btn btn-light like-button btn-sm" th:data-book-id="${book.bookId}"
-                        th:data-is-liked="${book.isLiked}">
-                    <i class="fa" th:classappend="${book.isLiked} ? 'fa-heart text-danger' : 'fa-heart-o'"></i> 좋아요
-                </button>
-            </div>
+<!--            &lt;!&ndash; 좋아요 버튼 &ndash;&gt;-->
+<!--            <div class="mt-3">-->
+<!--                <button type="button" class="btn btn-light like-button btn-sm" th:data-book-id="${book.bookId}"-->
+<!--                        th:data-is-liked="${book.isLiked}">-->
+<!--                    <i class="fa" th:classappend="${book.isLiked} ? 'fa-heart text-danger' : 'fa-heart-o'"></i> 좋아요-->
+<!--                </button>-->
+<!--            </div>-->
+
+            <button class="like-button" th:data-book-id="${book.bookId}" th:data-is-liked="${book.isLiked}" >
+                <!-- 기본 상태의 하트 SVG -->
+
+                <svg class="book-heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 21C12 21 4 13.31 4 8.5C4 5.42 6.42 3 9.5 3C11.24 3 12.91 4.1 13.5 5.64C14.09 4.1 15.76 3 17.5 3C20.58 3 23 5.42 23 8.5C23 13.31 15 21 15 21H12Z" />
+                </svg>
+
+            </button>
+
         </div>
     </div>
 
@@ -111,39 +281,385 @@
         </div>
 
     </section>
+
+
+    <section class="mt-5">
+        <div>
+            <h5 class="text-center fs-6 mb-4" th:text="'리뷰 (' + ${reviews.getTotalElements()} + ')'"></h5>
+            <form action="/reviews/create" class="d-flex ms-auto">
+                <input type="hidden" name="bookId" th:value="${book.bookId}">
+                <button>리뷰 작성</button>
+            </form>
+        </div>
+
+        <div th:if="${#lists.isEmpty(reviews.content)}" class="text-center">
+            <p class="small">리뷰를 작성해보세요!</p>
+        </div>
+        <div class="row" th:if="${!#lists.isEmpty(reviews.content)}">
+
+            <div th:each="review : ${reviews.content}" class="review-container">
+                <div class="review-content">
+                    <div class="review-header">
+                        <div>
+                            <span class="review-userName" th:text="${review.userName}">user****</span>
+                            <span class="review-date" th:text="${review.createdAt}">2025.01.03</span>
+                        </div>
+                        <div>
+                            <a href="#" class="review-edit" th:data-review-id="${review.reviewId}" th:if="${review.editable}">수정</a>
+                            <a href="#" class="review-delete" th:if="${review.deletable}" th:attr="onclick='confirmDelete(' + ${review.reviewId} + ')'">삭제</a>
+                        </div>
+
+                        <div class="mb-3">
+                            <div id="reviewScore" class="review-score">
+                                <span class="star" th:classappend="${review.score >= 1 ? 'filled' : ''}">&#9733;</span>
+                                <span class="star" th:classappend="${review.score >= 2 ? 'filled' : ''}">&#9733;</span>
+                                <span class="star" th:classappend="${review.score >= 3 ? 'filled' : ''}">&#9733;</span>
+                                <span class="star" th:classappend="${review.score >= 4 ? 'filled' : ''}">&#9733;</span>
+                                <span class="star" th:classappend="${review.score >= 5 ? 'filled' : ''}">&#9733;</span>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div>
+                        <p th:text="${review.title}">리뷰 타이틀</p>
+                    </div>
+                    <div>
+                        <p th:text="${review.content}">리뷰 내용</p>
+                    </div>
+                    <div class="review-actions">
+
+                        <button class="review-like-button" th:data-review-id="${review.reviewId}" th:data-liked="${review.userLiked}" >
+                            <!-- 기본 상태의 하트 SVG -->
+
+                            <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 21C12 21 4 13.31 4 8.5C4 5.42 6.42 3 9.5 3C11.24 3 12.91 4.1 13.5 5.64C14.09 4.1 15.76 3 17.5 3C20.58 3 23 5.42 23 8.5C23 13.31 15 21 15 21H12Z" />
+                            </svg>
+                            <span class="review-like-count" th:text="${review.likeCount}">0</span>
+                            <!--                    <span class="like-count" th:text="${review.likeCount}">0</span>-->
+                        </button>
+
+                        <a class="review-comments"
+                              th:href="@{/reviews/{reviewId}/comments(reviewId=${review.reviewId})}">
+                            댓글 <span th:text="${review.commentCount}">0</span>
+                        </a>
+
+                    </div>
+                </div>
+                <!-- 오른쪽 이미지 -->
+                <div>
+                    <img th:src="${review.imagePaths[0]}" alt="Review Image" class="review-image" th:if="${review.imagePaths != null}">
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+</div>
+
+
+
+
+<div class="modal fade" id="editReviewModal" tabindex="-1" aria-labelledby="editReviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editReviewModalLabel">리뷰 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editReviewForm">
+                    <input type="hidden" id="editReviewId">
+                    <div class="mb-3">
+                        <label for="editReviewTitle" class="form-label">제목</label>
+                        <input type="text" class="form-control" id="editReviewTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editReviewContent" class="form-label">내용</label>
+                        <textarea class="form-control" id="editReviewContent" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editReviewScore" class="form-label">평점</label>
+                        <div id="editReviewScore" class="star-rating">
+                            <input type="radio" id="star5" name="score" value="5"><label for="star5">&#9733;</label>
+                            <input type="radio" id="star4" name="score" value="4"><label for="star4">&#9733;</label>
+                            <input type="radio" id="star3" name="score" value="3"><label for="star3">&#9733;</label>
+                            <input type="radio" id="star2" name="score" value="2"><label for="star2">&#9733;</label>
+                            <input type="radio" id="star1" name="score" value="1"><label for="star1">&#9733;</label>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary" id="saveReviewChanges">저장</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">로그인이 필요합니다</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                찜하기는 로그인 후 이용할 수 있어요.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelButton">취소</button>
+                <button type="button" class="btn btn-primary" id="redirectButton">로그인 페이지로 이동</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
+
+    // 리뷰 평점 설정
+    document.addEventListener("DOMContentLoaded", () => {
+        // 리뷰 리스트의 별점 설정
+        const starRatings = document.querySelectorAll('.review-score');
+        starRatings.forEach(starRating => {
+            const labels = starRating.querySelectorAll('.star');
+            // 클릭 이벤트 차단
+            labels.forEach(label => {
+                label.style.pointerEvents = 'none'; // 클릭 비활성화
+            });
+        });
+
+        // 수정 모달에서 별점 설정
+        const editReviewModal = document.getElementById('editReviewModal');
+        editReviewModal.addEventListener('show.bs.modal', () => {
+            const modalStarRating = document.getElementById('editReviewScore');
+            const labels = modalStarRating.querySelectorAll('label');
+            const inputs = modalStarRating.querySelectorAll('input[type="radio"]');
+
+            // 별점 초기화
+            labels.forEach(label => {
+                label.style.pointerEvents = 'auto'; // 클릭 활성화
+            });
+
+            // 별 클릭 시 색상 업데이트
+            inputs.forEach(input => {
+                input.addEventListener('change', () => {
+                    const selectedValue = parseInt(input.value, 10);
+                    labels.forEach((label, index) => {
+                        if (5 - index <= selectedValue) {
+                            label.style.color = '#f5c518'; // 선택된 별 색상 (노란색)
+                        } else {
+                            label.style.color = '#ccc'; // 기본 색상 (회색)
+                        }
+                    });
+                });
+            });
+        });
+    });
+
+
+
+
+
+    //리뷰 삭제
+    function confirmDelete(reviewId) {
+        if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
+            // DELETE 요청을 서버로 전송
+            fetch(`/reviews/${reviewId}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("리뷰가 삭제되었습니다.");
+                        location.reload(); // 페이지를 새로고침하여 업데이트된 리스트를 반영
+                    } else {
+                        throw new Error("리뷰 삭제에 실패했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert("삭제 도중 문제가 발생했습니다.");
+                });
+        }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.review-like-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const loginUserId = document.getElementById('loginUserId').value;
+            // const loginModal = document.getElementById("loginModal");
+            console.log(typeof loginUserId, loginUserId)
+
+            if (parseInt(loginUserId) === -1){
+                const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                loginModal.show();
+                return;
+            }
+
+            console.log("out")
+
+
+            const reviewId = button.getAttribute('data-review-id');
+            const isLiked = button.getAttribute('data-liked') === 'true';
+
+            // const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+
+            fetch(`/reviews/${reviewId}/likes`, {
+                method: isLiked ? 'DELETE' : 'POST', // 좋아요 추가 또는 삭제
+            })
+                .then(response => {
+
+                    if (response.status === 500) {
+                        alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+                        // window.location.href = "/login"; // 로그인 페이지로 리디렉션
+                    }
+
+                    console.log(response.status)
+
+                    return response.text()
+                })
+                .then(data => {
+                    // 서버 응답에 따라 좋아요 상태 업데이트
+                    console.log(data)
+                    button.setAttribute('data-liked', !isLiked);
+                    button.querySelector('.review-like-count').textContent = data;
+                })
+                .catch(error => console.error('좋아요 처리 중 오류 발생:', error));
+        });
+
+    });
+
+    });
+
+
+
+
+
+        //도서 좋아요
     document.addEventListener('DOMContentLoaded', () => {
         const likeButtons = document.querySelectorAll('.like-button');
         likeButtons.forEach(button => {
             button.addEventListener('click', () => {
+                const loginUserId = document.getElementById('loginUserId').value;
+                console.log("click")
                 const bookId = button.getAttribute('data-book-id');
                 const isLiked = button.getAttribute('data-is-liked') === 'true';
 
                 fetch(`/likes`, {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({bookId: bookId, userId: 1}) // Replace 1 with actual user ID
+                    body: JSON.stringify({bookId: bookId, userId: loginUserId}) // Replace 1 with actual user ID
                 })
                     .then(response => {
                         if (!response.ok) throw new Error('Failed to update like status');
                         return response.json();
                     })
                     .then(data => {
-                        button.setAttribute('data-is-liked', data.isLiked);
-                        const icon = button.querySelector('i');
-                        if (data.isLiked) {
-                            icon.classList.remove('fa-heart-o');
-                            icon.classList.add('fa-heart', 'text-danger');
-                        } else {
-                            icon.classList.remove('fa-heart', 'text-danger');
-                            icon.classList.add('fa-heart-o');
-                        }
+                        console.log(data.liked)
+                        button.setAttribute('data-is-liked', data.liked);
+
                     })
                     .catch(error => console.error(error));
             });
+        });
+    });
+
+
+    // 리뷰 수정
+    document.addEventListener('DOMContentLoaded', () => {
+        // 수정 버튼 클릭 이벤트
+        document.querySelectorAll('.review-edit').forEach(button => {
+            button.addEventListener('click', event => {
+                event.preventDefault();
+                console.log("in")
+                const reviewId = button.getAttribute('data-review-id');
+
+                // 서버에서 리뷰 데이터를 가져오기
+                fetch(`/reviews/${reviewId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // 모달에 데이터 채우기
+                        document.getElementById('editReviewId').value = data.reviewId;
+                        document.getElementById('editReviewTitle').value = data.title;
+                        document.getElementById('editReviewContent').value = data.content;
+
+                        const score = data.score;
+                        const starInput = document.querySelector(`#editReviewScore input[value="${score}"]`);
+                        if (starInput) {
+                            starInput.checked = true;
+                        }
+
+
+                        // 모달 열기
+                        const editReviewModal = new bootstrap.Modal(document.getElementById('editReviewModal'));
+                        editReviewModal.show();
+                    })
+                    .catch(error => {
+                        console.error('리뷰 데이터를 불러오는데 실패했습니다.', error);
+                        alert('리뷰 데이터를 불러오는데 실패했습니다.');
+                    });
+            });
+        });
+
+        // 저장 버튼 클릭 이벤트
+        document.getElementById('saveReviewChanges').addEventListener('click', () => {
+            const reviewId = document.getElementById('editReviewId').value;
+            const updatedReview = {
+                score: Number(document.querySelector('#editReviewScore input:checked').value),
+                title: document.getElementById('editReviewTitle').value,
+                content: document.getElementById('editReviewContent').value
+            };
+
+            const formData = new URLSearchParams();
+            formData.append('score', document.querySelector('#editReviewScore input:checked').value);
+            formData.append('title', document.getElementById('editReviewTitle').value);
+            formData.append('content', document.getElementById('editReviewContent').value);
+
+
+            // 서버에 수정 요청 보내기
+            fetch(`/reviews/${reviewId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData.toString()
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('리뷰가 수정되었습니다.');
+                        location.reload(); // 페이지 새로고침
+                    } else {
+                        throw new Error('리뷰 수정에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('리뷰 수정 중 문제가 발생했습니다.', error);
+                    alert('리뷰 수정 중 문제가 발생했습니다.');
+                });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const loginModal = document.getElementById("loginModal");
+        const cancelButton = document.getElementById("cancelButton");
+        const redirectButton = document.getElementById("redirectButton");
+
+        // 취소 버튼 클릭 이벤트
+        cancelButton.addEventListener("click", () => {
+            loginModal.classList.add("d-none"); // 모달 창 숨기기
+        });
+
+        // 이동하기 버튼 클릭 이벤트
+        redirectButton.addEventListener("click", () => {
+            window.location.href = "/login"; // 로그인 페이지로 이동
         });
     });
 </script>
