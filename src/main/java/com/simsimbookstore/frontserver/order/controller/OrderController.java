@@ -57,7 +57,6 @@ public class OrderController {
         redirectAttributes.addFlashAttribute("bookOrderList", responseDtos);
         redirectAttributes.addFlashAttribute("wrapTypes", wrapService.getAllAvailableWrapTypes());
         redirectAttributes.addFlashAttribute("userId", userId);
-        redirectAttributes.addFlashAttribute("bookOrderList", responseDtos);
         redirectAttributes.addFlashAttribute("wrapTypes", wrapService.getAllAvailableWrapTypes());
         redirectAttributes.addFlashAttribute("availablePoints", pointHistoryService.getPoints(userId));
         redirectAttributes.addFlashAttribute("addresses", addressService.getAddress(userId));
@@ -67,8 +66,7 @@ public class OrderController {
 
 
 
-    @PostMapping
-    @RequestMapping("/shop/order/total")
+    @PostMapping("/shop/order/total")
     @ResponseBody
     public ResponseEntity<?> calculateTotal(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                             @RequestBody TotalRequestDto dto) {
