@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿠폰 정책 생성</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        a {
+            text-decoration: none;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>쿠폰 정책이 성공적으로 생성되었습니다!</h1>
+
+    <table>
+        <tr th:if="${couponPolicy.couponPolicyName != null}">
+            <th>쿠폰 정책 이름</th>
+            <td th:text="${couponPolicy.couponPolicyName}">쿠폰 정책 이름</td>
+        </tr>
+        <tr th:if="${couponPolicy.discountType != null}">
+            <th>할인 형태</th>
+            <td th:text="${couponPolicy.discountType.name}">할인 형태</td>
+        </tr>
+        <tr th:if="${couponPolicy.discountRate != null}">
+            <th>할인율</th>
+            <td th:text="${couponPolicy.discountRate + '%'}">할인율</td>
+        </tr>
+        <tr th:if="${couponPolicy.discountPrice != null}">
+            <th>할인 금액</th>
+            <td th:text="${couponPolicy.discountPrice + '원'}">할인 금액</td>
+        </tr>
+        <tr th:if="${couponPolicy.maxDiscountAmount != null}">
+            <th>최대 할인 금액</th>
+            <td th:text="${couponPolicy.maxDiscountAmount + '원'}">최대 할인 금액</td>
+        </tr>
+        <tr th:if="${couponPolicy.minOrderAmount != null}">
+            <th>최소 주문 금액</th>
+            <td th:text="${couponPolicy.minOrderAmount + '원'}">최소 주문 금액</td>
+        </tr>
+        <tr th:if="${couponPolicy.policyDescription != null}">
+            <th>정책 설명</th>
+            <td th:text="${couponPolicy.policyDescription}">정책 설명</td>
+        </tr>
+    </table>
+
+    <p><a th:href="@{/admin}">admin 페이지로 돌아가기</a></p>
+</div>
+</body>
+</html>
