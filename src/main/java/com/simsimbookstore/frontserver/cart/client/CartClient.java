@@ -15,7 +15,7 @@ public interface CartClient {
     CartResponseDto getBookForCart(@PathVariable(name = "bookId") String bookId,
                                    @RequestParam(name = "quantity") int quantity);
 
-    @PatchMapping("/migrate/user/{userId}")
+    @PutMapping("/migrate/user/{userId}")
     void CartToDB(@PathVariable(name = "userId") Long userId,
                   @RequestBody List<CartRequestDto> requestDtoList);
 }
