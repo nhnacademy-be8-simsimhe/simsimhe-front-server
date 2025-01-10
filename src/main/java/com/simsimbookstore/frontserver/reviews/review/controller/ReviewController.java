@@ -48,7 +48,7 @@ public class ReviewController {
         return "/reviews/review";
     }
 
-    @GetMapping("/users/myPage/reviews")
+    @GetMapping("/users/users/reviews")
     public String createReviewListView(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam(required = false) Long bookId, Model model){
         Page<UserAvailableReviewsDTO> availableReviews = userReviewServiceClient.getEligibleBooksForReview(customUserDetails.getUserId(), 0, 10);
         Page<UserReviewsDTO> submittedReviews = userReviewServiceClient.getUserReviews(customUserDetails.getUserId(), 0,10);

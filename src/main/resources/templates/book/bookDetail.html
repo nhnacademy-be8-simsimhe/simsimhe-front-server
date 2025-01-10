@@ -311,10 +311,10 @@
     <section class="mt-5">
         <div>
             <h5 class="text-center fs-6 mb-4" th:text="'리뷰 (' + ${reviews.getTotalElements()} + ')'"></h5>
-            <form action="/reviews/create" class="d-flex ms-auto">
-                <input type="hidden" name="bookId" th:value="${book.bookId}">
-                <button>리뷰 작성</button>
-            </form>
+<!--            <form action="/reviews/create" class="d-flex ms-auto">-->
+<!--                <input type="hidden" name="bookId" th:value="${book.bookId}">-->
+<!--                <button>리뷰 작성</button>-->
+<!--            </form>-->
         </div>
 
         <div th:if="${#lists.isEmpty(reviews.content)}" class="text-center">

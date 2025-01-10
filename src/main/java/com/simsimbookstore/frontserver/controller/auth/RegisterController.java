@@ -1,7 +1,7 @@
 package com.simsimbookstore.frontserver.controller.auth;
 
 
-import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserRegisterRequest;
+import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserRegisterRequestDto;
 import com.simsimbookstore.frontserver.users.localUser.service.LocalUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,16 +22,16 @@ public class RegisterController {
 
     @PostMapping("/localUser/register")
     public ResponseEntity<?> registerUser(
-            @ModelAttribute LocalUserRegisterRequest localUserRequest
+            @ModelAttribute LocalUserRegisterRequestDto localUserRegisterRequestDto
     ){
-        boolean isExists = localUserService.existsByLoginId(localUserRequest.getLoginId());
+        boolean isExists = localUserService.existsByLoginId(localUserRegisterRequestDto.getLoginId());
         if (isExists) {
             Map<String,String> errorMap = new HashMap<>();
             errorMap.put("error","이미 존재하는 아이디입니다.");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMap);
         }
 
-        String s = localUserService.addLocalUser(localUserRequest);
+        String s = localUserService.addLocalUser(localUserRegisterRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

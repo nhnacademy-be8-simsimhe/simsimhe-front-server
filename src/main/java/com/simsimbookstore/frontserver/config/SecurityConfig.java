@@ -1,9 +1,11 @@
 package com.simsimbookstore.frontserver.config;
 
 
-//import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler;
+import com.simsimbookstore.frontserver.cart.service.CartService;
+import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
 //import com.simsimbookstore.frontserver.security.handler.LocalLoginSuccessHandler;
+import com.simsimbookstore.frontserver.security.handler.LocalLoginSuccessHandler;
 import com.simsimbookstore.frontserver.users.user.service.CustomUserDetailsService;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
+    private final CartService cartService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,9 +46,8 @@ public class SecurityConfig {
                 .requestMatchers("/reviews/create").authenticated()
                 .requestMatchers(HttpMethod.POST,"/reviews/*/likes").authenticated()
                 .requestMatchers("/management/health").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll());
-
-
         //rememberme
         http.rememberMe(rememberMe->rememberMe
                 .tokenValiditySeconds(3600)
@@ -66,11 +68,12 @@ public class SecurityConfig {
         http.formLogin(form->form.loginPage("/index?showLoginModal=true")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
-//                .failureHandler(new CustomAuthFailureHandler())
-//                .successHandler(new LocalLoginSuccessHandler(userService))
+                .successHandler(new LocalLoginSuccessHandler(userService))
+                .failureHandler(new CustomAuthFailureHandler())
         );
+
         http.logout(logout->logout
-                .addLogoutHandler(new CustomLogoutHandler())
+                .addLogoutHandler(new CustomLogoutHandler(cartService))
                 .logoutUrl("/logout"));
 
         // filter
