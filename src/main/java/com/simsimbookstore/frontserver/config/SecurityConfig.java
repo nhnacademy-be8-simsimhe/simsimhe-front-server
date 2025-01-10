@@ -5,12 +5,14 @@ import com.simsimbookstore.frontserver.cart.service.CartService;
 import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
 import com.simsimbookstore.frontserver.security.handler.LocalLoginSuccessHandler;
+import com.simsimbookstore.frontserver.security.provider.CustomAuthenticationProvider;
 import com.simsimbookstore.frontserver.users.user.service.CustomUserDetailsService;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,12 +40,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
 
-        //authorize
+        //authorizeå
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 .requestMatchers("/users/myPage/**").authenticated()
                 .requestMatchers("/management/health").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll());
+
+        http.authenticationProvider(customAuthenticationProvider());
 
         //rememberme
         http.rememberMe(rememberMe->rememberMe
@@ -81,10 +85,13 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        ProviderManager providerManager = (ProviderManager) authenticationConfiguration.getAuthenticationManager();
+//        providerManager.getProviders().add(customAuthenticationProvider());
+//        AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -111,5 +118,14 @@ public class SecurityConfig {
                 .build();
 
         return customRequest;
+    }
+
+    @Bean
+    public CustomAuthenticationProvider customAuthenticationProvider(){
+        CustomAuthenticationProvider customAuthenticationProvider = new CustomAuthenticationProvider();
+        customAuthenticationProvider.setUserDetailsService(userDetailsService);
+        customAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return customAuthenticationProvider;
+
     }
 }

@@ -33,7 +33,7 @@ public class UserInfoController {
         return modelAndView;
     }
 
-    @PostMapping("/userInfo/withdrawal")
+    @PostMapping("/userInfo/quit")
     public String userStatusUpdate(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam UserStatus userStatus
