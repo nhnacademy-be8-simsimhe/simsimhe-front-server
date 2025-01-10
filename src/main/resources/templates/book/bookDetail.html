@@ -331,7 +331,7 @@
                         </div>
                         <div>
                             <a href="#" class="review-edit" th:data-review-id="${review.reviewId}" th:if="${review.editable}">수정</a>
-                            <a href="#" class="review-delete" th:if="${review.deletable}" th:attr="onclick='confirmDelete(' + ${review.reviewId} + ')'">삭제</a>
+                            <a href="#" class="review-delete" th:data-review-id="${review.reviewId}" th:if="${review.deletable}">삭제</a>
                         </div>
 
                         <div class="mb-3">
@@ -512,12 +512,106 @@
         });
     });
 
+    document.addEventListener("DOMContentLoaded", () =>{
+        const reviewListContainer = document.querySelector(".review-list")
+
+        if (reviewListContainer){
+            reviewListContainer.addEventListener("click", (event) => {
+                const target = event.target;
+
+                if (target.closest(".review-like-button")){
+                    const reviewLikeButton = target.closest(".review-like-button");
+                    handleReviewLikeButtonClick(reviewLikeButton);
+                }
+
+                if (target.closest(".review-edit")){
+                    const reviewEditButton = target.closest(".review-edit");
+                    handleReviewEditButtonClick(reviewEditButton);
+                }
 
 
+                if (target.closest(".review-delete")){
+                    const reviewDeleteButton = target.closest(".review-delete");
+                    handleReviewDeleteButtonClick(reviewDeleteButton);
+                }
+
+            })
+        }
+    })
 
 
-    //리뷰 삭제
-    function confirmDelete(reviewId) {
+    //리뷰 좋아요 버튼 이벤트
+    function handleReviewLikeButtonClick(button){
+        const loginUserId = document.getElementById('loginUserId').value;
+
+        if (parseInt(loginUserId) === -1){
+            const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+            loginModal.show();
+            return;
+        }
+
+        const reviewId = button.getAttribute('data-review-id');
+        const isLiked = button.getAttribute('data-liked') === 'true';
+
+        // const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+
+        fetch(`/reviews/${reviewId}/likes`, {
+            method: isLiked ? 'DELETE' : 'POST', // 좋아요 추가 또는 삭제
+        })
+            .then(response => {
+
+                if (response.status === 500) {
+                    alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+                    // window.location.href = "/login"; // 로그인 페이지로 리디렉션
+                }
+
+                console.log(response.status)
+
+                return response.text()
+            })
+            .then(data => {
+                // 서버 응답에 따라 좋아요 상태 업데이트
+                console.log(data)
+                button.setAttribute('data-liked', !isLiked);
+                button.querySelector('.review-like-count').textContent = data;
+            })
+            .catch(error => console.error('좋아요 처리 중 오류 발생:', error));
+    }
+
+    //리뷰 수정 버튼 이벤트
+    function handleReviewEditButtonClick(button){
+        const reviewId = button.getAttribute('data-review-id');
+
+        // 서버에서 리뷰 데이터를 가져오기
+        fetch(`/reviews/${reviewId}`)
+            .then(response => response.json())
+            .then(data => {
+                // 모달에 데이터 채우기
+                document.getElementById('editReviewId').value = data.reviewId;
+                document.getElementById('editReviewTitle').value = data.title;
+                document.getElementById('editReviewContent').value = data.content;
+
+                const score = data.score;
+                const starInput = document.querySelector(`#editReviewScore input[value="${score}"]`);
+                if (starInput) {
+                    starInput.checked = true;
+                }
+
+
+                // 모달 열기
+                const editReviewModal = new bootstrap.Modal(document.getElementById('editReviewModal'));
+                editReviewModal.show();
+            })
+            .catch(error => {
+                console.error('리뷰 데이터를 불러오는데 실패했습니다.', error);
+                alert('리뷰 데이터를 불러오는데 실패했습니다.');
+            });
+    }
+
+    //리뷰 삭제 버튼 이벤트
+    function handleReviewDeleteButtonClick(button){
+        const reviewId = button.dataset.reviewId;
+
         if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
             // DELETE 요청을 서버로 전송
             fetch(`/reviews/${reviewId}`, {
@@ -537,59 +631,9 @@
                 });
         }
     }
-    document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('.review-like-button').forEach(button => {
-        button.addEventListener('click', () => {
-            const loginUserId = document.getElementById('loginUserId').value;
-            // const loginModal = document.getElementById("loginModal");
-            console.log(typeof loginUserId, loginUserId)
-
-            if (parseInt(loginUserId) === -1){
-                const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-                loginModal.show();
-                return;
-            }
-
-            console.log("out")
 
 
-            const reviewId = button.getAttribute('data-review-id');
-            const isLiked = button.getAttribute('data-liked') === 'true';
-
-            // const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-
-            fetch(`/reviews/${reviewId}/likes`, {
-                method: isLiked ? 'DELETE' : 'POST', // 좋아요 추가 또는 삭제
-            })
-                .then(response => {
-
-                    if (response.status === 500) {
-                        alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-                        // window.location.href = "/login"; // 로그인 페이지로 리디렉션
-                    }
-
-                    console.log(response.status)
-
-                    return response.text()
-                })
-                .then(data => {
-                    // 서버 응답에 따라 좋아요 상태 업데이트
-                    console.log(data)
-                    button.setAttribute('data-liked', !isLiked);
-                    button.querySelector('.review-like-count').textContent = data;
-                })
-                .catch(error => console.error('좋아요 처리 중 오류 발생:', error));
-        });
-
-    });
-
-    });
-
-
-
-
-
-        //도서 좋아요
+    //도서 좋아요
     document.addEventListener('DOMContentLoaded', () => {
         const likeButtons = document.querySelectorAll('.like-button');
         likeButtons.forEach(button => {
@@ -645,42 +689,8 @@
         });
     });
 
-
-    // 리뷰 수정
+    //수정 모달창 저장 버튼 클릭 이벤트
     document.addEventListener('DOMContentLoaded', () => {
-        // 수정 버튼 클릭 이벤트
-        document.querySelectorAll('.review-edit').forEach(button => {
-            button.addEventListener('click', event => {
-                event.preventDefault();
-                console.log("in")
-                const reviewId = button.getAttribute('data-review-id');
-
-                // 서버에서 리뷰 데이터를 가져오기
-                fetch(`/reviews/${reviewId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // 모달에 데이터 채우기
-                        document.getElementById('editReviewId').value = data.reviewId;
-                        document.getElementById('editReviewTitle').value = data.title;
-                        document.getElementById('editReviewContent').value = data.content;
-
-                        const score = data.score;
-                        const starInput = document.querySelector(`#editReviewScore input[value="${score}"]`);
-                        if (starInput) {
-                            starInput.checked = true;
-                        }
-
-
-                        // 모달 열기
-                        const editReviewModal = new bootstrap.Modal(document.getElementById('editReviewModal'));
-                        editReviewModal.show();
-                    })
-                    .catch(error => {
-                        console.error('리뷰 데이터를 불러오는데 실패했습니다.', error);
-                        alert('리뷰 데이터를 불러오는데 실패했습니다.');
-                    });
-            });
-        });
 
         // 저장 버튼 클릭 이벤트
         document.getElementById('saveReviewChanges').addEventListener('click', () => {
@@ -720,14 +730,19 @@
         });
     });
 
+
+    //로그인 확인 모달창 이벤트
     document.addEventListener("DOMContentLoaded", () => {
-        const loginModal = document.getElementById("loginModal");
+
+        const loginModalElement = document.getElementById("loginModal");
+        const loginModal = new bootstrap.Modal(loginModalElement);
         const cancelButton = document.getElementById("cancelButton");
         const redirectButton = document.getElementById("redirectButton");
 
         // 취소 버튼 클릭 이벤트
         cancelButton.addEventListener("click", () => {
-            loginModal.classList.add("d-none"); // 모달 창 숨기기
+            loginModal.hide();
+            // loginModal.classList.add("d-none"); // 모달 창 숨기기
         });
 
         // 이동하기 버튼 클릭 이벤트
@@ -866,9 +881,8 @@
             // 업데이트된 HTML을 리뷰 리스트 컨테이너에 삽입
             const reviewListContainer = document.querySelector(".review-list");
             reviewListContainer.innerHTML = html;
+            // reviewListContainer.appendChild()
 
-            // 동적으로 생성된 요소에 이벤트 리스너 추가
-            // addEventListenersToReviewActions();
         }
 
         function generateStarHTML(score) {
