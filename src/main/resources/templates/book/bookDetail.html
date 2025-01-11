@@ -55,6 +55,7 @@
                 <span th:if="${book.saleprice == null}" class="fw-bold small" th:text="${book.price}">가격</span>
             </p>
 
+
             <!-- 좋아요 버튼 -->
             <div class="mt-3">
                 <button type="button" class="btn btn-outline-danger like-button btn-sm"
@@ -117,6 +118,16 @@
                 <span th:text="${contributor.contributorRole}">역할</span>
             </li>
         </ul>
+    </div>
+
+    <!-- 리뷰 개수 및 평균 평점 -->
+    <div class="mt-3">
+        <p><strong>리뷰 개수:</strong> <span th:text="${book.reviewCount} + '개'">0개</span></p>
+        <p><strong>리뷰 평점:</strong>
+            <span th:if="${book.scoreAverage != null}"
+                  th:text="${#numbers.formatDecimal(book.scoreAverage, 1, 1)} + '점'">0.0점</span>
+            <span th:if="${book.scoreAverage == null}">0.0점</span>
+        </p>
     </div>
 
     <!-- 추천 도서 -->
@@ -202,15 +213,13 @@
                 .then(data => {
                     alert('장바구니에 담겼습니다!');
                 })
-                .catch(error => {
-                    console.error('Error adding to cart:', error);
-                    alert('장바구니 추가 중 오류가 발생했습니다.');
-                });
+                // .catch(error => {
+                //     console.error('Error adding to cart:', error);
+                //     alert('장바구니 추가 중 오류가 발생했습니다.');
+                // });
         });
     });
 </script>
-
-
 
 
 </body>

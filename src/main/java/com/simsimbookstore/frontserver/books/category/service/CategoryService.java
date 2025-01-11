@@ -29,4 +29,15 @@ public class CategoryService {
     public List<CategoryResponseDto> getALlCategorys(){
         return client.getAllCategorys();
     }
+
+    /**
+     * 카테고리삭제 -> 자식카테고리가 있으면 삭제안됌
+     * @param categoryId
+     */
+    @Transactional
+    public void deleteCartgory(Long categoryId){
+        client.deleteCategory(categoryId);
+    }
+
+
 }

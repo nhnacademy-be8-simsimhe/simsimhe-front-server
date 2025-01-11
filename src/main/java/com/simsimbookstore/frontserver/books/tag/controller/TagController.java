@@ -20,6 +20,19 @@ public class TagController {
 
     private final TagService tagService;
 
+
+    /**
+     * 태그삭제
+     * @param tagId
+     * @return
+     */
+    @DeleteMapping("/delete/{tagId}")
+    public String deleteTag(@PathVariable(name = "tagId") Long tagId) {
+        tagService.deleteTag(tagId);
+
+        return "redirect:/admin/tags";
+    }
+
     /**
      * 모든 태그 조회
      *
@@ -36,6 +49,7 @@ public class TagController {
 
     /**
      * 태그 추가 폼
+     *
      * @param model
      * @return
      */
@@ -47,6 +61,7 @@ public class TagController {
 
     /**
      * 태그 추가
+     *
      * @param requestDto
      * @param bindingResult
      * @param model
@@ -67,6 +82,7 @@ public class TagController {
 
     /**
      * 태그 수정 폼
+     *
      * @param tagId
      * @param model
      * @return
@@ -81,6 +97,7 @@ public class TagController {
 
     /**
      * 태그 수정
+     *
      * @param tagId
      * @param tagRequestDto
      * @param bindingResult
@@ -97,9 +114,9 @@ public class TagController {
             return "admin/book/updateTagForm";
         }
 
-        tagService.updateTag(tagId,tagRequestDto);
+        tagService.updateTag(tagId, tagRequestDto);
 
-       return "redirect:/admin/tags";
+        return "redirect:/admin/tags";
     }
 
 }

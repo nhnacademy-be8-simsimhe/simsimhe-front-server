@@ -19,12 +19,13 @@ public class BookGetService {
     private final BookClient bookClient;
 
 
-    public List<BookListResponse> getPopularityBook(){
+    public List<BookListResponse> getPopularityBook() {
         return bookClient.getPopularityBook();
     }
 
     /**
      * 사용자가 좋아요누른 도서조회
+     *
      * @param page
      * @param size
      * @param userId
@@ -38,19 +39,6 @@ public class BookGetService {
     //특정 도서를 제외한 동일 카테고리 내 인기 도서 추천 기능
     public List<BookListResponse> getRecommendBooks(Long bookId, List<Long> categoryIdList) {
         return bookClient.getRecommendBooks(bookId, categoryIdList);
-    }
-
-    /**
-     * 카테고리랑 관련된 도서 조회
-     *
-     * @param categoryId
-     * @param userId
-     * @param page
-     * @param size
-     * @return
-     */
-    public PageResponse<BookListResponse> getBooksByCategory(Long categoryId, Long userId, int page, int size) {
-        return bookClient.getBooksByCategory(categoryId, userId, page, size);
     }
 
 
@@ -104,7 +92,36 @@ public class BookGetService {
      * @param size
      * @return
      */
-    public PageResponse<BookListResponse> getBooksByTag(Long tagId, Long userId, int page, int size) {
-        return bookClient.getBooksByTag(tagId, userId, page, size);
+//    public PageResponse<BookListResponse> getBooksByTag(Long tagId, Long userId, int page, int size) {
+//        return bookClient.getBooksByTag(tagId, userId, page, size);
+//    }
+    public PageResponse<BookListResponse> getBooksByTag(Long tagId, Long userId, int page, int size, String sort) {
+        return bookClient.getBooksByTag(tagId, userId, page, size, sort);
+    }
+
+    /**
+     * 카테고리랑 관련된 도서 조회
+     *
+     * @param categoryId
+     * @param userId
+     * @param page
+     * @param size
+     * @return
+     */
+//    public PageResponse<BookListResponse> getBooksByCategory(Long categoryId, Long userId, int page, int size) {
+//        return bookClient.getBooksByCategory(categoryId, userId, page, size);
+//    }
+
+    /**
+     * 카테고리랑 관련된 도서 조회
+     *
+     * @param categoryId
+     * @param userId
+     * @param page
+     * @param size
+     * @return
+     */
+    public PageResponse<BookListResponse> getBooksByCategory(Long categoryId, Long userId, int page, int size, String sort) {
+        return bookClient.getBooksByCategory(categoryId, userId, page, size, sort);
     }
 }
