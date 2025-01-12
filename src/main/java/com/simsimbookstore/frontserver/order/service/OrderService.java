@@ -22,8 +22,13 @@ public class OrderService {
     private final OrderHistoryClient orderHistoryClient;
 
     @Transactional
-    public List<BookListResponseDto> doOrder(List<BookListRequestDto> dtos) {
-        return orderClient.doOrder(dtos);
+    public List<BookListResponseDto> doGuestOrder(List<BookListRequestDto> dtos) {
+        return orderClient.doGuestOrder(dtos);
+    }
+
+    @Transactional
+    public List<BookListResponseDto> doMemberOrder(Long userId, List<BookListRequestDto> dtos) {
+        return orderClient.doMemberOrder(userId, dtos);
     }
 
     public TotalResponseDto calculateTotal(TotalRequestDto dtos) {

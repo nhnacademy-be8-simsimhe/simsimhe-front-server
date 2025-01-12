@@ -231,15 +231,19 @@
             <div class="mt-4">
                 <a href="/carts/customer" class="btn btn-success">장바구니 바로가기</a>
             </div>
+            <!-- 주문하기 버튼 -->
+            <div class="mt-4">
+                <form th:action="@{/shop/order}" method="post" class="d-inline-block">
+                    <input type="hidden" name="bookId" th:value="${book.bookId}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="btn btn-warning fw-bold px-4 py-2">
+                        <i class="fas fa-shopping-cart me-2"></i> 주문하기
+                    </button>
+                </form>
 
         </div>
     </div>
 
-    <form th:action="@{/shop/order}" method="post">
-        <input type="hidden" name="bookId" th:value="${book.bookId}">
-        <input type="hidden" name="quantity" value="1">
-        <button type="submit">주문하기</button>
-    </form>
 
 
     <!-- 카테고리 및 태그 -->

@@ -2,157 +2,173 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>pay test</title>
-    <!-- 토스 페이먼츠, 다음 우편번호 JS -->
+    <title>주문 페이지</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://js.tosspayments.com/v2/standard"></script>
     <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <style>
+        .section-title {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
+        }
+        .order_item { margin-bottom: 15px; }
+    </style>
 </head>
 <body>
+<div class="container my-4">
+    <!-- 수취인 정보 -->
+    <div class="card p-3 mb-4">
+        <h4 class="fw-normal section-title">수취인 정보</h4>
+        <label for="addressSelection" class="form-label">주소 선택:</label>
+        <select class="form-select mb-3" id="addressSelection" onchange="fillAddressFields(this)">
+            <option value="">새로운 배송지</option>
+            <option th:each="address : ${addresses}"
+                    th:value="${address.addressId}"
+                    th:data-zip-code="${address.postalCode}"
+                    th:data-address="${address.roadAddress}"
+                    th:data-detail-address="${address.detailedAddress}"
+                    th:text="${address.alias}">
+            </option>
+        </select>
 
-<div class="p-3 border rounded-3 mb-4">
-    <h4 class="fw-normal">수취인 정보</h4>
-    <label for="addressSelection">주소 선택:</label>
-    <select class="form-select mb-3" id="addressSelection" onchange="fillAddressFields(this)">
-        <option value="">새로운 배송지</option>
-        <option th:each="address : ${addresses}"
-                th:value="${address.addressId}"
-                th:data-zip-code="${address.postalCode}"
-                th:data-address="${address.roadAddress}"
-                th:data-detail-address="${address.detailedAddress}"
-                th:text="${address.alias}">
-        </option>
-    </select>
-
-
-    <input type="text" class="form-control mb-2" id="receiverName" placeholder="이름" required>
-    <input type="tel" class="form-control mb-2" id="receiverNumber" placeholder="전화번호" pattern="[0-9]{11}" required>
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" id="zipCode" placeholder="우편번호" readonly>
-        <button class="btn btn-outline-secondary" type="button" onclick="execDaumPostcode()">우편번호 찾기</button>
+        <input type="text" class="form-control mb-2" id="receiverName" placeholder="이름" required>
+        <input type="tel" class="form-control mb-2" id="receiverNumber" placeholder="전화번호" pattern="[0-9]{11}" required>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="zipCode" placeholder="우편번호" readonly>
+            <button class="btn btn-outline-secondary" type="button" onclick="execDaumPostcode()">우편번호 찾기</button>
+        </div>
+        <input type="text" class="form-control mb-2" id="address" placeholder="도로명주소" readonly required>
+        <input type="text" class="form-control" id="detailAddress" placeholder="상세주소" required>
     </div>
-    <input type="text" class="form-control mb-2" id="address" placeholder="도로명주소" readonly required>
-    <input type="text" class="form-control" id="detailAddress" placeholder="상세주소" required>
-</div>
 
-<div class="p-3 border rounded-3 mb-4">
-    <h4 class="fw-normal mb-5">발송인 정보</h4>
-    <input type="text" class="form-control mb-2" id="senderName" placeholder="이름">
-    <input type="tel" pattern="[0-9]{11}" maxlength="11" class="form-control mb-2" id="senderPhoneNumber"
-           placeholder="전화번호">
-    <input type="email" class="form-control" id="senderEmail" placeholder="이메일">
-</div>
+    <!-- 발송인 정보 -->
+    <div class="card p-3 mb-4">
+        <h4 class="fw-normal section-title">발송인 정보</h4>
+        <input type="text" class="form-control mb-2" id="senderName" placeholder="이름">
+        <input type="tel" pattern="[0-9]{11}" maxlength="11" class="form-control mb-2" id="senderPhoneNumber" placeholder="전화번호">
+        <input type="email" class="form-control" id="senderEmail" placeholder="이메일">
+    </div>
 
-<div class="p-3 border rounded-3 mb-4">
-    <h4 class="fw-normal mb-3">배송일 선택</h4>
-    <input type="date" class="form-control w-50" id="deliveryDate">
-</div>
+    <!-- 배송일 선택 -->
+    <div class="card p-3 mb-4">
+        <h4 class="fw-normal section-title">배송일 선택</h4>
+        <input type="date" class="form-control w-50" id="deliveryDate">
+    </div>
 
-<!-- 주문 목록 영역 -->
-<div id="order_id">
-    <ul>
-        <th:block th:each="bookOrder : ${bookOrderList}">
-            <li>
-                <!-- 개별 상품 묶음 -->
-                <div class="order_item"
-                     th:attr="data-book-id=${bookOrder.bookId}">
+    <!-- 주문 목록 -->
+    <div class="card p-3 mb-4">
+        <h4 class="fw-normal section-title">주문 목록</h4>
+        <div id="order_id">
+            <ul class="list-unstyled">
+                <th:block th:each="bookOrder : ${bookOrderList}">
+                    <li class="mb-3">
+                        <div class="order_item" th:attr="data-book-id=${bookOrder.bookId}">
+                            <div>
+                                <strong>상품아이디:</strong> <span th:text="${bookOrder.bookId}"></span>
+                            </div>
+                            <div>
+                                <strong>상품명:</strong> <span th:text="${bookOrder.title}"></span>
+                            </div>
+                            <div>
+                                <strong>가격:</strong> <span class="book-price" th:text="${bookOrder.price}"></span> 원
+                            </div>
+                            <div>
+                                <strong>수량:</strong> <span class="book-quantity" th:text="${bookOrder.quantity}"></span>
+                            </div>
+                        </div>
 
-                    <span>상품아이디 : </span>
-                    <span th:text="${bookOrder.bookId}"></span>&nbsp;&nbsp;
-
-                    <span>상품명 : </span>
-                    <span th:text="${bookOrder.title}"></span>&nbsp;&nbsp;
-
-                    <span>가격 : </span>
-                    <!-- 여기서 class="book-price"로 설정 -->
-                    <span class="book-price" th:text="${bookOrder.price}"></span>&nbsp;&nbsp;
-
-                    <span>수량: </span>
-                    <!-- 여기서 class="book-quantity"로 설정 -->
-                    <span class="book-quantity" th:text="${bookOrder.quantity}"></span>
-                </div>
-
-                <!-- 쿠폰 선택 -->
-                <div>
-                    <h5>쿠폰 선택</h5>
-                    <th:block th:if="${couponList != null}">
-                        <!-- coupon-select 클래스 -->
-                        <select id="coupon-${bookOrder.bookId}" class="form-select coupon-select">
-                            <option value="">쿠폰 선택</option>
-                            <th:block th:each="coupon : ${couponList}" th:if="${coupon.bookId == bookOrder.bookId}">
-                                <option th:value="${coupon.memberCouponId}"
-                                        th:data-discount="${coupon.discountPrice}"
-                                        th:text="${coupon.couponName + ' - '
-                                                 + coupon.discountPrice
-                                                 + (coupon.couponType == 'PERCENT' ? '%' : '원')}">
-                                </option>
+                        <!-- 쿠폰 선택 -->
+                        <div class="mt-2">
+                            <h5>쿠폰 선택</h5>
+                            <th:block th:if="${bookOrder.coupons != null}">
+                                <select th:id="'coupon-' + ${bookOrder.bookId}" class="form-select coupon-select mb-2">
+                                    <option value="">쿠폰 선택</option>
+                                    <th:block th:each="coupon : ${bookOrder.coupons}">
+                                        <option th:value="${coupon.couponId}"
+                                                th:text="${coupon.couponTypeName}"
+                                                th:attr="data-discount-type=${coupon.getDiscountType()}">
+                                        </option>
+                                    </th:block>
+                                </select>
                             </th:block>
-                        </select>
-                    </th:block>
-                    <th:block th:if="${couponList == null}">
-                        <p>사용 가능한 쿠폰이 없습니다.</p>
-                    </th:block>
-                </div>
+                            <th:block th:if="${bookOrder.coupons == null || bookOrder.coupons.isEmpty()}">
+                                <p>사용 가능한 쿠폰이 없습니다.</p>
+                            </th:block>
+                        </div>
 
-                <!-- 포장 선택 -->
-                <div>
-                    <h5>포장 선택</h5>
-                    <!-- package-select 클래스 -->
-                    <select th:attr="id=${'package-' + bookOrder.bookId}" class="form-select package-select">
-                        <option value="0" data-price="0">포장 없음</option>
-                        <th:block th:each="wrapType : ${wrapTypes}">
-                            <option th:value="${wrapType.packageTypeId}"
-                                    th:data-price="${wrapType.packagePrice}"
-                                    th:text="${wrapType.packageName + ' - ' + wrapType.packagePrice + '원'}">
-                            </option>
-                        </th:block>
-                    </select>
-                    <!-- package-quantity 클래스 -->
-                    <input th:attr="id=${'package-quantity-' + bookOrder.bookId}"
-                           type="number" min="0" value="1"
-                           class="form-control mt-2 package-quantity"
-                           placeholder="포장 개수">
-                </div>
-                <br><br>
-            </li>
-        </th:block>
-    </ul>
-</div>
-
-<div class="p-3 border rounded-3 mb-4">
-    <h4 class="fw-normal mb-3">포인트 사용</h4>
-    <div>
-        <label for="usePoint">사용할 포인트:</label>
-        <input type="number" class="form-control" id="usePoint" placeholder="사용할 포인트 입력" min="0">
-        <small id="availablePoints" class="form-text text-muted">
-            사용 가능한 포인트: <span id="availablePointsValue">0</span>원
-        </small>
-
-    </div>
-</div>
-
-<!-- 합계 영역 -->
-<div>
-    <span>합계: </span>
-    <span id="total_price">₩0</span>
-</div>
-
-<!-- 결제 방법 선택 -->
-<div class="p-3 border rounded-3 mb-4">
-    <div class="box_section" style="padding: 40px 30px 50px 30px; margin-top: 30px; margin-bottom: 50px">
-        <h4 class="fw-normal mb-3">결제 방법</h4>
-        <div id="payment-method" style="display: flex">
-            <button id="CARD" class="button2" onclick="selectPaymentMethod('CARD')">카드</button>
-            <button id="TRANSFER" class="button2" onclick="selectPaymentMethod('TRANSFER')">계좌이체</button>
+                        <!-- 포장 선택 -->
+                        <div class="mt-2">
+                            <h5>포장 선택</h5>
+                            <select th:attr="id=${'package-' + bookOrder.bookId}" class="form-select package-select mb-2">
+                                <option value="0" data-price="0">포장 없음</option>
+                                <th:block th:each="wrapType : ${wrapTypes}">
+                                    <option th:value="${wrapType.packageTypeId}"
+                                            th:data-price="${wrapType.packagePrice}"
+                                            th:text="${wrapType.packageName + ' - ' + wrapType.packagePrice + '원'}">
+                                    </option>
+                                </th:block>
+                            </select>
+                            <input th:attr="id=${'package-quantity-' + bookOrder.bookId}"
+                                   type="number" min="0" value="1"
+                                   class="form-control mt-2 package-quantity"
+                                   placeholder="포장 개수">
+                        </div>
+                    </li>
+                </th:block>
+            </ul>
         </div>
     </div>
-</div>
 
-<!-- 결제 버튼 -->
-<div class="p-3 border rounded-3 mb-4">
-    <button id="paymentButton" class="btn btn-primary btn-lg" onclick="submitOrder()">결제하기</button>
-</div>
+    <!-- 포인트 사용 -->
+    <div class="card p-3 mb-4">
+        <h4 class="fw-normal section-title">포인트 사용</h4>
+        <div>
+            <label for="usePoint" class="form-label">사용할 포인트:</label>
+            <input type="number" class="form-control" id="usePoint" placeholder="사용할 포인트 입력" min="0">
+            <small id="availablePoints" class="form-text text-muted">
+                사용 가능한 포인트: <span id="availablePointsValue">0</span>원
+            </small>
+        </div>
+    </div>
 
+    <!-- 합계 -->
+    <div class="card p-3 mb-4">
+        <h4 class="fw-normal section-title">합계</h4>
+        <div>
+            <span>합계: </span>
+            <span id="total_price">₩0</span>
+        </div>
+    </div>
+
+    <!-- 결제 방법 선택 -->
+    <div class="card p-3 mb-4">
+        <h4 class="fw-normal section-title">결제 방법</h4>
+        <div id="payment-method" class="d-flex gap-3">
+            <button id="CARD" class="btn btn-outline-primary" onclick="selectPaymentMethod('CARD')">카드</button>
+            <button id="TRANSFER" class="btn btn-outline-secondary" onclick="selectPaymentMethod('TRANSFER')">계좌이체</button>
+        </div>
+    </div>
+
+    <!-- 결제 버튼 -->
+    <div class="text-center mb-4">
+        <button id="paymentButton" class="btn btn-primary btn-lg" onclick="submitOrder()">결제하기</button>
+    </div>
+</div>
+<script th:inline="javascript">
+    const bookOrderList = [[${bookOrderList}]];
+    const addresses = [[${addresses}]];
+    const couponsByBook = [[${couponsByBook}]];
+    const userId = [[${userId}]];
+</script>
+
+<script th:inline="javascript">
+    console.log("Book Order List: ", [[${bookOrderList}]]);
+    console.log("Wrap Types: ", [[${wrapTypes}]]);
+</script>
 <script>
+    let notPointUseTotal = 0;
+    let globalDeliveryPrice = 0;  // 배송비를 저장할 전역 변수
     let selectedPaymentMethod = null;
 
     function selectPaymentMethod(method) {
@@ -171,6 +187,7 @@
         const senderName = document.getElementById("senderName").value.trim();
         const receiverName = document.getElementById("receiverName").value.trim();
         const receiverNumber = document.getElementById("receiverNumber").value.trim();
+        const detailAddress = document.getElementById("detailAddress").value.trim();
 
         if (!phoneNumber) {
             alert("전화번호를 입력해주세요.");
@@ -182,6 +199,10 @@
         }
         if (!receiverNumber) {
             alert("수취인 전화번호를 입력해주세요.");
+            return;
+        }
+        if (!detailAddress) {
+            alert("상세 주소를 입력해주세요.");
             return;
         }
 
@@ -204,7 +225,7 @@
             deliveryDate: document.getElementById("deliveryDate").value,
             orderEmail: document.getElementById("senderEmail").value,
             phoneNumber: phoneNumber,
-            senderName:senderName,
+            senderName: senderName,
             deliveryPrice: null
         };
 
@@ -233,6 +254,10 @@
                     quantity: parseInt(packageQuantityInput.value || "0", 10)
                 });
             }
+            if (parseInt(packageQuantityInput.value || "0", 10) > quantity) {
+                alert("포장지의 수량은 책 수량을 초과할 수 없습니다.");
+                return; // 주문 제출 중단
+            }
 
             orderBookRequestDtos.push({
                 bookId: parseInt(bookId, 10),
@@ -244,8 +269,8 @@
                 couponDiscountRequestDto: couponId
                     ? {
                         couponId: couponId,
-                        couponName: couponSelect.options[couponSelect.selectedIndex].textContent,
-                        couponType: "FIX", // 예제 값, 서버 로직에 따라 다를 수 있음
+                        couponName: couponSelect.options[couponSelect.selectedIndex].textContent.trim(),
+                        couponType: couponSelect.options[couponSelect.selectedIndex].getAttribute("data-discount-type") || null,
                         discountPrice: discountPrice
                     }
                     : null,
@@ -253,17 +278,6 @@
             });
         });
 
-        let method;
-
-        try {
-            if (selectedPaymentMethod === "CARD") {
-                method = "CARD";
-            } else if (selectedPaymentMethod === "TRANSFER") {
-                method = "TRANSFER";
-            }
-        } catch (error) {
-            console.error("결제 요청 중 에러 발생: ", error);
-        }
 
         // 주문 요청 데이터 구성
         const orderFacadeRequestDto = {
@@ -272,6 +286,23 @@
             orderBookRequestDtos: orderBookRequestDtos,
             method: selectedPaymentMethod
         };
+
+
+
+        // 배송비는 항상 제공된다고 가정하므로 별도 초기화 생략
+        // memberOrderRequestDto.deliveryPrice는 이미 할당되어 있다고 가정
+
+        // 음수 또는 NaN 값 방지 처리
+
+        console.log("Original Price:", memberOrderRequestDto.originalPrice);
+        console.log("Delivery Price:", memberOrderRequestDto.deliveryPrice);
+        console.log("Point Use:", memberOrderRequestDto.pointUse);
+
+        // 포인트 사용 검증: 사용 포인트가 총액을 초과할 경우 경고
+        if (memberOrderRequestDto.pointUse > notPointUseTotal) {
+            alert("포인트 사용액이 결제 금액을 초과할 수 없습니다.");
+            return; // 주문 제출 중단
+        }
 
         console.log("Order Data:", orderFacadeRequestDto);
 
@@ -292,7 +323,6 @@
             })
             .then(link => {
                 console.log("결제 링크:", link);
-                // 리디렉션 또는 링크 표시
                 window.location.href = link; // 결제창으로 이동
             })
             .catch(error => {
@@ -300,28 +330,9 @@
                 alert("결제 처리 중 문제가 발생했습니다.");
             });
     }
-
-</script>
-
-<!-- bookOrderList 데이터를 JSON으로 변환해서 JS에서 참조 가능하게 -->
-<script th:inline="javascript">
-    const bookOrderList = [[${bookOrderList}]];
-    const addresses =  [[${addresses}]];
-    const userId = [[${userId}]];
-</script>
-
-<script th:inline="javascript">
-    console.log("Book Order List: ", [[${bookOrderList}]]);
-    console.log("Coupon List: ", [[${couponList}]]);
-    console.log("Wrap Types: ", [[${wrapTypes}]]);
-</script>
-
-
-<script>
+    let total;
     document.addEventListener("DOMContentLoaded", () => {
         console.log("DOM fully loaded and parsed.");
-
-        // 페이지 로드 시 초기 합계 계산
         updateTotal();
 
         // 포인트 입력 변경 시 합계 업데이트
@@ -374,15 +385,19 @@
 
             // 쿠폰 선택
             const couponSelect = document.getElementById(`coupon-${bookId}`);
-            if (couponSelect && couponSelect.value) {
-                const discount = parseInt(
-                    couponSelect.options[couponSelect.selectedIndex].getAttribute("data-discount") || "0",
-                    10
-                );
-                couponOptions[bookId] = {
-                    couponId: parseInt(couponSelect.value, 10),
-                    discount: discount
-                };
+
+            if (couponSelect) {
+                // 실제 value 값이 있을 때만 couponOptions에 넣음
+                if (couponSelect.value) {
+                    couponOptions[bookId] = parseInt(couponSelect.value, 10);
+                    console.log(`Book ID: ${bookId}, Selected Coupon ID: ${couponSelect.value}`);
+                } else {
+                    console.log(`No coupon selected for Book ID: ${bookId}`);
+                }
+            }
+            // couponSelect가 없으면
+            else {
+                console.log(`Coupon Select not found for Book ID: ${bookId}`);
             }
 
             // 포장 선택
@@ -406,8 +421,9 @@
         // 포인트 사용
         const usePoint = parseInt(document.getElementById("usePoint").value || "0", 10);
 
+
         // 서버로 전송할 데이터
-        const requestBody = { userId ,bookList, packagingOptions, couponOptions, usePoint };
+        const requestBody = {userId, bookList, packagingOptions, couponOptions, usePoint};
 
         console.log("보낼 데이터:", requestBody);
 
@@ -415,7 +431,7 @@
             // POST /api/order/total (백엔드가 total + availablePoints 등을 내려줌)
             const response = await fetch("/shop/order/total", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(requestBody),
                 credentials: "include",
             });
@@ -423,17 +439,30 @@
             if (response.ok) {
                 const data = await response.json();
                 console.log("서버 응답:", data);
-
+                total = data.total;
                 // 서버에서 반환한 합계(total)
                 document.getElementById("total_price").innerText
                     = `₩${data.total.toLocaleString("ko-KR")}`;
-
+                notPointUseTotal = data.notPointUseTotal;
                 originalCalcPrice = data.originalPrice; // 전역 변수에 저장
+                globalDeliveryPrice = data.deliveryPrice || 0; // 배송비 저장, null 방지
                 console.log("Original Price 저장:", originalCalcPrice);
 
 
                 // 서버에서 반환한 availablePoints(남은 포인트, 혹은 현재 포인트)
                 document.getElementById("availablePoints").innerText = data.availablePoints.toLocaleString("ko-KR");
+
+                if (data.couponDiscountDetails) {
+                    data.couponDiscountDetails.forEach(usage => {
+                        const discountSpan = document.getElementById(`discount-${usage.bookId}`);
+                        if (discountSpan) {
+                            const discountValue = parseFloat(usage.discount); // 문자열을 숫자로 변환
+                            discountSpan.innerText = `할인액: ₩${discountValue.toLocaleString("ko-KR")}`;
+                        } else {
+                            console.warn(`Discount span not found for bookId: ${usage.bookId}`);
+                        }
+                    });
+                }
             } else {
                 console.error("HTTP 오류:", response.statusText);
             }
@@ -488,5 +517,9 @@
         }
     }
 </script>
+
+<!-- bookOrderList 데이터를 JSON으로 변환해서 JS에서 참조 가능하게 -->
+
+
 </body>
 </html>
