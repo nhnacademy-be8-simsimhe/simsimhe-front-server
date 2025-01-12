@@ -5,6 +5,8 @@ import com.simsimbookstore.frontserver.cart.dto.CartRequestDto;
 import com.simsimbookstore.frontserver.cart.dto.CartResponseDto;
 import com.simsimbookstore.frontserver.cart.service.CartService;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +31,30 @@ public class CartRestController {
      * @param customUserDetails
      * @return
      */
+//    @PostMapping
+//    public ResponseEntity<?> addBookInCart(@RequestBody CartRequestDto requestDto,
+//                                           @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+//
+//        if (customUserDetails == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+//        }
+//
+//        Long userId = customUserDetails.getUserId();
+//
+//        CartResponseDto cartResponseDto = cartService.addBookInCart(String.valueOf(userId), requestDto);
+//
+//        return ResponseEntity.ok(cartResponseDto);
+//    }
     @PostMapping
     public ResponseEntity<?> addBookInCart(@RequestBody CartRequestDto requestDto,
-                                           @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+                                           @AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                           HttpServletRequest request,
+                                           HttpServletResponse response) {
+        // 회원 또는 비회원 customerId 가져오기
+        String customerId = cartService.getOrCreateCustomerId(customUserDetails, request, response);
 
-        if (customUserDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
-        }
-
-        Long userId = customUserDetails.getUserId();
-
-        CartResponseDto cartResponseDto = cartService.addBookInCart(String.valueOf(userId), requestDto);
+        // 장바구니에 도서 추가
+        CartResponseDto cartResponseDto = cartService.addBookInCart(customerId, requestDto);
 
         return ResponseEntity.ok(cartResponseDto);
     }
@@ -52,40 +67,64 @@ public class CartRestController {
      * @param customUserDetails
      * @return
      */
+//    @DeleteMapping("/book/{bookId}")
+//    public ResponseEntity<?> deleteBookInCart(@PathVariable(name = "bookId") String bookId,
+//                                              @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+//        if (customUserDetails == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+//        }
+//
+//        Long userId = customUserDetails.getUserId();
+//
+//        CartResponseDto cartResponseDto = cartService.deleteBookInCart(String.valueOf(userId), bookId);
+//
+//
+//        return ResponseEntity.ok(cartResponseDto);
+//    }
     @DeleteMapping("/book/{bookId}")
     public ResponseEntity<?> deleteBookInCart(@PathVariable(name = "bookId") String bookId,
-                                              @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        if (customUserDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
-        }
+                                              @AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                              HttpServletRequest request,
+                                              HttpServletResponse response) {
+        // 회원 또는 비회원 customerId 가져오기
+        String customerId = cartService.getOrCreateCustomerId(customUserDetails, request, response);
 
-        Long userId = customUserDetails.getUserId();
-
-        CartResponseDto cartResponseDto = cartService.deleteBookInCart(String.valueOf(userId), bookId);
-
+        CartResponseDto cartResponseDto = cartService.deleteBookInCart(customerId, bookId);
 
         return ResponseEntity.ok(cartResponseDto);
     }
 
     /**
      * 책 수량 변경
+     *
      * @param requestDto
      * @param customUserDetails
      * @return
      */
+//    @PatchMapping
+//    public ResponseEntity<?> updateCartQuantity(@RequestBody CartRequestDto requestDto,
+//                                                @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+//        if (customUserDetails == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+//        }
+//
+//        Long userId = customUserDetails.getUserId();
+//
+//        CartResponseDto cartResponseDto = cartService.updateCartQuantity(String.valueOf(userId), requestDto);
+//
+//        return ResponseEntity.ok(cartResponseDto);
+//    }
     @PatchMapping
     public ResponseEntity<?> updateCartQuantity(@RequestBody CartRequestDto requestDto,
-                                                              @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        if (customUserDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
-        }
+                                                @AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                                HttpServletRequest request,
+                                                HttpServletResponse response) {
+        // 회원 또는 비회원 customerId 가져오기
+        String customerId = cartService.getOrCreateCustomerId(customUserDetails, request, response);
 
-        Long userId = customUserDetails.getUserId();
-
-        CartResponseDto cartResponseDto = cartService.updateCartQuantity(String.valueOf(userId), requestDto);
+        CartResponseDto cartResponseDto = cartService.updateCartQuantity(customerId, requestDto);
 
         return ResponseEntity.ok(cartResponseDto);
-
     }
 
 

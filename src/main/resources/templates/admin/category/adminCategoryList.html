@@ -8,32 +8,53 @@
             border-collapse: collapse;
             width: 100%;
         }
+
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
         }
+
         th {
             background-color: #f2f2f2;
             text-align: left;
         }
+
         tr:hover {
             background-color: #f5f5f5;
         }
+
         .pagination {
             margin-top: 20px;
         }
+
         .pagination a {
             margin: 0 5px;
             text-decoration: none;
             color: #007bff;
         }
+
         .pagination a:hover {
             text-decoration: underline;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            padding: 5px;
+            font-size: 16px;
+            width: 300px;
         }
     </style>
 </head>
 <body>
 <h1>Category List</h1>
+
+<!-- 검색 입력 필드 -->
+<div class="search-bar">
+    <input type="text" id="searchInput" placeholder="카테고리 이름으로 검색">
+</div>
 
 <table>
     <thead>
@@ -41,19 +62,24 @@
         <th>ID</th>
         <th>Name</th>
         <th>하위 카테고리</th>
+        <th>Action</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody id="categoryTableBody">
     <tr th:each="category : ${categories}">
         <td th:text="${category.categoryId}"></td>
         <td th:text="${category.categoryName}"></td>
         <td>
-            <!-- 자식 카테고리가 없으면 "없음" 표시 -->
             <span th:if="${category.children == null || category.children.isEmpty()}" th:text="'하위 카테고리 없음'"></span>
-            <!-- 자식 카테고리가 있으면 목록 표시 -->
             <ul th:if="${category.children != null && !category.children.isEmpty()}">
                 <li th:each="child : ${category.children}" th:text="${child.categoryName}"></li>
             </ul>
+        </td>
+        <td>
+            <form th:action="@{'/admin/categories/' + ${category.categoryId} + '?page=' + ${currentPage}}" method="post">
+                <input type="hidden" name="_method" value="delete" />
+                <button type="submit">Delete</button>
+            </form>
         </td>
     </tr>
     </tbody>
@@ -69,7 +95,31 @@
 </div>
 
 <a href="/admin">Back to Admin Page</a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const tableBody = document.getElementById('categoryTableBody');
+        const tableRows = tableBody.querySelectorAll('tr');
+
+        // 검색 입력 이벤트 리스너
+        searchInput.addEventListener('input', function () {
+            const keyword = searchInput.value.toLowerCase();
+
+            // 각 행을 순회하면서 검색어에 따라 표시 여부 결정
+            tableRows.forEach(row => {
+                const nameCell = row.querySelector('td:nth-child(2)'); // Name 열 (두 번째 열)
+                if (nameCell) {
+                    const nameText = nameCell.textContent.toLowerCase();
+                    if (nameText.includes(keyword)) {
+                        row.style.display = ''; // 검색어와 일치하면 표시
+                    } else {
+                        row.style.display = 'none'; // 검색어와 일치하지 않으면 숨김
+                    }
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
-
-

@@ -78,9 +78,11 @@ public class BookGetController {
                                      @RequestParam(required = false) Long userId,
                                      @RequestParam(defaultValue = "1") int page,
                                      @RequestParam(defaultValue = "10") int size,
+                                     @RequestParam(defaultValue = "latest") String sort,
                                      Model model) {
         // 카테고리와 관련된 도서 조회
-        PageResponse<BookListResponse> booksPage = bookGetService.getBooksByCategory(categoryId, userId, page, size);
+        PageResponse<BookListResponse> booksPage = bookGetService.getBooksByCategory(categoryId, userId, page, size, sort);
+        model.addAttribute("sort", sort);                 // 현재 정렬 기준
 
 
         model.addAttribute("books", booksPage.getData()); // 도서 리스트
@@ -145,22 +147,42 @@ public class BookGetController {
         return "book/bookDetail";
     }
 
+    //    @GetMapping("/tag/{tagId}")
+//    public String getBooksByTag(@PathVariable Long tagId,
+//                                @RequestParam(required = false) Long userId,
+//                                @RequestParam(defaultValue = "1") int page,
+//                                @RequestParam(defaultValue = "16") int size,
+//                                Model model) {
+//        // 태그에 맞는 도서 목록 조회
+//        PageResponse<BookListResponse> booksByTag = bookGetService.getBooksByTag(tagId, userId, page, size);
+//        List<TagResponseDto> tags = tagService.getAllTags();
+//
+//        model.addAttribute("books", booksByTag.getData()); // 도서 목록
+//        //model.addAttribute("tags", tags);                 // 모든 태그
+//        model.addAttribute("currentTagId", tagId);        // 현재 선택된 태그 ID
+//        model.addAttribute("currentPage", page); // 현재 페이지 번호
+//        model.addAttribute("totalPages", booksByTag.getTotalPage()); // 총 페이지 수
+//        model.addAttribute("size", size); // 한 페이지에 표시할 항목 수
+//
+//        return "book/bookListByTag"; // 태그별 도서 목록 뷰
+//    }
     @GetMapping("/tag/{tagId}")
     public String getBooksByTag(@PathVariable Long tagId,
                                 @RequestParam(required = false) Long userId,
                                 @RequestParam(defaultValue = "1") int page,
                                 @RequestParam(defaultValue = "16") int size,
+                                @RequestParam(defaultValue = "latest") String sort,
                                 Model model) {
         // 태그에 맞는 도서 목록 조회
-        PageResponse<BookListResponse> booksByTag = bookGetService.getBooksByTag(tagId, userId, page, size);
+        PageResponse<BookListResponse> booksByTag = bookGetService.getBooksByTag(tagId, userId, page, size, sort);
         List<TagResponseDto> tags = tagService.getAllTags();
 
         model.addAttribute("books", booksByTag.getData()); // 도서 목록
-        //model.addAttribute("tags", tags);                 // 모든 태그
         model.addAttribute("currentTagId", tagId);        // 현재 선택된 태그 ID
-        model.addAttribute("currentPage", page); // 현재 페이지 번호
+        model.addAttribute("currentPage", page);          // 현재 페이지 번호
         model.addAttribute("totalPages", booksByTag.getTotalPage()); // 총 페이지 수
-        model.addAttribute("size", size); // 한 페이지에 표시할 항목 수
+        model.addAttribute("size", size);                 // 한 페이지에 표시할 항목 수
+        model.addAttribute("sort", sort);                 // 현재 정렬 기준
 
         return "book/bookListByTag"; // 태그별 도서 목록 뷰
     }
