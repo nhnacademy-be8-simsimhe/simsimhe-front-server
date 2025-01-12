@@ -61,6 +61,9 @@
 <body>
 <h1>책 목록</h1>
 
+<!-- 검색 필드 -->
+<input type="text" id="searchInput" placeholder="도서 제목 검색" />
+
 <table>
     <thead>
     <tr>
@@ -91,11 +94,8 @@
         <td th:text="${book.bookStatus.status}"></td>
         <td th:text="${book.giftPackaging ? '가능' : '불가능'}"></td>
         <td class="actions">
-            <!-- 도서 상태 수정 버튼 -->
             <a th:href="@{'/admin/books/status/' + ${book.bookId} + '?page=' + ${currentPage}}">도서 상태 수정</a>
-            <!-- 도서 정보 수정 버튼 -->
             <a th:href="@{'/admin/books/update/' + ${book.bookId} + '?page=' + ${currentPage}}">도서 수정</a>
-            <!-- 도서 포장 여부 수정 버튼 -->
             <a th:href="@{'/admin/books/gift/' + ${book.bookId} + '?page=' + ${currentPage}}">포장 여부 수정</a>
         </td>
     </tr>
@@ -112,5 +112,28 @@
 </div>
 
 <a href="/admin">관리자 페이지로 돌아가기</a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const tableRows = document.querySelectorAll('tbody tr');
+
+        searchInput.addEventListener('input', function () {
+            const keyword = searchInput.value.toLowerCase();
+
+            tableRows.forEach(row => {
+                const titleCell = row.querySelector('td:nth-child(3)'); // 제목이 있는 셀 (3번째 열)
+                if (titleCell) {
+                    const titleText = titleCell.textContent.toLowerCase();
+                    if (titleText.includes(keyword)) {
+                        row.style.display = ''; // 검색어와 일치하면 표시
+                    } else {
+                        row.style.display = 'none'; // 검색어와 일치하지 않으면 숨김
+                    }
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

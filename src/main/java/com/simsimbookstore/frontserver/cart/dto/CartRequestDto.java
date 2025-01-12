@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CartRequestDto {
 
-    private int quantity;
+    private int quantity; //담을 도서 수량
 
     private String bookId;
 
