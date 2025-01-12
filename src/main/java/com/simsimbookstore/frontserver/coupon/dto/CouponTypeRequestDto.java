@@ -15,7 +15,7 @@ import java.util.Objects;
 @Data
 public class CouponTypeRequestDto {
     @NotBlank(message = "쿠폰 종류 이름을 입력해주세요")
-    @Length(max = 40,message = "쿠폰 종류 이름은 최대 40자까지 입력 가능합니다.")
+    @Length(max = 40, message = "쿠폰 종류 이름은 최대 40자까지 입력 가능합니다.")
     private String couponTypeName;
     private Long targetId; //BookId , CategoryID
 
@@ -26,7 +26,7 @@ public class CouponTypeRequestDto {
     private Boolean stacking;
 
     @NotNull(message = "쿠폰 정책을 선택해주세요")
-    @Min(value = 1,message = "ID는 1이상이어야 합니다.")
+    @Min(value = 1, message = "ID는 1이상이어야 합니다.")
     private Long couponPolicyId;
 
     @NotNull(message = "쿠폰 타입을 입력해주세요")
@@ -53,5 +53,14 @@ public class CouponTypeRequestDto {
             return Objects.isNull(targetId);
         }
         return true;
+    }
+
+    @AssertTrue(message = "deadline은 현재보다 미래이어야합니다.")
+    public boolean isValidDeadline() {
+        if (Objects.isNull(deadline)) {
+            return true;
+        }
+
+        return deadline.isAfter(LocalDateTime.now());
     }
 }

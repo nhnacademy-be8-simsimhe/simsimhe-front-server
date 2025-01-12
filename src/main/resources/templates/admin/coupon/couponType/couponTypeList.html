@@ -1,10 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>쿠폰 타입 목록</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f9f9f9;
+        }
+        .pagination {
+            margin: 20px 0;
+            list-style: none;
+            display: flex;
+            gap: 8px;
+        }
+        .pagination li {
+            display: inline-block;
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .pagination li.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .pagination li.disabled {
+            color: #aaa;
+            cursor: not-allowed;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+    <h1>쿠폰 타입 목록</h1>
 
+    <!-- PageResponseDto<CouponTypeResponseDto>가 pageResponse라는 이름으로 넘어온다고 가정 -->
+    <!-- pageResponse.content: CouponTypeResponseDto의 목록 -->
+
+    <!-- 쿠폰 타입 목록 테이블 -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>쿠폰 타입명</th>
+            <th>기간(일)</th>
+            <th>마감 기한</th>
+            <th>스태킹</th>
+            <th>쿠폰 정책 ID</th>
+            <th>대상 타입</th>
+            <th>대상 ID</th>
+            <th>대상 이름</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 목록이 없을 때 표시 -->
+        <tr th:if="${#lists.isEmpty(pageResponse.content)}">
+            <td colspan="9">등록된 쿠폰 타입이 없습니다.</td>
+        </tr>
+
+        <!-- 목록이 있을 때 each -->
+        <tr th:each="type : ${pageResponse.content}">
+            <td th:text="${type.couponTypeId}">1</td>
+            <td th:text="${type.couponTypeName}">쿠폰 타입 이름</td>
+            <td th:text="${type.period}">0</td>
+            <td th:text="${#temporals.format(type.deadline, 'yyyy-MM-dd HH:mm:ss')}">마감기한</td>
+            <td th:text="${type.stacking}">true/false</td>
+            <td th:text="${type.couponPolicyId}">쿠폰 정책 ID</td>
+            <td th:text="${type.couponTypes}">ALL / BOOK / CATEGORY</td>
+            <td th:text="${type.couponTargetId}">대상 ID</td>
+            <td th:text="${type.couponTargetName}">대상 이름(카테고리 or 책)</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이지네이션 표시 (number, totalPages 등 이용) -->
+    <!-- number: 현재 페이지 인덱스(0-based), totalPages: 전체 페이지 수 -->
+    <ul class="pagination">
+        <!-- 이전 페이지 버튼 -->
+        <li th:classappend="${pageResponse.number == 0} ? 'disabled'">
+            <a th:href="@{/admin/couponTypes(page=${pageResponse.number - 1}, size=${pageResponse.size})}"
+               th:if="${pageResponse.number > 0}">
+                이전
+            </a>
+            <span th:if="${pageResponse.number == 0}">이전</span>
+        </li>
+
+        <!-- 페이지 번호 반복 (예: 1부터 totalPages까지) -->
+        <!-- 실제 프로젝트에선 start/end 계산 로직을 쓸 수도 있음 -->
+        <li th:each="i : ${#numbers.sequence(0, pageResponse.totalPages - 1)}"
+            th:classappend="${i == pageResponse.number} ? 'active'">
+            <a th:text="${i+1}"
+               th:href="@{/admin/couponTypes(page=${i}, size=${pageResponse.size})}">
+                1
+            </a>
+        </li>
+
+        <!-- 다음 페이지 버튼 -->
+        <li th:classappend="${pageResponse.number + 1 >= pageResponse.totalPages} ? 'disabled'">
+            <a th:href="@{/admin/couponTypes(page=${pageResponse.number + 1}, size=${pageResponse.size})}"
+               th:if="${pageResponse.number + 1 < pageResponse.totalPages}">
+                다음
+            </a>
+            <span th:if="${pageResponse.number + 1 >= pageResponse.totalPages}">다음</span>
+        </li>
+    </ul>
+    <p><a th:href="@{/admin}">admin 페이지로 돌아가기</a></p>
+
+</div>
 </body>
 </html>

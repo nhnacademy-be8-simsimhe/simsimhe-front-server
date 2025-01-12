@@ -1,10 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Coupon Policy List</title>
+    <style>
+        /* 기본 스타일 설정 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .pagination a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #007BFF;
+        }
+        .pagination a:hover {
+            text-decoration: underline;
+        }
+        .pagination span {
+            margin-right: 10px;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
+<h1>Coupon Policies</h1>
 
+<!-- 쿠폰 정책 목록 테이블 -->
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>쿠폰 정책 이름</th>
+        <th>할인 형태</th>
+        <th>할인율 (%)</th>
+        <th>할인액</th>
+        <th>최대 할인 금액</th>
+        <th>최소 주문 금액</th>
+        <th>쿠폰 정책 설명</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- CouponPolicyResponseDto 목록을 순회 -->
+    <tr th:each="coupon : ${couponPolicyList.content}">
+        <td th:text="${coupon.couponPolicyId != null ? coupon.couponPolicyId : 'X'}"></td>
+        <td th:text="${coupon.couponPolicyName != null ? coupon.couponPolicyName : 'X'}"></td>
+        <td th:text="${coupon.discountType != null ? coupon.discountType.name : 'X'}"></td>
+        <td th:text="${coupon.discountRate != null ? coupon.discountRate : 'X'}"></td>
+        <td th:text="${coupon.discountPrice != null ? coupon.discountPrice : 'X'}"></td>
+        <td th:text="${coupon.maxDiscountAmount != null ? coupon.maxDiscountAmount : 'X'}"></td>
+        <td th:text="${coupon.minOrderAMount != null ? coupon.minOrderAMount : 'X'}"></td>
+        <td th:text="${coupon.policyDescription != null ? coupon.policyDescription : 'X'}"></td>
+    </tr>
+    <!-- 데이터가 없을 경우 메시지 표시 -->
+    <tr th:if="${#lists.isEmpty(couponPolicyList.content)}">
+        <td colspan="8">생성된 쿠폰 정책이 없습니다.</td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이징 네비게이션 -->
+<div class="pagination">
+    <!-- 이전 페이지 버튼 -->
+    <a th:if="${!couponPolicyList.first}"
+       th:href="@{/admin/couponPolicies(page=${couponPolicyList.number - 1}, size=${couponPolicyList.size})}">
+        이전
+    </a>
+
+    <!-- 현재 페이지 번호 표시 -->
+    <span>Page <span th:text="${couponPolicyList.number + 1}">1</span> of <span th:text="${couponPolicyList.totalPages}">1</span></span>
+
+    <!-- 다음 페이지 버튼 -->
+    <a th:if="${!couponPolicyList.last}"
+       th:href="@{/admin/couponPolicies(page=${couponPolicyList.number + 1}, size=${couponPolicyList.size})}">
+        다음
+    </a>
+</div>
 </body>
 </html>
