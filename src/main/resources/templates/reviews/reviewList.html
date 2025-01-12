@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Klover 리뷰</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .tab-button {
+      cursor: pointer;
+    }
+    .tab-button.active {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+  <h2 class="text-center mb-4">심심이의 서재 리뷰</h2>
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <button class="tab-button active" id="available-reviews-tab">작성 가능한 리뷰(<span th:text="${!#lists.isEmpty(availableReviews) ? availableReviews.totalElements : 0}">0</span>)</button>
+      <button class="tab-button" id="submitted-reviews-tab">작성한 리뷰(<span th:text="${!#lists.isEmpty(submittedReviews) ? submittedReviews.totalElements : 0}">0</span>)</button>
+    </div>
+    <button class="btn btn-outline-secondary">결제 완료 순</button>
+  </div>
+
+  <!-- 작성 가능한 리뷰 -->
+  <div id="available-reviews-section" class="mt-4">
+    <div th:if="${#lists.isEmpty(availableReviews)}" class="text-center">
+      <p>작성 가능한 리뷰가 없습니다.</p>
+    </div>
+    <div th:each="review : ${availableReviews}">
+      <div class="row mb-4">
+        <div class="col-md-2">
+          <img th:src="${review.bookImagePath}" class="img-fluid rounded" alt="책 이미지">
+        </div>
+        <div class="col-md-8">
+          <h5 th:text="${review.bookTitle}">책 제목</h5>
+          <p th:text="${review.contributor}">저자</p>
+          <p>결제일: <span th:text="${review.orderDate}">2025.01.01</span></p>
+<!--          <p>리워드: e교환권 <span th:text="${review.reward}">200</span>원</p>-->
+<!--          <p>작성기한: <span th:text="${review.expirationDate}">2025.04.01</span> (<span th:text="${review.daysLeft}">D-82</span>)</p>-->
+        </div>
+        <div class="col-md-2 d-flex align-items-center">
+<!--          <button >구매 리뷰 작성</button>-->
+          <form action="/reviews/create" class="d-flex ms-auto">
+            <input type="hidden" name="bookId" th:value="${review.bookId}">
+            <button class="btn btn-primary">리뷰 작성</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 작성한 리뷰 -->
+  <div id="submitted-reviews-section" class="mt-4 d-none">
+    <div th:if="${#lists.isEmpty(submittedReviews)}" class="text-center">
+      <p>작성한 리뷰가 없습니다.</p>
+    </div>
+    <div th:each="review : ${submittedReviews}">
+      <div class="row mb-4">
+        <div class="col-md-2">
+          <img th:src="${review.bookImagePath}" class="img-fluid rounded" alt="책 이미지">
+        </div>
+        <div class="col-md-8">
+          <h5 th:text="${review.bookTitle}">책 제목</h5>
+          <p th:text="${review.contributor}">저자</p>
+          <p>작성일: <span th:text="${review.createdAt}">2025.01.02</span></p>
+        </div>
+        <div class="col-md-2 d-flex align-items-center">
+          <button class="btn btn-secondary" disabled>작성 완료</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const availableTab = document.getElementById('available-reviews-tab');
+    const submittedTab = document.getElementById('submitted-reviews-tab');
+    const availableSection = document.getElementById('available-reviews-section');
+    const submittedSection = document.getElementById('submitted-reviews-section');
+
+    availableTab.addEventListener('click', () => {
+      availableTab.classList.add('active');
+      submittedTab.classList.remove('active');
+      availableSection.classList.remove('d-none');
+      submittedSection.classList.add('d-none');
+    });
+
+    submittedTab.addEventListener('click', () => {
+      submittedTab.classList.add('active');
+      availableTab.classList.remove('active');
+      submittedSection.classList.remove('d-none');
+      availableSection.classList.add('d-none');
+    });
+  });
+</script>
+</body>
+</html>
