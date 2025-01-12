@@ -23,4 +23,8 @@ public class PointHistoryService {
     public PageResponse<PointHistoryResponseDto> getPointHistory (Long userId, int page, int size) {
         return pointHistoryClient.getPointHistory(userId, page, size);
     }
+
+    public Long doEarnReviewPoint(Long userId, Long reviewId) {
+        return pointHistoryClient.earnReviewPoint(userId, reviewId);
+    }
 }
