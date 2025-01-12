@@ -2,6 +2,7 @@ package com.simsimbookstore.frontserver.point.client;
 
 import com.simsimbookstore.frontserver.point.dto.PointHistoryResponseDto;
 import com.simsimbookstore.frontserver.point.dto.PointPolicyResponseDto;
+import com.simsimbookstore.frontserver.util.PageResponse;
 import java.math.BigDecimal;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
@@ -16,8 +17,9 @@ public interface PointHistoryClient {
     @GetMapping("/{userId}")
     BigDecimal getUserPoints(@PathVariable("userId") Long userId);
 
-    @GetMapping("/history")
-    Page<PointHistoryResponseDto> getPointHistory(@RequestParam("userId") Long userId, @RequestParam("page") int page,
-                                                  @RequestParam("size") int size);
+    @GetMapping("/history/{userId}")
+    PageResponse<PointHistoryResponseDto> getPointHistory(@RequestParam("userId") Long userId,
+                                                          @RequestParam(defaultValue = "1") int page,
+                                                          @RequestParam(defaultValue = "15") int size);
 
 }

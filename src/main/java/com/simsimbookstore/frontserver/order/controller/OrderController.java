@@ -57,8 +57,12 @@ public class OrderController {
             dtos.add(new BookListRequestDto(bookIdList.get(i), quantityList.get(i)));
         }
 
-        List<BookListResponseDto> responseDtos = orderService.doOrder(dtos);
         Long userId = customUserDetails.getUserId();
+
+        //if (userId != null)
+        List<BookListResponseDto> responseDtos = orderService.doMemberOrder(userId, dtos);
+
+
         redirectAttributes.addFlashAttribute("bookOrderList", responseDtos);
         redirectAttributes.addFlashAttribute("wrapTypes", wrapService.getAllAvailableWrapTypes());
         redirectAttributes.addFlashAttribute("userId", userId);
@@ -68,7 +72,6 @@ public class OrderController {
 
         return "redirect:/shop/order";
     }
-
 
 
     @PostMapping("/shop/order/total")
