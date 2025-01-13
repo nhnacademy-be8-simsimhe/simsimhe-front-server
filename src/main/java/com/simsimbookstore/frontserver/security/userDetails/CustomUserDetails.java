@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -23,6 +24,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     private Long userId;
     private List<GrantedAuthority> authorities;
     private UserStatus userStatus;
+    private LocalDateTime latestLoginDate;
 
 
     @Override
@@ -56,6 +58,23 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
 
     @Override
     public boolean isEnabled() {
-        return userStatus.equals(UserStatus.ACTIVE);
+        if (userStatus.equals(UserStatus.QUIT)) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+//        if(Objects.nonNull(latestLocalDate) && latestLocalDate.isBefore(LocalDateTime.now().minusMonths(1))){
+//        if(Objects.nonNull(latestLoginDate) && latestLoginDate.isBefore(LocalDateTime.now().minusSeconds(1))){
+//            return false;
+//        }
+//        else{
+//            return true;
+//        }
     }
 }
