@@ -1,6 +1,7 @@
 package com.simsimbookstore.frontserver.reviews.review.controller;
 
 
+import com.simsimbookstore.frontserver.point.client.PointHistoryClient;
 import com.simsimbookstore.frontserver.reviews.object.feign.ObjectServiceClient;
 import com.simsimbookstore.frontserver.reviews.review.domain.*;
 import com.simsimbookstore.frontserver.reviews.review.feign.ReviewServiceClient;
@@ -28,16 +29,19 @@ public class ReviewController {
     private final ObjectServiceClient objectServiceClient;
     private final ReviewImageServcieClient reviewImageServcieClient;
     private final UserReviewServiceClient userReviewServiceClient;
+    private final PointHistoryClient pointHistoryClient;
 
     @PostMapping("/reviews")
     public String createReview(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long bookId, @RequestPart(value = "file", required = false) List<MultipartFile> files, @ModelAttribute ReviewRequestDTO dto){
+        log.info("userId = {}", customUserDetails.getUserId() );
         ReviewResponseDTO review = reviewServiceClient.createReview(bookId, customUserDetails.getUserId(), dto);
-
+        log.info("Review created: {}", review);
         if (!files.getFirst().getOriginalFilename().isEmpty()){
             List<String> images = objectServiceClient.uploadObjects(files);
             reviewImageServcieClient.addReviewImages(review.getReviewId(), images);
         }
-
+        Long l = pointHistoryClient.earnReviewPoint(customUserDetails.getUserId(), review.getReviewId());
+        log.info("earnpoint: {}", l);
         return "redirect:/";
     }
 
