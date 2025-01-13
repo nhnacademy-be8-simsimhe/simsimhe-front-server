@@ -258,7 +258,10 @@
             userId: userId,
             deliveryId: null,
             originalPrice: originalCalcPrice,
-            pointUse: parseInt(document.getElementById("usePoint").value || "0", 10),
+            pointUse: (() => {
+                const usePointElement = document.getElementById("usePoint");
+                return usePointElement ? parseInt(usePointElement.value || "0", 10) : 0;
+            })(),
             totalPrice: parseInt(document.getElementById("total_price").innerText.replace(/[₩,]/g, ""), 10),
             deliveryDate: document.getElementById("deliveryDate").value,
             orderEmail: document.getElementById("senderEmail").value,
@@ -564,9 +567,5 @@
         }
     }
 </script>
-
-<!-- bookOrderList 데이터를 JSON으로 변환해서 JS에서 참조 가능하게 -->
-
-
 </body>
 </html>
