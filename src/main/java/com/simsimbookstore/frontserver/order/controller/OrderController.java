@@ -84,10 +84,12 @@ public class OrderController {
     public ResponseEntity<?> calculateTotal(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                             @RequestBody TotalRequestDto dto) {
         if (customUserDetails != null) {
+            log.info("userId = {}", customUserDetails.getUserId());
             dto.setUserId(customUserDetails.getUserId());
         } else {
             dto.setUserId(null);
         }
+        log.info("userId = {}", dto.getUserId());
         TotalResponseDto total = orderService.calculateTotal(dto);
         return ResponseEntity.ok(total);
     }
