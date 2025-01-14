@@ -19,6 +19,9 @@ public interface PointHistoryClient {
     @GetMapping("/{userId}")
     BigDecimal getUserPoints(@PathVariable("userId") Long userId);
 
+    @GetMapping("/{userId}/policy")
+    BigDecimal getUserPointPolicy(@PathVariable Long userId);
+
     @GetMapping("/history/{userId}")
     PageResponse<PointHistoryResponseDto> getPointHistory(@RequestParam("userId") Long userId,
                                                           @RequestParam(defaultValue = "1") int page,

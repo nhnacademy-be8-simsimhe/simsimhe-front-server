@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Tracking Result</title>
+</head>
+<body>
+<h1>Tracking Result</h1>
+
+<div th:if="${delivery != null}">
+  <p><strong>ID:</strong> <span th:text="${delivery.deliveryId}"></span></p>
+  <p><strong>Receiver:</strong> <span th:text="${delivery.deliveryReceiver}"></span></p>
+  <p><strong>State:</strong> <span th:text="${delivery.deliveryState}"></span></p>
+  <p><strong>Address:</strong> <span th:text="${delivery.roadAddress}"></span></p>
+</div>
+<div th:if="${delivery == null}">
+  <p>No results found.</p>
+</div>
+
+<p><a th:href="@{/admin/deliveries}">Back to List</a></p>
+</body>
+</html>
