@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search by Tracking</title>
+</head>
+<body>
+<h1>Search by Tracking Number</h1>
+<form th:action="@{/admin/deliveries/tracking}" method="post">
+    <input type="number" name="trackingNumber" placeholder="Enter tracking number"/>
+    <button type="submit">Search</button>
+</form>
+
+<p><a th:href="@{/admin/deliveries}">Back to List</a></p>
+</body>
+</html>

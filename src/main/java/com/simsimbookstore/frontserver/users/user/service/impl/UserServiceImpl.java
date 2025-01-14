@@ -10,6 +10,8 @@ import com.simsimbookstore.frontserver.users.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -36,5 +38,13 @@ public class UserServiceImpl implements UserService {
         return userServiceClient.updateUserStatus(loginId,userStatusUpdateRequestDto);
     }
 
+    @Override
+    public List<UserResponse> getActiveUser() {
+        return userServiceClient.getActiveUser();
+    }
+    @Override
+    public List<UserResponse> getAllUserByBirth(String birthMonth) {
+        return userServiceClient.getAllUserByBirth(birthMonth);
+    }
 
 }

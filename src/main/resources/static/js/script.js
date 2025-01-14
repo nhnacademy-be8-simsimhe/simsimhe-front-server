@@ -228,8 +228,30 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         if (data && data.error) {
           // 로그인 실패 시 오류 메시지 모달에 표시
           const errorMessageElement = document.getElementById('loginError');
-          errorMessageElement.textContent = data.error;
           errorMessageElement.style.display = "block";  // 에러 메시지 표시
+          errorMessageElement.textContent = data.error;
+
+          if (data.code === "CustomAccountExpiredException"){
+            const form = document.createElement('form');
+            form.method = 'GET';
+            form.action = "/users/dormant";
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'userId';
+            input.value = data.userId;
+
+            form.appendChild(input);
+
+            const button = document.createElement('button');
+            button.type = 'submit';
+            button.textContent = '휴면 유저 해제하기';
+            button.classList.add('btn');
+            button.classList.add('btn-danger')
+            form.appendChild(button);
+
+            errorMessageElement.appendChild(form);
+          }
         }
       })
       .catch(error => {

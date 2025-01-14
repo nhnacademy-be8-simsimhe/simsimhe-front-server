@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>쿠폰 타입 생성 완료</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    a {
+      text-decoration: none;
+      color: blue;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>쿠폰 타입이 성공적으로 생성되었습니다!</h1>
+
+  <!-- CouponTypeResponseDto를 couponType이라는 모델명으로 가정 -->
+  <table>
+    <tr th:if="${couponType.couponTypeId != null}">
+      <th>쿠폰 타입 ID</th>
+      <td th:text="${couponType.couponTypeId}">쿠폰 타입 ID</td>
+    </tr>
+    <tr th:if="${couponType.couponTypeName != null}">
+      <th>쿠폰 타입 이름</th>
+      <td th:text="${couponType.couponTypeName}">쿠폰 타입 이름</td>
+    </tr>
+
+    <!-- 기간(period) 혹은 마감 기한(deadline) 중 하나만 표시 -->
+    <tr th:if="${couponType.deadline == null}">
+      <th>기간(일)</th>
+      <td th:text="${couponType.period + '일'}">0일</td>
+    </tr>
+    <tr th:if="${couponType.deadline != null}">
+      <th>마감 기한</th>
+      <td th:text="${#temporals.format(couponType.deadline, 'yyyy-MM-dd HH:mm:ss')}">
+        마감 기한
+      </td>
+    </tr>
+
+    <tr>
+      <th>스태킹 가능</th>
+      <td th:text="${couponType.stacking}">true/false</td>
+    </tr>
+
+    <tr th:if="${couponType.couponPolicyId != null}">
+      <th>쿠폰 정책 ID</th>
+      <td th:text="${couponType.couponPolicyId}">쿠폰 정책 ID</td>
+    </tr>
+
+    <tr th:if="${couponType.couponTypes != null}">
+      <th>쿠폰 대상 타입</th>
+      <td th:text="${couponType.couponTypes.name}">ALL/BOOK/CATEGORY</td>
+    </tr>
+
+
+    <tr th:if="${couponType.couponTargetName != null}">
+      <th>쿠폰 대상 이름</th>
+      <td th:text="${couponType.couponTargetName}">카테고리 이름 or 책 이름</td>
+    </tr>
+  </table>
+
+  <p><a th:href="@{/admin}">admin 페이지로 돌아가기</a></p>
+</div>
+</body>
+</html>

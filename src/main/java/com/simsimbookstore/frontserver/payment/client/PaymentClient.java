@@ -21,7 +21,7 @@ public interface PaymentClient {
     String paymentInitiate(@RequestBody OrderFacadeRequestDto dto);
 
     @RequestMapping(method = RequestMethod.GET, value = "/success")
-    public ResponseEntity<ConfirmResponseDto> successRequestDto(@RequestParam String paymentKey,
+    ResponseEntity<ConfirmResponseDto> successRequestDto(@RequestParam String paymentKey,
                                                          @RequestParam String orderId,
                                                          @RequestParam BigDecimal amount);
 }

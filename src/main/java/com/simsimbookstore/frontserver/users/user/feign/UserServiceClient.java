@@ -8,6 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @FeignClient(name = "userApi", url = "http://localhost:8000/api/users")
 public interface UserServiceClient {
@@ -20,4 +21,11 @@ public interface UserServiceClient {
 
     @PutMapping("{userId}/status")
     UserResponse updateUserStatus(@PathVariable Long userId, UserStatusUpdateRequestDto userStatusUpdateRequestDto);
+
+    @GetMapping("/active")
+    List<UserResponse> getActiveUser();
+
+    @GetMapping
+    List<UserResponse> getAllUserByBirth(@RequestParam("birthMonth") String birthMonth);
+
 }
