@@ -38,6 +38,6 @@ public class ElasticsearchController {
         log.info("currentPage : {}", searchBooks.getCurrentPage());
         log.info("totalPages : {}", searchBooks.getTotalPage());
 
-        return "/search/searchList";
+        return "search/searchList";
     }
 }
