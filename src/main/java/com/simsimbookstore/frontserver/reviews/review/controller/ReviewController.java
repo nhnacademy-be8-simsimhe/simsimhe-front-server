@@ -63,7 +63,7 @@ public class ReviewController {
     }
 
 
-    @GetMapping("mypage/reviews")
+    @GetMapping("/myPage/reviews")
     public String getMyReviewList(@RequestParam Long bookId, Model model){
 
         model.addAttribute("bookId", bookId);
