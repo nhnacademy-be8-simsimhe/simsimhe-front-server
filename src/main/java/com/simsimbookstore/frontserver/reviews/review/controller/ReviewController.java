@@ -59,7 +59,7 @@ public class ReviewController {
 
         model.addAttribute("availableReviews",availableReviews);
         model.addAttribute("submittedReviews",submittedReviews);
-        return "/reviews/reviewList";
+        return "reviews/reviewList";
     }
 
 
@@ -67,7 +67,7 @@ public class ReviewController {
     public String getMyReviewList(@RequestParam Long bookId, Model model){
 
         model.addAttribute("bookId", bookId);
-        return "/reviews/review";
+        return "reviews/review";
     }
 
 
@@ -96,7 +96,7 @@ public class ReviewController {
 
         Review existingReview = reviewServiceClient.getReviewById(18L, reviewId);
         model.addAttribute("review", existingReview);
-        return "/reviews/reviewUpdate";
+        return "reviews/reviewUpdate";
     }
 
 
