@@ -14,6 +14,7 @@ public class SearchBookDto {
     String title;
     String description;
     String author;
+    String bookImage;
     List<String> tags;
     String publishedAt;
     long salePrice;

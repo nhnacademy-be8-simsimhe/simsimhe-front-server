@@ -96,9 +96,22 @@
 
     }
 
+  var resetSearchField = function() {
+    // Search submit button 클릭 시 input 초기화
+    document.querySelector('.search-submit').addEventListener('click', function(e) {
+      e.preventDefault(); // 기본 제출 동작 방지
+      const searchInput = document.querySelector('#search-form')
+
+      searchInput.form.submit();
+
+      searchInput.value = ''; // input 필드 초기화
+    });
+  };
+
     $(document).ready(function() {
 
       searchPopup();
+      resetSearchField();
       initProductQty();
       countdownTimer();
 
@@ -177,6 +190,8 @@
 })(jQuery);
 
 // ---------------------
+
+
 
 // 로그인 폼
 document.getElementById('loginForm').addEventListener('submit', function(event) {
