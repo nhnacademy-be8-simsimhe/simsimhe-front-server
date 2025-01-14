@@ -66,7 +66,6 @@
             <th>스태킹</th>
             <th>쿠폰 정책 ID</th>
             <th>대상 타입</th>
-            <th>대상 ID</th>
             <th>대상 이름</th>
         </tr>
         </thead>
@@ -84,8 +83,7 @@
             <td th:text="${#temporals.format(type.deadline, 'yyyy-MM-dd HH:mm:ss')}">마감기한</td>
             <td th:text="${type.stacking}">true/false</td>
             <td th:text="${type.couponPolicyId}">쿠폰 정책 ID</td>
-            <td th:text="${type.couponTypes}">ALL / BOOK / CATEGORY</td>
-            <td th:text="${type.couponTargetId}">대상 ID</td>
+            <td th:text="${type.couponTypes.name}">ALL / BOOK / CATEGORY</td>
             <td th:text="${type.couponTargetName}">대상 이름(카테고리 or 책)</td>
         </tr>
         </tbody>

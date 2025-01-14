@@ -4,10 +4,10 @@ import com.simsimbookstore.frontserver.coupon.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @FeignClient(name = "coupon-admin-api-server", url = "http://localhost:8000/api/admin")
 public interface CouponAdminClient {
@@ -24,4 +24,17 @@ public interface CouponAdminClient {
     @GetMapping("/couponTypes")
     public PageResponseDto<CouponTypeResponseDto> getAllCouponType(@RequestParam("page") int page,
                                                                    @RequestParam("size") int size);
+
+    @PostMapping("/coupons/issue")
+    public Map<String, List<Long>> issueCoupons(@RequestBody IssueCouponsRequestDto requestDto);
+
+    @GetMapping("/users/{userId}/coupons")
+    public PageResponseDto<CouponResponseDto> getCoupons(@PathVariable Long userId,
+                                                         @RequestParam(required = false) String sortField,
+                                                         @RequestParam("page") int page,
+                                                         @RequestParam("size") int size);
+
+    @GetMapping("/coupons")
+    public PageResponseDto<CouponResponseDto> getTotalCoupons(@RequestParam("page") int page,
+                                                              @RequestParam("size") int size);
 }

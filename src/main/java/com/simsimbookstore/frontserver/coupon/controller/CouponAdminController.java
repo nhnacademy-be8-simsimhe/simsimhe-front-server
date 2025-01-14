@@ -6,6 +6,8 @@ import com.simsimbookstore.frontserver.books.category.dto.CategoryResponseDto;
 import com.simsimbookstore.frontserver.books.category.service.CategoryService;
 import com.simsimbookstore.frontserver.coupon.dto.*;
 import com.simsimbookstore.frontserver.coupon.service.CouponAdminService;
+import com.simsimbookstore.frontserver.users.user.dto.UserResponse;
+import com.simsimbookstore.frontserver.users.user.service.UserService;
 import com.simsimbookstore.frontserver.util.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class CouponAdminController {
     private final CouponAdminService couponAdminService;
     private final BookGetService bookGetService;
     private final CategoryService categoryService;
+    private final UserService userService;
 
     @GetMapping("/couponPolicies/create")
     public String createCouponPolicyForm() {
@@ -99,6 +103,72 @@ public class CouponAdminController {
     }
 
     @GetMapping("/coupons/selectCouponType")
+    public String selectCouponTypeToIssueCoupon(@RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "10") int size,
+                                                Model model) {
+        PageResponseDto<CouponTypeResponseDto> couponTypePage = couponAdminService.getAllCouponType(page, size);
+        model.addAttribute("couponTypePage", couponTypePage);
+        return "admin/coupon/issue/selectCouponTypeToIssueCoupon";
+
+    }
+
+    @GetMapping("/coupons/issue")
+    public String issueCouponForm(@RequestParam("couponTypeId") Long couponTypeId,
+                              @RequestParam("couponTypeName") String couponTypeName,
+                              @RequestParam(value = "birthMonth",required = false) String birthMonth,
+                              Model model) {
+        model.addAttribute("issueCouponsRequestDto", IssueCouponsRequestDto.builder().couponTypeId(couponTypeId).build());
+        model.addAttribute("couponTypeName", couponTypeName);
+        //birthMonth값이 없으면 ACTIVE상태인 모든 일반회원을 가지고 온다.
+        // birthMonth값이 있으면 해당 월이 생일인 ACTIVE상태의 모든 일반회원을 가지고 온다.
+        List<UserResponse> userList;
+        if (birthMonth == null || birthMonth.isEmpty()) {
+            userList = userService.getActiveUser();
+        } else {
+            userList = userService.getAllUserByBirth(birthMonth);
+        }
+        model.addAttribute("userList", userList);
+        model.addAttribute("selectedBirthMonth", birthMonth);
+
+        return "admin/coupon/issue/issueCoupon";
+    }
+
+    @PostMapping("/coupons/issue")
+    public String issueCoupon(@ModelAttribute @Valid IssueCouponsRequestDto requestDto,
+                              Model model) {
+        Map<String, List<Long>> couponIds = couponAdminService.issueCoupons(requestDto);
+        model.addAttribute("couponIds", couponIds.get("couponIds"));
+        return "/admin/coupon/issue/successIssueCoupon";
+    }
+
+    @GetMapping("/coupons/selectUser")
+    public String selectUserToShowCoupon(Model model) {
+        List<UserResponse> userList = userService.getActiveUser();
+        model.addAttribute("userList", userList);
+        return "admin/coupon/selectUserToShowCoupon";
+    }
+
+    @GetMapping(value = "/coupons",params = "userId")
+    public String userCouponList(@RequestParam("userId") Long userId,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size,
+                                 Model model) {
+        PageResponseDto<CouponResponseDto> coupons = couponAdminService.getCoupons(userId, page, size, null);
+        UserResponse user = userService.findUserByUserId(userId);
+        model.addAttribute("user", user);
+        model.addAttribute("coupons", coupons);
+        return "admin/coupon/userCouponList";
+    }
+
+    @GetMapping(value = "/coupons",params = "!userId")
+    public String totalCouponList(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "20") int size,
+                                  Model model) {
+        PageResponseDto<CouponResponseDto> totalCoupons = couponAdminService.getTotalCoupons(page, size);
+        model.addAttribute("coupons", totalCoupons);
+        return "admin/coupon/totalCouponList";
+    }
+
 
     private Pageable setPageable(Pageable pageable) {
         return PageRequest.of(
