@@ -36,6 +36,7 @@ public class PaymentController {
         ResponseEntity<ConfirmResponseDto> confirmYN = paymentService.confirm(paymentKey, orderId, amount);
 
         if (confirmYN.getStatusCode().is2xxSuccessful()) {
+            model.addAttribute("orderId", confirmYN.getBody().getOrderId());
             return "payment/success";
         }
 
@@ -48,7 +49,7 @@ public class PaymentController {
     public String failUrl(HttpServletRequest request, Model model) {
         // 1. PAY_PROCESS_CANCELED : 구매자에 의한 취소 + orderId X -> 아무 처리 X(장바구니로 이동)
         if (request.getParameter("code").equals("PAY_PROCESS_CANCELED")) {
-            return "redirect:/carts/customer";
+            return "redirect:/index";
         }
 
         if ((request.getParameter("code").equals("PAY_PROCESS_ABORTED")) || (request.getParameter("code").equals("REJECT_CARD_COMPANY"))) {
