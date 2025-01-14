@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Delivery Detail</title>
+</head>
+<body>
+<h1>Delivery Detail</h1>
+
+<div>
+    <p><strong>ID:</strong> <span th:text="${detail.deliveryId}"></span></p>
+    <p><strong>Receiver:</strong> <span th:text="${detail.deliveryReceiver}"></span></p>
+    <p><strong>State:</strong> <span th:text="${detail.deliveryState}"></span></p>
+    <p><strong>Address:</strong> <span th:text="${detail.roadAddress}"></span></p>
+    <p><strong>Reference:</strong> <span th:text="${detail.reference} ?: 'None'"></span></p>
+    <p><strong>trackingNumber:</strong> <span th:text="${detail.trackingNumber} ?: 'None'"></span></p>
+
+</div>
+
+<!-- 상태 변경 폼 -->
+<h2>Update State</h2>
+<form th:action="@{/admin/deliveries/{id}/update-state(id=${detail.deliveryId})}" method="post">
+    <select name="newState">
+        <!-- detail.availableStates 에 있는 상태만큼 옵션 생성 -->
+        <option th:each="s : ${detail.availableStates}"
+                th:value="${s}"
+                th:text="${s}"
+                th:selected="${s} == ${detail.deliveryState}">
+        </option>
+    </select>
+    <button type="submit">Update</button>
+</form>
+
+<h2>Update Tracking Number</h2>
+<form th:action="@{/admin/deliveries/{id}/tracking-form(id=${detail.deliveryId})}" method="post">
+    <label for="trackingNumber">Tracking Number:</label>
+    <input type="number" id="trackingNumber" name="trackingNumber"
+           placeholder="Enter new tracking number"/>
+    <button type="submit">Update Tracking Number</button>
+</form>
+
+
+<!-- 뒤로가기 -->
+<p>
+    <a th:href="@{/admin/deliveries}">Back to List</a>
+</p>
+
+</body>
+</html>

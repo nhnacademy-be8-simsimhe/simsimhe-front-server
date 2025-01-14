@@ -51,11 +51,11 @@
                 <button type="submit">Update</button>
             </form>
 
-<!--            &lt;!&ndash; Delete 버튼 &ndash;&gt;-->
-<!--            <form th:action="@{'/admin/tags/delete/' + ${tag.tagId}}" method="post">-->
-<!--                <input type="hidden" name="_method" value="delete"/>-->
-<!--                <button type="submit">Delete</button>-->
-<!--            </form>-->
+            <!-- Delete 버튼 -->
+            <form th:action="@{'/admin/tags/delete/' + ${tag.tagId}}" method="post">
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit">Delete</button>
+            </form>
         </td>
     </tr>
     </tbody>

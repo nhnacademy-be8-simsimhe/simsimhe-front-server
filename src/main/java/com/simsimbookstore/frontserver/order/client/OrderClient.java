@@ -7,6 +7,7 @@ import com.simsimbookstore.frontserver.order.dto.TotalRequestDto;
 import com.simsimbookstore.frontserver.order.dto.TotalResponseDto;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface OrderClient {
 
     @PostMapping
-    List<BookListResponseDto> doOrder(@RequestBody List<BookListRequestDto> requestDtos);
+    List<BookListResponseDto> doGuestOrder(@RequestBody List<BookListRequestDto> requestDtos);
+
+    @PostMapping("/{userId}")
+    List<BookListResponseDto> doMemberOrder(@PathVariable Long userId, @RequestBody List<BookListRequestDto> requestDtos);
 
     @PostMapping("/total")
     TotalResponseDto calculateTotal(@RequestBody TotalRequestDto requestDtos);

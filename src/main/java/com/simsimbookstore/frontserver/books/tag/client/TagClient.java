@@ -21,4 +21,7 @@ public interface TagClient {
 
     @GetMapping("/{tagId}")
     TagResponseDto getTag(@PathVariable(name = "tagId") Long tagId);
+
+    @DeleteMapping("/{tagId}")
+    void deleteTag(@PathVariable(name = "tagId") Long tagId);
 }

@@ -54,22 +54,47 @@
 
     #message {
       color: #7f8c8d;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
 
-    .close-button {
-      background-color: #e74c3c;
-      color: white;
-      border: none;
+    .retry-message {
+      color: #2c3e50;
+      margin: 1.5rem 0;
+      font-weight: 500;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
+    .button {
       padding: 0.8rem 2rem;
       border-radius: 4px;
       cursor: pointer;
       font-size: 1rem;
       transition: background-color 0.2s;
+      border: none;
     }
 
-    .close-button:hover {
+    .retry-button {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .retry-button:hover {
       background-color: #c0392b;
+    }
+
+    .cancel-button {
+      background-color: #95a5a6;
+      color: white;
+    }
+
+    .cancel-button:hover {
+      background-color: #7f8c8d;
     }
   </style>
 </head>
@@ -84,7 +109,17 @@
     <h2>결제 실패</h2>
     <p id="code"></p>
     <p id="message"></p>
-    <button class="close-button" onclick="closeModal()">확인</button>
+    <p class="retry-message">결제에 실패했습니다.</p>
+    <div class="button-group">
+      <form method="get" action="/carts/customer">
+        <button class="button retry-button" type="submit" value="장바구니"> 장바구니 </button>
+      </form>
+      <form method="get" action="/index">
+          <button class="button cancel-button" type="submit" value="홈으로"> 홈으로 </button>
+      </form>
+    </div>
+<!--      <br />-->
+<!--      <p>문의 사항이나 불편 사항이 있다면 심심해도서로 문의 남겨주세요</p>-->
   </div>
 </div>
 
@@ -96,13 +131,6 @@
 
   codeElement.textContent = "에러코드: " + urlParams.get("code");
   messageElement.textContent = "실패 사유: " + urlParams.get("message");
-
-  function closeModal() {
-    // 이전 페이지로 돌아가기
-    window.history.back();
-    // 또는 특정 페이지로 이동
-    // window.location.href = '원하는 페이지 URL';
-  }
 </script>
 </body>
 </html>
