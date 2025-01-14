@@ -95,11 +95,6 @@ public interface BookClient {
      * @param size
      * @return
      */
-//    @GetMapping("/tag/{tagId}")
-//    PageResponse<BookListResponse> getBooksByTag(@PathVariable(name = "tagId") Long tagId,
-//                                                 @RequestParam(required = false) Long userId,
-//                                                 @RequestParam(defaultValue = "1") int page,
-//                                                 @RequestParam(defaultValue = "16") int size);
     @GetMapping("/tag/{tagId}")
     PageResponse<BookListResponse> getBooksByTag(@PathVariable(name = "tagId") Long tagId,
                                                  @RequestParam(required = false) Long userId,
@@ -107,20 +102,6 @@ public interface BookClient {
                                                  @RequestParam(defaultValue = "16") int size,
                                                  @RequestParam(defaultValue = "latest") String sort);
 
-    /**
-     * 카테고리와 하위 카테고리에 해당하는 책을 조회
-     *
-     * @param categoryId
-     * @param userId
-     * @param page
-     * @param size
-     * @return
-     */
-//    @GetMapping("/category/{categoryId}")
-//    PageResponse<BookListResponse> getBooksByCategory(@PathVariable(name = "categoryId") Long categoryId,
-//                                                      @RequestParam(required = false) Long userId,
-//                                                      @RequestParam(defaultValue = "1") int page,
-//                                                      @RequestParam(defaultValue = "10") int size);
 
     /**
      * 카테고리와 하위 카테고리에 해당하는 책을 조회
@@ -135,7 +116,7 @@ public interface BookClient {
     PageResponse<BookListResponse> getBooksByCategory(@PathVariable(name = "categoryId") Long categoryId,
                                                       @RequestParam(required = false) Long userId,
                                                       @RequestParam(defaultValue = "1") int page,
-                                                      @RequestParam(defaultValue = "10") int size,
+                                                      @RequestParam(defaultValue = "16") int size,
                                                       @RequestParam(defaultValue = "latest") String sort);
 
 
