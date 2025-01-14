@@ -19,12 +19,14 @@ import java.util.*;
 @Getter
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails, OAuth2User {
-    private String loginId;
+    private String principalName;
     private String password;
     private Long userId;
     private List<GrantedAuthority> authorities;
     private UserStatus userStatus;
     private LocalDateTime latestLoginDate;
+
+
 
 
     @Override
@@ -34,12 +36,13 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
         return authorities;
     }
 
     @Override
     public String getUsername() {
-        return loginId;
+        return principalName;
     }
 
     @Override
@@ -49,10 +52,13 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return loginId;
+        return principalName;
     }
 
     public void addRole(RoleName role) {
+        if (Objects.isNull(authorities)) {
+            authorities = new ArrayList<>();
+        }
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 

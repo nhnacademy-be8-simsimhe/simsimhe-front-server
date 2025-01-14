@@ -4,7 +4,6 @@ import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import com.simsimbookstore.frontserver.users.localUser.dto.LocalUserResponseDto;
 import com.simsimbookstore.frontserver.users.localUser.service.LocalUserService;
 import com.simsimbookstore.frontserver.users.role.dto.RoleName;
-import com.simsimbookstore.frontserver.users.user.exception.CustomAccountExpiredException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         CustomUserDetails customUserDetails = CustomUserDetails.builder()
                 .userId(localUserResponse.getUserId())
-                .loginId(localUserResponse.getLoginId())
+                .principalName(localUserResponse.getLoginId())
                 .password(localUserResponse.getPassword())
                 .authorities(new ArrayList<>())
                 .userStatus(localUserResponse.getUserStatus())

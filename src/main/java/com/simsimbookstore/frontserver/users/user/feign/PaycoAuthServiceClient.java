@@ -1,5 +1,6 @@
 package com.simsimbookstore.frontserver.users.user.feign;
 
+import com.simsimbookstore.frontserver.users.socialUser.dto.PaycoTokenResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface PaycoAuthServiceClient {
 
     @PostMapping("/token")
-    String getAccessToken(
+    PaycoTokenResponseDto getAccessToken(
             @RequestParam(value = "grant_type") String grant_type,
             @RequestParam(value = "client_id") String clientId,
             @RequestParam(value = "client_secret") String client_secret,
