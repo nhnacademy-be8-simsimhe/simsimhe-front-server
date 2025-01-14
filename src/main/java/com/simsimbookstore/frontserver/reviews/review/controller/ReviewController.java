@@ -49,7 +49,7 @@ public class ReviewController {
     public String createReviewView(@RequestParam Long bookId, Model model){
 
         model.addAttribute("bookId", bookId);
-        return "/reviews/review";
+        return "reviews/review";
     }
 
     @GetMapping("/users/myPage/reviews")
