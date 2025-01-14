@@ -6,6 +6,10 @@ import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler
 import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
 import com.simsimbookstore.frontserver.security.handler.LocalLoginSuccessHandler;
 import com.simsimbookstore.frontserver.security.provider.CustomAuthenticationProvider;
+import com.simsimbookstore.frontserver.security.requestRepository.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.simsimbookstore.frontserver.security.tokenResponseClient.CustomAccessTokenResponseClient;
+import com.simsimbookstore.frontserver.users.user.feign.PaycoAuthServiceClient;
+import com.simsimbookstore.frontserver.users.user.service.CustomOauth2UserService;
 
 import com.simsimbookstore.frontserver.users.user.service.CustomUserDetailsService;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
@@ -13,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -32,11 +38,13 @@ import java.util.Map;
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
+    private final CustomOauth2UserService oauth2UserService;
+    private final PaycoAuthServiceClient paycoAuthServiceClient;
     private final UserService userService;
     private final CartService cartService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
 
         //authorize
@@ -57,6 +65,14 @@ public class SecurityConfig {
                 .rememberMeParameter("remember-me"));
 
         // oauth2
+        http.oauth2Login(oauth2Login->oauth2Login
+                .authorizationEndpoint(endpoint->endpoint.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))
+                .tokenEndpoint(tokenEndpoint -> tokenEndpoint.accessTokenResponseClient(new CustomAccessTokenResponseClient(paycoAuthServiceClient)))
+                .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(oauth2UserService))
+                .loginPage("/")
+//                .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/payco"))
+                .defaultSuccessUrl("/",true))
+        ;
 
 //        http.oauth2Login(oauth2Login->oauth2Login
 //                .loginPage("/login")
@@ -86,13 +102,15 @@ public class SecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+
 //        ProviderManager providerManager = (ProviderManager) authenticationConfiguration.getAuthenticationManager();
 //        providerManager.getProviders().add(customAuthenticationProvider());
 //        AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
 //        return authenticationConfiguration.getAuthenticationManager();
-//    }
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -127,6 +145,5 @@ public class SecurityConfig {
         customAuthenticationProvider.setUserDetailsService(userDetailsService);
         customAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return customAuthenticationProvider;
-
     }
 }
