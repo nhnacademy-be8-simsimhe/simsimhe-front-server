@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -18,11 +19,14 @@ import java.util.*;
 @Getter
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails, OAuth2User {
-    private String loginId;
+    private String principalName;
     private String password;
     private Long userId;
     private List<GrantedAuthority> authorities;
     private UserStatus userStatus;
+    private LocalDateTime latestLoginDate;
+
+
 
 
     @Override
@@ -32,12 +36,13 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
         return authorities;
     }
 
     @Override
     public String getUsername() {
-        return loginId;
+        return principalName;
     }
 
     @Override
@@ -47,15 +52,35 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return loginId;
+        return principalName;
     }
 
     public void addRole(RoleName role) {
+        if (Objects.isNull(authorities)) {
+            authorities = new ArrayList<>();
+        }
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
     public boolean isEnabled() {
-        return userStatus.equals(UserStatus.ACTIVE);
+        if (userStatus.equals(UserStatus.QUIT)) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+//        if(Objects.nonNull(latestLocalDate) && latestLocalDate.isBefore(LocalDateTime.now().minusMonths(1))){
+//        if(Objects.nonNull(latestLoginDate) && latestLoginDate.isBefore(LocalDateTime.now().minusSeconds(1))){
+//            return false;
+//        }
+//        else{
+//            return true;
+//        }
     }
 }

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupon Policy Form</title>
+    <style>
+        .conditional { display: none; }
+    </style>
+</head>
+<body>
+<h1>쿠폰 정책 등록</h1>
+<form action="/admin/couponPolicies/create" method="post">
+    <!-- Coupon Policy Name -->
+    <label for="couponPolicyName">쿠폰 정책 이름:</label><br>
+    <input type="text" id="couponPolicyName" name="couponPolicyName" maxlength="100" required>
+    <span>최대 100 글자</span>
+    <br><br>
+
+    <!-- Discount Type -->
+    <label for="discountType">할인 형태:</label><br>
+    <select id="discountType" name="discountType" required>
+        <option value="">-- 할인 형태 --</option>
+        <option value="RATE">정률</option>
+        <option value="FIX">정액</option>
+    </select>
+    <br><br>
+
+    <!-- Discount Price -->
+    <div id="discountPriceField" class="conditional">
+        <label for="discountPrice">할인 금액:</label><br>
+        <input type="number" id="discountPrice" name="discountPrice" step="100" min="0">
+        <br><br>
+    </div>
+
+    <!-- Discount Rate -->
+    <div id="discountRateField" class="conditional">
+        <label for="discountRate">할인률:</label><br>
+        <input type="number" id="discountRate" name="discountRate" step="1" min="0">
+        <br><br>
+    </div>
+
+    <!-- Max Discount Amount -->
+    <div id="maxDiscountAmountField" class="conditional">
+        <label for="maxDiscountAmount">최대 할인 금액:</label><br>
+        <input type="number" id="maxDiscountAmount" name="maxDiscountAmount" step="100" min="0">
+        <br><br>
+    </div>
+
+    <!-- Min Order Amount -->
+    <div id="minOrderAmountField" class="conditional">
+        <label for="minOrderAmount">최소 주문 금액:</label><br>
+        <input type="number" id="minOrderAmount" name="minOrderAmount" step="100" min="0">
+        <br><br>
+    </div>
+
+    <!-- Policy Description -->
+    <label for="policyDescription">정책 설명:</label><br>
+    <textarea id="policyDescription" name="policyDescription" maxlength="1000" required></textarea>
+    <span>최대 100글자</span>
+    <br><br>
+
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    document.getElementById('discountType').addEventListener('change', function () {
+        const discountType = this.value;
+
+        // Hide all conditional fields initially
+        document.querySelectorAll('.conditional').forEach(field => {
+            field.style.display = 'none';
+            field.querySelectorAll('input').forEach(input => input.value = ''); // Clear input values
+        });
+
+        if (discountType === 'RATE') {
+            document.getElementById('discountRateField').style.display = 'block';
+            document.getElementById('maxDiscountAmountField').style.display = 'block';
+            document.getElementById('minOrderAmountField').style.display = 'block';
+        } else if (discountType === 'FIX') {
+            document.getElementById('discountPriceField').style.display = 'block';
+            document.getElementById('minOrderAmountField').style.display = 'block';
+        }
+    });
+</script>
+</body>
+</html>

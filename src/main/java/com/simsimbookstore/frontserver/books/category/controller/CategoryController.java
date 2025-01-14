@@ -4,7 +4,6 @@ package com.simsimbookstore.frontserver.books.category.controller;
 import com.simsimbookstore.frontserver.books.category.dto.CategoryRequestDto;
 import com.simsimbookstore.frontserver.books.category.dto.CategoryResponseDto;
 import com.simsimbookstore.frontserver.books.category.service.CategoryService;
-import com.simsimbookstore.frontserver.books.contributor.dto.ContributorRequestDto;
 import com.simsimbookstore.frontserver.util.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +18,16 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryController {
 
     private final CategoryService categoryService;
+
+    @DeleteMapping("/{categoryId}")
+    public String deleteCategory(@PathVariable(name = "categoryId") Long categoryId,
+                                 @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+        categoryService.deleteCartgory(categoryId);
+
+        // 삭제 후 해당 페이지로 리다이렉트
+        return "redirect:/admin/categories?page=" + page;
+    }
+
 
     @GetMapping
     public String categoryList(@RequestParam(defaultValue = "1") int page,
@@ -35,8 +44,8 @@ public class CategoryController {
 
     @GetMapping("/create")
     public String createCategoryForm(@RequestParam(defaultValue = "1") int page,
-                                        @RequestParam(defaultValue = "30") int size,
-                                        Model model) {
+                                     @RequestParam(defaultValue = "30") int size,
+                                     Model model) {
         PageResponse<CategoryResponseDto> categoryPage = categoryService.getAllCategory(page, size);
 
         model.addAttribute("category", new CategoryRequestDto());

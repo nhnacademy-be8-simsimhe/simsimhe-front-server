@@ -19,8 +19,8 @@
       <div class="card-header">
         <div style="display: flex; justify-content: space-between; align-items: center;">
         <h4>내 계정</h4>
-          <form action="/users/myPage/user/userInfo/withdrawal" method="post">
-            <input type="hidden" id="userStatus" name="userStatus" value="INACTIVE">
+          <form action="/users/myPage/user/userInfo/quit" method="post">
+            <input type="hidden" id="userStatus" name="userStatus" value="QUIT">
           <button class="btn btn-danger">회원 탈퇴</button>
           </form>
         </div>
@@ -59,6 +59,10 @@
           </li>
 
           <li class="list-group-item">
+            <strong>적립률:</strong> <span th:text="${earnValue}"></span>
+          </li>
+
+          <li class="list-group-item">
             <strong>역할:</strong>
             <ul>
               <li th:each="role : ${user.getRoles()}" th:text="${role}"></li>
@@ -72,6 +76,9 @@
             </ul>
           </li>
         </ul>
+        <li class="list-group-item">
+          <a href="/user/coupons">가진 쿠폰 보기</a>
+        </li>
       </div>
     </div>
   </div>

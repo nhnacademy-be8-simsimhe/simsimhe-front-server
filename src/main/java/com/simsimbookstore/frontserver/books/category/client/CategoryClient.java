@@ -4,15 +4,15 @@ import com.simsimbookstore.frontserver.books.category.dto.CategoryRequestDto;
 import com.simsimbookstore.frontserver.books.category.dto.CategoryResponseDto;
 import com.simsimbookstore.frontserver.util.PageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "category-api-server",url = "http://localhost:8000/api/admin/categories")
+@FeignClient(name = "category-api-server", url = "http://localhost:8000/api/admin/categories")
 public interface CategoryClient {
+
+    @DeleteMapping("/{categoryId}")
+    void deleteCategory(@PathVariable(name = "categoryId") Long categoryId);
 
     @GetMapping
     PageResponse<CategoryResponseDto> getAllCategory(@RequestParam(defaultValue = "1") int page,
