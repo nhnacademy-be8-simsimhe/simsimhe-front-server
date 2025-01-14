@@ -31,8 +31,8 @@ public class CouponAdminService {
         return couponAdminClient.getAllCouponType(page, size);
     }
 
-    public Map<String, List<Long>> issueCoupons(IssueCouponsRequestDto requestDto) {
-        return couponAdminClient.issueCoupons(requestDto);
+    public void issueCoupons(IssueCouponsRequestDto requestDto) {
+        couponAdminClient.issueCoupons(requestDto);
     }
 
     public PageResponseDto<CouponResponseDto> getCoupons(Long userId, int page, int size, String sortField) {
