@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>결제 성공</title>
     <style>
-        /* 이전 스타일 유지 */
         .modal-backdrop {
             position: fixed;
             top: 0;
@@ -109,9 +108,13 @@
             <path class="check" fill="none" stroke="#2ecc71" stroke-width="2" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
         </svg>
         <h2>결제에 성공했습니다</h2>
+        <p> 주문 번호 : </p>
+        <p th:text="${orderId}"></p>
+        <p> 이메일 : </p>
+        <p th:text="${orderId}"></p>
         <div class="button-group">
             <form method="get" action="/shop/users/orders">
-                <button class="button order-button" type="submit" value="상세 주문 내역"> 상세 주문 내역 </button>
+                <button class="button order-button" type="submit" value="상세 주문 내역"> 주문 내역 </button>
             </form>
             <form method="get" action="/index">
                 <button class="button home-button" type="submit" value="홈으로"> 홈으로 </button>
