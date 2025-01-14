@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Update Tracking Number</title>
+</head>
+<body>
+<h1>Update Tracking Number</h1>
+
+<div>
+  <p><strong>Delivery ID:</strong>
+    <span th:text="${delivery.deliveryId}"></span>
+  </p>
+  <p><strong>Current Tracking Number:</strong>
+    <span th:text="${delivery.trackingNumber} ?: 'None'"></span>
+  </p>
+</div>
+
+<form th:action="@{/admin/deliveries/{id}/tracking-form(id=${delivery.deliveryId})}" method="post">
+  <label for="trackingNumber">New Tracking Number:</label>
+  <input type="number" id="trackingNumber" name="trackingNumber"/>
+  <button type="submit">Update</button>
+</form>
+
+<hr/>
+<a th:href="@{/admin/deliveries/{id}(id=${delivery.deliveryId})}">Back to Detail</a>
+</body>
+</html>

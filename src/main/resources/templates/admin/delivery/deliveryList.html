@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Delivery List</title>
+</head>
+<body>
+<h1>Delivery List</h1>
+
+<!-- 상태 필터 -->
+<form th:action="@{/admin/deliveries/filter}" method="get">
+    <select name="state">
+        <option value="PENDING" th:selected="${filterState} == 'PENDING'">PENDING</option>
+        <option value="READY" th:selected="${filterState} == 'READY'">READY</option>
+        <option value="IN_PROGRESS" th:selected="${filterState} == 'IN_PROGRESS'">IN_PROGRESS</option>
+        <option value="COMPLETED" th:selected="${filterState} == 'COMPLETED'">COMPLETED</option>
+        <option value="RETURNED" th:selected="${filterState} == 'RETURNED'">RETURNED</option>
+        <option value="ERROR" th:selected="${filterState} == 'ERROR'">ERROR</option>
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
+<!-- 배송 목록 테이블 -->
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Receiver</th>
+        <th>State</th>
+        <th>Address</th>
+        <th>Detail</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="delivery : ${pageResponse.data}">
+        <td th:text="${delivery.deliveryId}"></td>
+        <td th:text="${delivery.deliveryReceiver}"></td>
+        <td th:text="${delivery.deliveryState}"></td>
+        <td th:text="${delivery.roadAddress}"></td>
+        <td>
+            <a th:href="@{/admin/deliveries/{id}(id=${delivery.deliveryId})}">View Detail</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이지네이션 -->
+<div>
+    <span>Page: <b th:text="${pageResponse.currentPage}"></b> / <b th:text="${pageResponse.totalPage}"></b></span>
+    <div>
+        <span th:each="i : ${#numbers.sequence(pageResponse.startPage, pageResponse.endPage)}">
+            <a th:href="@{/admin/deliveries(page=${i})}"
+               th:text="${i}"
+               th:style="'margin:5px; text-decoration:none;' + (i == pageResponse.currentPage ? 'color:red;' : 'color:blue;')">
+            </a>
+        </span>
+    </div>
+</div>
+
+<hr/>
+<!-- 트래킹번호 검색 페이지로 이동 -->
+<a th:href="@{/admin/deliveries/tracking}">Search by tracking number</a>
+
+</body>
+</html>

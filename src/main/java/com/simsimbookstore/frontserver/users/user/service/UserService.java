@@ -6,6 +6,7 @@ import com.simsimbookstore.frontserver.users.user.dto.UserStatus;
 import com.simsimbookstore.frontserver.users.user.dto.UserStatusUpdateRequestDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface UserService {
 
@@ -16,4 +17,8 @@ public interface UserService {
     UserResponse updateUserLatestLoginDate(Long loginId, UserLateLoginDateUpdateRequestDto requestDto);
 
     UserResponse updateUserStatus(Long loginId,  UserStatusUpdateRequestDto userStatusUpdateRequestDto);
+
+    List<UserResponse> getActiveUser();
+
+    List<UserResponse> getAllUserByBirth(String birthMonth);
 }

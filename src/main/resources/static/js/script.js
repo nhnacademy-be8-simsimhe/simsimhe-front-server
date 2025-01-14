@@ -96,9 +96,22 @@
 
     }
 
+  var resetSearchField = function() {
+    // Search submit button 클릭 시 input 초기화
+    document.querySelector('.search-submit').addEventListener('click', function(e) {
+      e.preventDefault(); // 기본 제출 동작 방지
+      const searchInput = document.querySelector('#search-form')
+
+      searchInput.form.submit();
+
+      searchInput.value = ''; // input 필드 초기화
+    });
+  };
+
     $(document).ready(function() {
 
       searchPopup();
+      resetSearchField();
       initProductQty();
       countdownTimer();
 
@@ -178,6 +191,8 @@
 
 // ---------------------
 
+
+
 // 로그인 폼
 document.getElementById('loginForm').addEventListener('submit', function(event) {
   event.preventDefault(); // 폼 제출을 방지
@@ -213,8 +228,30 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         if (data && data.error) {
           // 로그인 실패 시 오류 메시지 모달에 표시
           const errorMessageElement = document.getElementById('loginError');
-          errorMessageElement.textContent = data.error;
           errorMessageElement.style.display = "block";  // 에러 메시지 표시
+          errorMessageElement.textContent = data.error;
+
+          if (data.code === "CustomAccountExpiredException"){
+            const form = document.createElement('form');
+            form.method = 'GET';
+            form.action = "/users/dormant";
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'userId';
+            input.value = data.userId;
+
+            form.appendChild(input);
+
+            const button = document.createElement('button');
+            button.type = 'submit';
+            button.textContent = '휴면 유저 해제하기';
+            button.classList.add('btn');
+            button.classList.add('btn-danger')
+            form.appendChild(button);
+
+            errorMessageElement.appendChild(form);
+          }
         }
       })
       .catch(error => {

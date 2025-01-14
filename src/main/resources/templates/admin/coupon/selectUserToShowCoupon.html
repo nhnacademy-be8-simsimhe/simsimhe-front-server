@@ -1,0 +1,141 @@
+<!-- src/main/resources/templates/admin/coupon/selectUserToShowCoupon.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>쿠폰 발급된 사용자 목록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .form-step {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .pagination a, .pagination span {
+            margin: 0 5px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #007BFF;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .pagination .disabled {
+            color: #ccc;
+            border-color: #ccc;
+            pointer-events: none;
+        }
+        .pagination .active {
+            background-color: #007BFF;
+            color: white;
+            border-color: #007BFF;
+        }
+        .button-group {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .button-group button {
+            padding: 8px 16px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+            background-color: #28a745;
+            color: white;
+        }
+        .button-group button:hover {
+            background-color: #218838;
+        }
+        .error {
+            color: red;
+            margin: 10px 0;
+        }
+        /* 반응형 디자인 */
+        @media (max-width: 800px) {
+            table, th, td {
+                font-size: 0.9em;
+            }
+            .pagination a, .pagination span {
+                padding: 6px 8px;
+                margin: 0 3px;
+            }
+            .button-group button {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>쿠폰 발급된 사용자 목록</h1>
+
+<div class="form-step">
+    <h2>사용자 목록</h2>
+
+    <!-- 사용자 목록 테이블 -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>이름</th>
+            <th>생일</th>
+            <th>이메일</th>
+            <th>쿠폰 보기</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${userList}">
+            <td th:text="${user.userId}">1</td>
+            <td th:text="${user.userName}">홍길동</td>
+            <td th:text="${user.birth}"></td>
+            <td th:text="${user.email}">hong@xxx.com</td>
+            <td>
+                <!-- 쿠폰 보기 버튼 -->
+                <form th:action="@{/admin/coupons}" method="get">
+                    <input type="hidden" name="userId" th:value="${user.userId}" />
+                    <button type="submit">쿠폰 보기</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(userList)}">
+            <td colspan="5">표시할 사용자가 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="button-group">
+        <a th:href="@{/admin/coupons}">전체 쿠폰 목록 보기</a>
+    </div>
+
+
+</div>
+
+</body>
+</html>
