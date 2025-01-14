@@ -34,9 +34,11 @@ public class UserInfoController {
 
         BigDecimal points = pointHistoryService.getPoints(customUserDetails.getUserId());
         UserResponse user = userService.findUserByUserId(customUserDetails.getUserId());
+        BigDecimal earnValue = pointHistoryService.getEarnValue(customUserDetails.getUserId());
         modelAndView.addObject("user", user);
         modelAndView.addObject("requestURI", request.getRequestURI());
         modelAndView.addObject("points", points);
+        modelAndView.addObject("earnValue", earnValue);
 
         return modelAndView;
     }
