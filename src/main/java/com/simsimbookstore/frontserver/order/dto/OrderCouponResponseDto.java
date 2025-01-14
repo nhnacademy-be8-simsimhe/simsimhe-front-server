@@ -2,6 +2,7 @@ package com.simsimbookstore.frontserver.order.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.coyote.BadRequestException;
@@ -12,6 +13,7 @@ public class OrderCouponResponseDto {
     private Long couponId;
     private String couponTypeName;
     private DisCountType discountType;
+    private BigDecimal discountPrice;
 
     enum DisCountType {
         RATE("정률"),
