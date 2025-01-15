@@ -85,7 +85,10 @@
             <tr th:each="order : ${orderHistories.data}">
                 <td th:text="${order.orderNumber}"></td>
                 <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                <td th:text="${order.orderName}"></td>
+                <td>
+                  <a th:href="@{/shop/users/orders/detail/{orderNumber}(orderNumber=${order.orderNumber})}"
+                  th:text="${order.orderName}"></a>
+                </td>
                 <td th:text="${order.orderAmount}"></td>
                 <td th:text="${order.orderState}"></td>
                 <td th:text="${order.trackingNumber}"></td>
