@@ -23,7 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RabbitMqConfig {
     public static final String EXCHANGE_NAME = "simsimbooks.exchange";
-    public static final String COUPON_QUEUE_ROUTING_KEY = "routing_key_coupon";
+    public static final String COUPON_ISSUE_QUEUE_ROUTING_KEY = "routing_key_issue_coupon";
 
     private final RabbitMqProperty rabbitMqProperty;
     private final Map<String, String> secretMap = new HashMap<>();
@@ -35,8 +35,8 @@ public class RabbitMqConfig {
         String secretKey = keyConfig.keyStore(rabbitMqProperty.getSecretKey());
         String[] split = secretKey.split("\n");
         for (String s : split) {
-            String key = s.split(":")[0].trim();
-            String value = s.split(":")[1].trim();
+            String key = s.split(":")[0];
+            String value = s.split(":")[1];
             secretMap.put(key, value);
         }
         return secretMap;
@@ -79,7 +79,7 @@ public class RabbitMqConfig {
 
     @Bean
     public Queue couponQueue() { //쿠폰 큐
-        return new Queue("simsimbooks.coupon.queue", true);
+        return new Queue("simsimbooks.coupon.issue.queue", true);
     }
     @Bean
     public DirectExchange directExchange() { //Exchange
@@ -90,7 +90,7 @@ public class RabbitMqConfig {
 
     @Bean
     public Binding bindingCouponQueue(Queue couponQueue, DirectExchange directExchange) {
-        return BindingBuilder.bind(couponQueue).to(directExchange).with(COUPON_QUEUE_ROUTING_KEY);
+        return BindingBuilder.bind(couponQueue).to(directExchange).with(COUPON_ISSUE_QUEUE_ROUTING_KEY);
     }
 }
 
