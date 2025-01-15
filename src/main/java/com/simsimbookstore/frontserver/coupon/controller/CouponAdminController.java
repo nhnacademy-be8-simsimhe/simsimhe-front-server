@@ -136,8 +136,7 @@ public class CouponAdminController {
     @PostMapping("/coupons/issue")
     public String issueCoupon(@ModelAttribute @Valid IssueCouponsRequestDto requestDto,
                               Model model) {
-        Map<String, List<Long>> couponIds = couponAdminService.issueCoupons(requestDto);
-        model.addAttribute("couponIds", couponIds.get("couponIds"));
+        couponAdminService.issueCoupons(requestDto);
         return "/admin/coupon/issue/successIssueCoupon";
     }
 
