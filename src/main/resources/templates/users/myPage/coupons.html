@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>사용 가능한 쿠폰 목록</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <!-- Bootstrap CSS (옵션) -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h2>사용 가능한 쿠폰 목록</h2>
+
+  <!-- 쿠폰 목록 -->
+  <div th:if="${unusedCoupon.content.size()} > 0">
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>쿠폰 이름</th>
+        <th>발급일</th>
+        <th>만료 기간</th>
+        <th>중복사용</th>
+        <th>적용 대상</th>
+        <th>할인 타입</th>
+        <th>상세 정보</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="coupon : ${unusedCoupon.content}">
+        <td th:text="${coupon.couponTypeName}">Summer Sale</td>
+        <td th:text="${coupon.issueDate}">2023-01-01 10:00</td>
+        <td th:text="${coupon.deadline}">2023-12-31 23:59</td>
+        <td th:text="${coupon.isStacking ? 'Yes' : 'No'}">Yes</td>
+        <td th:text="${coupon.couponTargetType.name}">ALL</td>
+
+        <div th:switch="${coupon.disCountType.toString()}">
+          <!-- 정액 쿠폰 -->
+          <div th:case="FIX">
+            <td>정액</td>
+            <td>
+              <p>할인액: <span th:text="${coupon.discountPrice}">10,000</span> 원</p>
+              <p>최소 주문금액: <span th:text="${coupon.minOrderAmount}">50,000</span> 원</p>
+            </td>
+          </div>
+          <!-- 정률 쿠폰 -->
+          <div th:case="RATE">
+            <td>정률</td>
+            <p>할인율: <span th:text="${coupon.discountRate}">10</span>%</p>
+            <p>최대 할인 금액: <span th:text="${coupon.maxDiscountAmount}">30,000</span> 원</p>
+            <p>최소 주문 금액: <span th:text="${coupon.minOrderAmount}">50,000</span> 원</p>
+          </div>
+        </div>
+
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- 페이징 네비게이션 -->
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <li class="page-item" th:classappend="${unusedCoupon.first} ? 'disabled'">
+          <a class="page-link" th:href="@{|/user/coupons?page=${unusedCoupon.number - 1}&size=${unusedCoupon.size}|}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, unusedCoupon.totalPages -1)}"
+            th:classappend="${i == unusedCoupon.number} ? 'active'">
+          <a class="page-link" th:href="@{|/user/coupons?page=${i}&size=${unusedCoupon.size}|}" th:text="${i + 1}">1</a>
+        </li>
+        <li class="page-item" th:classappend="${unusedCoupon.last} ? 'disabled'">
+          <a class="page-link" th:href="@{|/user/coupons?page=${unusedCoupon.number + 1}&size=${unusedCoupon.size}|}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div th:if="${unusedCoupon.content.size()} == 0">
+    <p>쿠폰이 없습니다.</p>
+  </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery and Bootstrap JS (옵션) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
