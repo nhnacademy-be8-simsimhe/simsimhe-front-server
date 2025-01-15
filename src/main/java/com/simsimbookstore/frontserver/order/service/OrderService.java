@@ -7,6 +7,7 @@ import com.simsimbookstore.frontserver.order.dto.BookListResponseDto;
 import com.simsimbookstore.frontserver.order.dto.OrderHistoryResponseDto;
 import com.simsimbookstore.frontserver.order.dto.TotalRequestDto;
 import com.simsimbookstore.frontserver.order.dto.TotalResponseDto;
+import com.simsimbookstore.frontserver.util.PageResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,7 +36,8 @@ public class OrderService {
         return orderClient.calculateTotal(dtos);
     }
 
-    public Page<OrderHistoryResponseDto> getOrderHistory(Long userId, Pageable pageable) {
-        return orderHistoryClient.getOrders(userId, pageable);
+    public PageResponse<OrderHistoryResponseDto> getOrderHistory(Long userId, int page, int size) {
+
+        return orderHistoryClient.getOrders(userId, page, size);
     }
 }
