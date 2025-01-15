@@ -26,23 +26,17 @@ public class ElasticsearchController {
             sort = "popular";
         }
 
-
-
         PageResponse<SearchBookDto> searchBooks = elasticsearchService.getSearchData(keyword, sort, page);
 
-        // 한 번에 표시할 페이지 버튼 개수
-        // 한 페이지 그룹에 표시할 페이지 수
         int pageGroupSize = 10;
 
-// 현재 페이지 그룹 계산
         int currentPage = searchBooks.getCurrentPage() - 1; // 1부터 시작한 값을 0부터 시작하도록 보정
         int currentPageGroup = currentPage / pageGroupSize;
 
-// 시작 페이지와 끝 페이지 계산
         int startPage = currentPageGroup * pageGroupSize + 1; // 1부터 시작
         int endPage = Math.min(startPage + pageGroupSize - 1, searchBooks.getTotalPage());
 
-// 모델에 값 전달
+
         model.addAttribute("keyword", keyword);
         model.addAttribute("sort", sort);
         model.addAttribute("searchBooks", searchBooks.getData());
@@ -52,6 +46,10 @@ public class ElasticsearchController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
+        log.info("totalElements : {}", searchBooks.getTotalElements());
+        log.info("currentPage : {}", searchBooks.getCurrentPage());
+        log.info("startPage : {}", startPage);
+        log.info("endPage : {}", endPage);
 
         return "search/searchList";
     }

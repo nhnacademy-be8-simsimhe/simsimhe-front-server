@@ -11,6 +11,35 @@
       font-weight: bold;
       text-decoration: underline;
     }
+    .link-style {
+      text-decoration: none;
+      color: inherit;
+      transition: text-decoration 0.3s;
+    }
+
+    .link-style:hover {
+      text-decoration: underline;
+      color: inherit;
+    }
+
+    .link-style.text-danger {
+      color: #dc3545;
+    }
+
+    .review-score {
+      display: flex;
+      gap: 2px; /* 별 사이 간격 */
+    }
+
+    .star {
+      font-size: 1.5rem; /* 별 크기 */
+      color: #ccc; /* 기본 비활성 상태 색상 */
+    }
+
+    .star.filled {
+      color: #f5c518; /* 채워진 별 색상 (노란색) */
+    }
+
   </style>
 </head>
 <body>
@@ -57,25 +86,48 @@
     <div th:if="${#lists.isEmpty(submittedReviews)}" class="text-center">
       <p>작성한 리뷰가 없습니다.</p>
     </div>
-    <div th:each="review : ${submittedReviews}">
-      <div class="row mb-4">
+    <div th:each="review : ${submittedReviews}" class="card mb-4 shadow-sm">
+      <div class="row g-0">
         <div class="col-md-2">
-          <img th:src="${review.bookImagePath}" class="img-fluid rounded" alt="책 이미지">
+          <a th:href="@{'/books/' + ${review.bookId}}" class="link-style">
+            <img th:src="${review.bookImagePath}" class="img-fluid rounded-start" alt="책 이미지">
+          </a>
         </div>
-        <div class="col-md-8">
-          <h5 th:text="${review.bookTitle}">책 제목</h5>
-          <p th:text="${review.contributor}">저자</p>
-          <p>작성일: <span th:text="${review.createdAt}">2025.01.02</span></p>
-        </div>
-        <div class="col-md-2 d-flex align-items-center">
-          <button class="btn btn-secondary" disabled>작성 완료</button>
+        <div class="col-md-10">
+          <div class="card-body">
+            <h5 class="card-title fw-bold">
+              <a th:href="@{'/books/' + ${review.bookId}}" class="link-style" th:text="${review.bookTitle}"></a>
+            </h5>
+            <p class="card-text text-muted" th:text="${review.contributor}">저자</p>
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center">
+                <span id="reviewScore" class="review-score">
+                                <span class="star" th:classappend="${review.score >= 1 ? 'filled' : ''}">&#9733;</span>
+                                <span class="star" th:classappend="${review.score >= 2 ? 'filled' : ''}">&#9733;</span>
+                                <span class="star" th:classappend="${review.score >= 3 ? 'filled' : ''}">&#9733;</span>
+                                <span class="star" th:classappend="${review.score >= 4 ? 'filled' : ''}">&#9733;</span>
+                                <span class="star" th:classappend="${review.score >= 5 ? 'filled' : ''}">&#9733;</span>
+                            </span>
+              </div>
+              <div>
+                <span class="text-muted me-3">작성일: <span th:text="${review.createdAt}"></span></span>
+                <a th:href="@{'/reviews/edit/' + ${review.bookId}}" class="link-style me-3">수정</a>
+                <a th:href="@{'/reviews/delete/' + ${review.bookId}}" class="link-style text-danger">삭제</a>
+              </div>
+            </div>
+            <hr>
+            <p class="card-text" th:text="${review.content}">리뷰 내용</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<script>
+
+
+
+  <script>
   document.addEventListener('DOMContentLoaded', function () {
     const availableTab = document.getElementById('available-reviews-tab');
     const submittedTab = document.getElementById('submitted-reviews-tab');
