@@ -25,6 +25,7 @@ public class OrderHistoryResponseDto {
 
     public enum OrderState {
         PENDING,           // 주문대기
+        DELIVERY_READY,
         IN_DELIVERY,       // 배송중
         COMPLETED,         // 완료
         RETURNED,          // 반품
