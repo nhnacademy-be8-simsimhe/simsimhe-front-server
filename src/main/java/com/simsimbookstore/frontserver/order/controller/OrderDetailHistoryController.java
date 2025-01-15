@@ -39,15 +39,25 @@ public class OrderDetailHistoryController {
         // 총 쿠폰 할인 금액
         List<OrderDetailProduct> product = orderDetailDto.getOrderDetailProductList();
         for (OrderDetailProduct couponPrice : product) {
+            BigDecimal totalPrice;
             BigDecimal coupon = couponPrice.getCouponPrice();
-            BigDecimal totalPrice = coupon.add(coupon);
+            if (product.size() > 1) {
+                totalPrice = coupon.add(coupon);
+            } else {
+                totalPrice = coupon;
+            }
             model.addAttribute("totalCouponPrice", totalPrice);
         }
 
         // 총 포장 비용 금액
         for (OrderDetailProduct wrapPrice : product) {
+            BigDecimal totalWrapPrice;
             BigDecimal wrap = wrapPrice.getPackagePrice();
-            BigDecimal totalWrapPrice = wrap.add(wrap);
+            if (product.size() > 1) {
+                totalWrapPrice = wrap.add(wrap);
+            } else {
+                totalWrapPrice = wrap;
+            }
             model.addAttribute("totalWrapPrice", totalWrapPrice);
         }
 
