@@ -201,13 +201,6 @@
             </p>
 
 
-<!--            &lt;!&ndash; 좋아요 버튼 &ndash;&gt;-->
-<!--            <div class="mt-3">-->
-<!--                <button type="button" class="btn btn-light like-button btn-sm" th:data-book-id="${book.bookId}"-->
-<!--                        th:data-is-liked="${book.isLiked}">-->
-<!--                    <i class="fa" th:classappend="${book.isLiked} ? 'fa-heart text-danger' : 'fa-heart-o'"></i> 좋아요-->
-<!--                </button>-->
-<!--            </div>-->
 
             <button class="like-button" th:data-book-id="${book.bookId}" th:data-is-liked="${book.isLiked}" >
                 <!-- 기본 상태의 하트 SVG -->
@@ -217,6 +210,7 @@
                 </svg>
 
             </button>
+
 
 
 
@@ -231,15 +225,19 @@
             <div class="mt-4">
                 <a href="/carts/customer" class="btn btn-success">장바구니 바로가기</a>
             </div>
+            <!-- 주문하기 버튼 -->
+            <div class="mt-4">
+                <form th:action="@{/shop/order}" method="post" class="d-inline-block">
+                    <input type="hidden" name="bookId" th:value="${book.bookId}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="btn btn-warning fw-bold px-4 py-2">
+                        <i class="fas fa-shopping-cart me-2"></i> 주문하기
+                    </button>
+                </form>
 
         </div>
     </div>
 
-    <form th:action="@{/shop/order}" method="post">
-        <input type="hidden" name="bookId" th:value="${book.bookId}">
-        <input type="hidden" name="quantity" value="1">
-        <button type="submit">주문하기</button>
-    </form>
 
 
     <!-- 카테고리 및 태그 -->
@@ -277,6 +275,16 @@
         </ul>
     </div>
 
+    <!-- 리뷰 개수 및 평균 평점 -->
+    <div class="mt-3">
+        <p><strong>리뷰 개수:</strong> <span th:text="${book.reviewCount} + '개'">0개</span></p>
+        <p><strong>리뷰 평점:</strong>
+            <span th:if="${book.scoreAverage != null}"
+                  th:text="${#numbers.formatDecimal(book.scoreAverage, 1, 1)} + '점'">0.0점</span>
+            <span th:if="${book.scoreAverage == null}">0.0점</span>
+        </p>
+    </div>
+
     <!-- 추천 도서 -->
     <section class="mt-5">
         <h5 class="text-center fs-6 mb-4">같은 카테고리 도서 추천</h5>
@@ -304,23 +312,24 @@
                 </div>
             </div>
         </div>
+
     </section>
 
 
     <section class="mt-5">
         <div>
             <h5 class="text-center fs-6 mb-4" th:text="'리뷰 (' + ${reviews.getTotalElements()} + ')'"></h5>
-            <form action="/reviews/create" class="d-flex ms-auto">
-                <input type="hidden" name="bookId" th:value="${book.bookId}">
-                <button>리뷰 작성</button>
-            </form>
+<!--            <form action="/reviews/create" class="d-flex ms-auto">-->
+<!--                <input type="hidden" name="bookId" th:value="${book.bookId}">-->
+<!--                <button>리뷰 작성</button>-->
+<!--            </form>-->
         </div>
 
         <div th:if="${#lists.isEmpty(reviews.content)}" class="text-center">
             <p class="small">리뷰를 작성해보세요!</p>
         </div>
-        <div class="row" th:if="${!#lists.isEmpty(reviews.content)}">
-
+        <div  class="row" th:if="${!#lists.isEmpty(reviews.content)}">
+            <div th:class="review-list">
             <div th:each="review : ${reviews.content}" class="review-container">
                 <div class="review-content">
                     <div class="review-header">
@@ -330,7 +339,7 @@
                         </div>
                         <div>
                             <a href="#" class="review-edit" th:data-review-id="${review.reviewId}" th:if="${review.editable}">수정</a>
-                            <a href="#" class="review-delete" th:if="${review.deletable}" th:attr="onclick='confirmDelete(' + ${review.reviewId} + ')'">삭제</a>
+                            <a href="#" class="review-delete" th:data-review-id="${review.reviewId}" th:if="${review.deletable}">삭제</a>
                         </div>
 
                         <div class="mb-3">
@@ -364,7 +373,7 @@
                         </button>
 
                         <a class="review-comments"
-                              th:href="@{/reviews/{reviewId}/comments(reviewId=${review.reviewId})}">
+                           th:href="@{/reviews/{reviewId}/comments(reviewId=${review.reviewId})}">
                             댓글 <span th:text="${review.commentCount}">0</span>
                         </a>
 
@@ -376,6 +385,27 @@
                 </div>
 
 
+            </div>
+            </div>
+
+            <div class="pagination justify-content-center">
+                <ul class="pagination">
+                    <!-- Previous Button -->
+                    <li class="page-item" th:classappend="${reviews.hasPrevious()} ? '' : 'disabled'" th:if="${reviews.hasPrevious()}">
+                        <button class="page-link" th:data-page="${reviews.number - 1}" data-size="10" th:disabled="${!reviews.hasPrevious()}">Previous</button>
+                    </li>
+
+                    <!-- Page Numbers -->
+                    <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, reviews.totalPages - 1)}"
+                        th:classappend="${pageNum == reviews.number} ? 'active' : ''">
+                        <button class="page-link" th:data-page="${pageNum}" data-size="10" th:text="${pageNum + 1}"></button>
+                    </li>
+
+                    <!-- Next Button -->
+                    <li class="page-item" th:classappend="${reviews.hasNext()} ? '' : 'disabled'" th:if="${reviews.hasNext()}">
+                        <button class="page-link" th:data-page="${reviews.number + 1}" data-size="10" th:disabled="${!reviews.hasNext()}">Next</button>
+                    </li>
+                </ul>
             </div>
 
         </div>
@@ -490,12 +520,106 @@
         });
     });
 
+    document.addEventListener("DOMContentLoaded", () =>{
+        const reviewListContainer = document.querySelector(".review-list")
+
+        if (reviewListContainer){
+            reviewListContainer.addEventListener("click", (event) => {
+                const target = event.target;
+
+                if (target.closest(".review-like-button")){
+                    const reviewLikeButton = target.closest(".review-like-button");
+                    handleReviewLikeButtonClick(reviewLikeButton);
+                }
+
+                if (target.closest(".review-edit")){
+                    const reviewEditButton = target.closest(".review-edit");
+                    handleReviewEditButtonClick(reviewEditButton);
+                }
 
 
+                if (target.closest(".review-delete")){
+                    const reviewDeleteButton = target.closest(".review-delete");
+                    handleReviewDeleteButtonClick(reviewDeleteButton);
+                }
+
+            })
+        }
+    })
 
 
-    //리뷰 삭제
-    function confirmDelete(reviewId) {
+    //리뷰 좋아요 버튼 이벤트
+    function handleReviewLikeButtonClick(button){
+        const loginUserId = document.getElementById('loginUserId').value;
+
+        if (parseInt(loginUserId) === -1){
+            const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+            loginModal.show();
+            return;
+        }
+
+        const reviewId = button.getAttribute('data-review-id');
+        const isLiked = button.getAttribute('data-liked') === 'true';
+
+        // const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+
+        fetch(`/reviews/${reviewId}/likes`, {
+            method: isLiked ? 'DELETE' : 'POST', // 좋아요 추가 또는 삭제
+        })
+            .then(response => {
+
+                if (response.status === 500) {
+                    alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+                    // window.location.href = "/login"; // 로그인 페이지로 리디렉션
+                }
+
+                console.log(response.status)
+
+                return response.text()
+            })
+            .then(data => {
+                // 서버 응답에 따라 좋아요 상태 업데이트
+                console.log(data)
+                button.setAttribute('data-liked', !isLiked);
+                button.querySelector('.review-like-count').textContent = data;
+            })
+            .catch(error => console.error('좋아요 처리 중 오류 발생:', error));
+    }
+
+    //리뷰 수정 버튼 이벤트
+    function handleReviewEditButtonClick(button){
+        const reviewId = button.getAttribute('data-review-id');
+
+        // 서버에서 리뷰 데이터를 가져오기
+        fetch(`/reviews/${reviewId}`)
+            .then(response => response.json())
+            .then(data => {
+                // 모달에 데이터 채우기
+                document.getElementById('editReviewId').value = data.reviewId;
+                document.getElementById('editReviewTitle').value = data.title;
+                document.getElementById('editReviewContent').value = data.content;
+
+                const score = data.score;
+                const starInput = document.querySelector(`#editReviewScore input[value="${score}"]`);
+                if (starInput) {
+                    starInput.checked = true;
+                }
+
+
+                // 모달 열기
+                const editReviewModal = new bootstrap.Modal(document.getElementById('editReviewModal'));
+                editReviewModal.show();
+            })
+            .catch(error => {
+                console.error('리뷰 데이터를 불러오는데 실패했습니다.', error);
+                alert('리뷰 데이터를 불러오는데 실패했습니다.');
+            });
+    }
+
+    //리뷰 삭제 버튼 이벤트
+    function handleReviewDeleteButtonClick(button){
+        const reviewId = button.dataset.reviewId;
+
         if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
             // DELETE 요청을 서버로 전송
             fetch(`/reviews/${reviewId}`, {
@@ -515,67 +639,17 @@
                 });
         }
     }
-    document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('.review-like-button').forEach(button => {
-        button.addEventListener('click', () => {
-            const loginUserId = document.getElementById('loginUserId').value;
-            // const loginModal = document.getElementById("loginModal");
-            console.log(typeof loginUserId, loginUserId)
-
-            if (parseInt(loginUserId) === -1){
-                const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-                loginModal.show();
-                return;
-            }
-
-            console.log("out")
 
 
-            const reviewId = button.getAttribute('data-review-id');
-            const isLiked = button.getAttribute('data-liked') === 'true';
-
-            // const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-
-            fetch(`/reviews/${reviewId}/likes`, {
-                method: isLiked ? 'DELETE' : 'POST', // 좋아요 추가 또는 삭제
-            })
-                .then(response => {
-
-                    if (response.status === 500) {
-                        alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-                        // window.location.href = "/login"; // 로그인 페이지로 리디렉션
-                    }
-
-                    console.log(response.status)
-
-                    return response.text()
-                })
-                .then(data => {
-                    // 서버 응답에 따라 좋아요 상태 업데이트
-                    console.log(data)
-                    button.setAttribute('data-liked', !isLiked);
-                    button.querySelector('.review-like-count').textContent = data;
-                })
-                .catch(error => console.error('좋아요 처리 중 오류 발생:', error));
-        });
-
-    });
-
-    });
-
-
-
-
-
-        //도서 좋아요
+    //도서 좋아요
     document.addEventListener('DOMContentLoaded', () => {
-        // 좋아요 버튼 동작
         const likeButtons = document.querySelectorAll('.like-button');
         likeButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const loginUserId = document.getElementById('loginUserId').value;
                 console.log("click")
                 const bookId = button.getAttribute('data-book-id');
+                const isLiked = button.getAttribute('data-is-liked') === 'true';
 
                 fetch(`/likes`, {
                     method: 'PUT',
@@ -616,49 +690,15 @@
                 .then(data => {
                     alert('장바구니에 담겼습니다!');
                 })
-                .catch(error => {
-                    console.error('Error adding to cart:', error);
-                    alert('장바구니 추가 중 오류가 발생했습니다.');
-                });
+                // .catch(error => {
+                //     console.error('Error adding to cart:', error);
+                //     alert('장바구니 추가 중 오류가 발생했습니다.');
+                // });
         });
     });
 
-
-    // 리뷰 수정
+    //수정 모달창 저장 버튼 클릭 이벤트
     document.addEventListener('DOMContentLoaded', () => {
-        // 수정 버튼 클릭 이벤트
-        document.querySelectorAll('.review-edit').forEach(button => {
-            button.addEventListener('click', event => {
-                event.preventDefault();
-                console.log("in")
-                const reviewId = button.getAttribute('data-review-id');
-
-                // 서버에서 리뷰 데이터를 가져오기
-                fetch(`/reviews/${reviewId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // 모달에 데이터 채우기
-                        document.getElementById('editReviewId').value = data.reviewId;
-                        document.getElementById('editReviewTitle').value = data.title;
-                        document.getElementById('editReviewContent').value = data.content;
-
-                        const score = data.score;
-                        const starInput = document.querySelector(`#editReviewScore input[value="${score}"]`);
-                        if (starInput) {
-                            starInput.checked = true;
-                        }
-
-
-                        // 모달 열기
-                        const editReviewModal = new bootstrap.Modal(document.getElementById('editReviewModal'));
-                        editReviewModal.show();
-                    })
-                    .catch(error => {
-                        console.error('리뷰 데이터를 불러오는데 실패했습니다.', error);
-                        alert('리뷰 데이터를 불러오는데 실패했습니다.');
-                    });
-            });
-        });
 
         // 저장 버튼 클릭 이벤트
         document.getElementById('saveReviewChanges').addEventListener('click', () => {
@@ -698,14 +738,18 @@
         });
     });
 
+    //로그인 확인 모달창 이벤트
     document.addEventListener("DOMContentLoaded", () => {
-        const loginModal = document.getElementById("loginModal");
+
+        const loginModalElement = document.getElementById("loginModal");
+        const loginModal = new bootstrap.Modal(loginModalElement);
         const cancelButton = document.getElementById("cancelButton");
         const redirectButton = document.getElementById("redirectButton");
 
         // 취소 버튼 클릭 이벤트
         cancelButton.addEventListener("click", () => {
-            loginModal.classList.add("d-none"); // 모달 창 숨기기
+            loginModal.hide();
+            // loginModal.classList.add("d-none"); // 모달 창 숨기기
         });
 
         // 이동하기 버튼 클릭 이벤트
@@ -713,10 +757,157 @@
             window.location.href = "/login"; // 로그인 페이지로 이동
         });
     });
+
+
+
+
+    //페이지네이션
+    document.addEventListener("DOMContentLoaded", () => {
+        const paginationContainer = document.querySelector(".pagination");
+        const reviewListContainer = document.querySelector(".review-list"); // 리뷰 리스트가 렌더링되는 영역
+
+        paginationContainer.addEventListener("click", (event) => {
+            const target = event.target;
+
+            // 페이지 버튼이 클릭되었는지 확인
+            if (target.tagName === "BUTTON" && target.dataset.page) {
+                const page = target.dataset.page;
+                const size = target.dataset.size;
+
+                console.log(page)
+                console.log(size)
+
+                // Fetch API를 사용하여 해당 페이지의 리뷰 데이터 가져오기
+                fetch(`/reviews?bookId=18&page=${page}&size=${size}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("리뷰 데이터를 가져오는데 실패했습니다.");
+                        }
+                        return response.json(); // JSON 형식으로 응답 처리
+                    })
+                    .then(data => {
+                        // 리뷰 리스트 영역 업데이트
+                        console.log(data)
+                        updateReviewList(data);
+                        updatePagination(data);
+                    })
+                    .catch(error => {
+                        console.error("오류:", error);
+                        alert("리뷰 데이터를 가져오는 중 문제가 발생했습니다.");
+                    });
+            }
+        });
+
+
+        function updatePagination(data){
+            let html = "";
+
+            const sequence = createSequence(0, data.totalPages - 1); // 페이지 번호 시퀀스 생성
+
+            html = `
+        <ul class="pagination">
+            <!-- Previous Button -->
+            <li class="page-item ${data.first ? 'disabled': ''}" ${data.first ? 'hidden' : ''}>
+                <button class="page-link" data-page="${data.number - 1}" data-size="10" ${data.first ? 'disabled' : ''}>Previous</button>
+            </li>
+    `;
+
+            // 페이지 번호 버튼 추가
+            sequence.forEach(pageNum => {
+                html += `
+            <li class="page-item ${pageNum === data.number ? 'active' : ''}">
+                <button class="page-link" data-page="${pageNum}" data-size="10">${pageNum + 1}</button>
+            </li>
+        `;
+            });
+
+            // Next Button 추가
+            html += `
+            <li class="page-item ${data.last ?'disabled': '' }" ${data.last ? 'hidden' : ''}>
+                <button class="page-link" data-page="${data.number + 1}" data-size="10" ${data.last ? 'disabled' : ''}>Next</button>
+            </li>
+        </ul>
+    `;
+
+            const paginationContainer = document.querySelector(".pagination");
+            paginationContainer.innerHTML = html;
+        }
+
+
+        // 리뷰 리스트를 업데이트하는 함수
+        function updateReviewList(data) {
+            let html = "";
+
+            console.log()
+
+
+            data.content.forEach(review => {
+                html += `
+            <div class="review-container">
+                <div class="review-content">
+                    <div class="review-header">
+                        <div>
+                            <span class="review-userName">${review.userName}</span>
+                            <span class="review-date">${review.createdAt}</span>
+                        </div>
+                        <div>
+                            ${review.editable ? `<a href="#" class="review-edit" data-review-id="${review.reviewId}">수정</a>` : ""}
+                            ${review.deletable ? `<a href="#" class="review-delete" onclick="confirmDelete(${review.reviewId})">삭제</a>` : ""}
+                        </div>
+                    </div>
+                    <div id="reviewScore" class="review-score">
+                        ${generateStarHTML(review.score)}
+                    </div>
+                    <div>
+                        <p>${review.title}</p>
+                        <p>${review.content}</p>
+                    </div>
+                    <div class="review-actions">
+                        <button class="review-like-button" data-review-id="${review.reviewId}" data-liked="${review.userLiked}">
+                            <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 21C12 21 4 13.31 4 8.5C4 5.42 6.42 3 9.5 3C11.24 3 12.91 4.1 13.5 5.64C14.09 4.1 15.76 3 17.5 3C20.58 3 23 5.42 23 8.5C23 13.31 15 21 15 21H12Z" />
+                            </svg>
+                            <span class="review-like-count">${review.likeCount}</span>
+                        </button>
+                        <a class="review-comments" href="/reviews/${review.reviewId}/comments">
+                            댓글 <span>${review.commentCount}</span>
+                        </a>
+                    </div>
+                </div>
+                ${review.imagePaths && review.imagePaths.length > 0 ? `<div><img src="${review.imagePaths[0]}" alt="Review Image" class="review-image"></div>` : ""}
+            </div>
+
+`;
+            });
+
+            // 업데이트된 HTML을 리뷰 리스트 컨테이너에 삽입
+            const reviewListContainer = document.querySelector(".review-list");
+            reviewListContainer.innerHTML = html;
+            // reviewListContainer.appendChild()
+
+        }
+
+        function generateStarHTML(score) {
+            let starsHTML = "";
+            for (let i = 1; i <= 5; i++) {
+                starsHTML += `<span class="star ${i <= score ? "filled" : ""}">&#9733;</span>`;
+            }
+            return starsHTML;
+        }
+
+        function createSequence(start, end) {
+            return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+        }
+
+    });
+
+
+
 </script>
-
-
-
-
 </body>
 </html>

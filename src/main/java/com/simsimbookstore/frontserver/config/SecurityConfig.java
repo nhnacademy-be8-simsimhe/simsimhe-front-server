@@ -4,7 +4,13 @@ package com.simsimbookstore.frontserver.config;
 import com.simsimbookstore.frontserver.cart.service.CartService;
 import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
-//import com.simsimbookstore.frontserver.security.handler.LocalLoginSuccessHandler;
+import com.simsimbookstore.frontserver.security.handler.LocalLoginSuccessHandler;
+import com.simsimbookstore.frontserver.security.provider.CustomAuthenticationProvider;
+import com.simsimbookstore.frontserver.security.requestRepository.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.simsimbookstore.frontserver.security.tokenResponseClient.CustomAccessTokenResponseClient;
+import com.simsimbookstore.frontserver.users.user.feign.PaycoAuthServiceClient;
+import com.simsimbookstore.frontserver.users.user.service.CustomOauth2UserService;
+
 import com.simsimbookstore.frontserver.users.user.service.CustomUserDetailsService;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +38,13 @@ import java.util.Map;
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
+    private final CustomOauth2UserService oauth2UserService;
+    private final PaycoAuthServiceClient paycoAuthServiceClient;
     private final UserService userService;
     private final CartService cartService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
 
         //authorize
@@ -47,6 +55,9 @@ public class SecurityConfig {
                 .requestMatchers("/management/health").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll());
+
+        http.authenticationProvider(customAuthenticationProvider());
+
         //rememberme
         http.rememberMe(rememberMe->rememberMe
                 .tokenValiditySeconds(3600)
@@ -54,6 +65,14 @@ public class SecurityConfig {
                 .rememberMeParameter("remember-me"));
 
         // oauth2
+        http.oauth2Login(oauth2Login->oauth2Login
+                .authorizationEndpoint(endpoint->endpoint.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))
+                .tokenEndpoint(tokenEndpoint -> tokenEndpoint.accessTokenResponseClient(new CustomAccessTokenResponseClient(paycoAuthServiceClient)))
+                .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(oauth2UserService))
+                .loginPage("/")
+//                .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/payco"))
+                .defaultSuccessUrl("/",true))
+        ;
 
 //        http.oauth2Login(oauth2Login->oauth2Login
 //                .loginPage("/login")
@@ -86,6 +105,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+
+//        ProviderManager providerManager = (ProviderManager) authenticationConfiguration.getAuthenticationManager();
+//        providerManager.getProviders().add(customAuthenticationProvider());
+//        AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
+//        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
@@ -113,5 +137,13 @@ public class SecurityConfig {
                 .build();
 
         return customRequest;
+    }
+
+    @Bean
+    public CustomAuthenticationProvider customAuthenticationProvider(){
+        CustomAuthenticationProvider customAuthenticationProvider = new CustomAuthenticationProvider();
+        customAuthenticationProvider.setUserDetailsService(userDetailsService);
+        customAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return customAuthenticationProvider;
     }
 }

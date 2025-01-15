@@ -3,6 +3,29 @@ spring:
     livereload:
       enabled: false
 
+  security:
+    oauth2:
+      client:
+        registration:
+          payco:
+            client-name: "Payco"
+            client-id: "3RDeNpTkG1m6SFCM8Fv2126"
+            client-secret: "barXft6cWnFFVH2sTbXLNOoU"
+            redirect-uri: "https://simsimbook.store/login/oauth2/code/payco"
+            authorization-grant-type: "authorization_code"
+
+        provider:
+          payco:
+            authorization-uri: "https://id.payco.com/oauth2.0/authorize?&serviceProviderCode=FRIENDS&userLocale=ko_KR"
+            token-uri: "https://id.payco.com/oauth2.0/token"
+            user-info-uri: "https://apis-payco.krp.toastoven.net/payco/friends/find_member_v2.json"
+
+#payco
+payco:
+  client_id: "3RDeNpTkG1m6SFCM8Fv2126"
+  client_secret: "barXft6cWnFFVH2sTbXLNOoU"
+  redirect_url: "https://simsimbook.store/login/oauth2/code/payco"
+
 management:
   endpoints:
     web:
@@ -13,14 +36,5 @@ management:
   endpoint:
     health:
       show-details: always
-
-
-
-##payco
-payco:
-  client_id: "prod client id"
-  redirect_url: "prod redirect url"
-  client_secret: "prod client secret"
-
 redis:
   database: 211

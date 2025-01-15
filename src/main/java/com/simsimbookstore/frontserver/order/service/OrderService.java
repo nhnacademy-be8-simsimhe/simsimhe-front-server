@@ -3,7 +3,11 @@ package com.simsimbookstore.frontserver.order.service;
 import com.simsimbookstore.frontserver.order.client.OrderClient;
 import com.simsimbookstore.frontserver.order.client.OrderDetailClient;
 import com.simsimbookstore.frontserver.order.client.OrderHistoryClient;
+
 import com.simsimbookstore.frontserver.order.dto.*;
+import com.simsimbookstore.frontserver.util.PageResponse;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,16 +26,22 @@ public class OrderService {
     private final OrderDetailClient orderDetailClient;
 
     @Transactional
-    public List<BookListResponseDto> doOrder(List<BookListRequestDto> dtos) {
-        return orderClient.doOrder(dtos);
+    public List<BookListResponseDto> doGuestOrder(List<BookListRequestDto> dtos) {
+        return orderClient.doGuestOrder(dtos);
+    }
+
+    @Transactional
+    public List<BookListResponseDto> doMemberOrder(Long userId, List<BookListRequestDto> dtos) {
+        return orderClient.doMemberOrder(userId, dtos);
     }
 
     public TotalResponseDto calculateTotal(TotalRequestDto dtos) {
         return orderClient.calculateTotal(dtos);
     }
 
-    public Page<OrderHistoryResponseDto> getOrderHistory(Long userId, Pageable pageable) {
-        return orderHistoryClient.getOrders(userId, pageable);
+    public PageResponse<OrderHistoryResponseDto> getOrderHistory(Long userId, int page, int size) {
+
+        return orderHistoryClient.getOrders(userId, page, size);
     }
 
     public OrderDetailResponseDto orderDetailHistory(Long userId, String orderNumber) {

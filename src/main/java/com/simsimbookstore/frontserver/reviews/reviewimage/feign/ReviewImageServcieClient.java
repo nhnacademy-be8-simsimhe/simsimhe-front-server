@@ -12,7 +12,7 @@ import java.util.List;
 public interface ReviewImageServcieClient {
 
     @PostMapping("/{reviewId}/images")
-    public List<ReviewImgPathResponseDTO> addReviewImages(@PathVariable Long reviewId, @RequestParam List<String> imageName);
+    public List<ReviewImgPathResponseDTO> addReviewImages(@PathVariable Long reviewId, @RequestBody List<String> imageName);
 
     @GetMapping("/{reviewId}/images")
     public List<ReviewImagePath> getReviewImages(@PathVariable Long reviewId);

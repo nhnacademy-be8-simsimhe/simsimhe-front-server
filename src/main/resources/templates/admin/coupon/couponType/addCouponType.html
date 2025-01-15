@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>쿠폰 유형 생성</title>
+    <meta charset="UTF-8">
+    <!-- Bootstrap (선택 사항) -->
+    <link rel="stylesheet"
+          th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css}" />
+    <style>
+        .error {
+            color: red;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container mt-5">
+    <h1>쿠폰 유형 생성</h1>
+
+    <form id="couponForm"
+          th:object="${couponTypeRequestDto}"
+          th:action="@{/admin/couponTypes/create}"
+          method="post">
+
+        <!-- (1) 쿠폰 정책 ID (히든), @Min(1) 검증 필요 -->
+        <input type="hidden" id="couponPolicyId" th:field="*{couponPolicyId}" />
+
+        <!-- (2) 쿠폰 종류 이름: NotBlank, length<=40 -->
+        <div class="form-group">
+            <label for="couponTypeName">쿠폰 종류 이름</label>
+            <input type="text"
+                   id="couponTypeName"
+                   th:field="*{couponTypeName}"
+                   class="form-control"
+                   required
+                   maxlength="40" />
+            <div class="error"
+                 th:if="${#fields.hasErrors('couponTypeName')}"
+                 th:errors="*{couponTypeName}">
+            </div>
+        </div>
+
+        <!-- (3) 쿠폰 대상 타입 (ALL/BOOK/CATEGORY) -->
+        <div class="form-group">
+            <label for="couponTargetType">쿠폰 대상 타입</label>
+            <select id="couponTargetType"
+                    th:field="*{couponTargetType}"
+                    class="form-control"
+                    onchange="toggleTargetSection(); updatePageLinks();">
+                <option value="" disabled selected>선택하세요</option>
+                <option th:each="type : ${couponTargetTypes}"
+                        th:value="${type}"
+                        th:text="${type.name}">
+                </option>
+            </select>
+            <div class="error"
+                 th:if="${#fields.hasErrors('couponTargetType')}"
+                 th:errors="*{couponTargetType}">
+            </div>
+        </div>
+
+        <!-- (4) BOOK일 때 책 목록 (페이지네이션) -->
+        <div class="form-group"
+             id="bookListSection"
+             th:classappend="${couponTypeRequestDto.couponTargetType == 'BOOK'} ? '' : 'hidden'">
+            <label>책 선택</label>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>선택</th>
+                    <th>ID</th>
+                    <th>제목</th>
+                    <th>저자</th>
+                    <th>상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="book : ${allBooks.data}">
+                    <td>
+                        <!-- 단일 선택(라디오) 가정 -->
+                        <input type="radio"
+                               name="targetId"
+                               th:value="${book.bookId}"
+                               th:checked="${book.bookId} == ${couponTypeRequestDto.targetId}" />
+                    </td>
+                    <td th:text="${book.bookId}">1</td>
+                    <td th:text="${book.title}">책 제목</td>
+                    <td th:text="${book.publisher}">저자</td>
+                    <td th:text="${book.bookStatus.status}">상태</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- 페이지네이션 -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <!-- 이전 페이지 -->
+                    <li class="page-item"
+                        th:classappend="${allBooks.currentPage+1 == 1} ? 'disabled'">
+                        <a class="page-link page-link-target"
+                           th:href="@{/admin/couponTypes/create(
+                               page=${allBooks.currentPage - 1},
+                               couponPolicyId=${couponPolicyId},
+                               couponTargetType=${couponTypeRequestDto.couponTargetType}
+                           )}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- 페이지 번호 반복 -->
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(allBooks.startPage, allBooks.endPage)}"
+                        th:classappend="${i == allBooks.currentPage+1} ? 'active'">
+                        <a class="page-link page-link-target"
+                           th:text="${i}"
+                           th:href="@{/admin/couponTypes/create(
+                        page=${i},
+                        couponPolicyId=${couponPolicyId},
+                        couponTargetType=${couponTypeRequestDto.couponTargetType}
+                        )}">
+                        </a>
+                    </li>
+
+                    <!-- 다음 페이지 -->
+                    <li class="page-item"
+                        th:classappend="${allBooks.currentPage + 1 >= allBooks.totalPage} ? 'disabled'">
+                        <a class="page-link page-link-target"
+                           th:href="@{/admin/couponTypes/create(
+                               page=${allBooks.currentPage + 1},
+                               couponPolicyId=${couponPolicyId},
+                               couponTargetType=${couponTypeRequestDto.couponTargetType}
+                           )}"
+                           aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- (5) CATEGORY 일 때 카테고리 선택 -->
+        <div class="form-group"
+             id="categorySection"
+             th:classappend="${couponTypeRequestDto.couponTargetType == 'CATEGORY'} ? '' : 'hidden'">
+            <label>카테고리 선택</label>
+            <select th:field="*{targetId}" class="form-control">
+                <option value="" disabled selected>카테고리를 선택하세요</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.getCategoryId()}"
+                        th:text="${cat.getCategoryName()}">
+                </option>
+            </select>
+            <div class="error"
+                 th:if="${#fields.hasErrors('targetId')}"
+                 th:errors="*{targetId}">
+            </div>
+        </div>
+
+        <!-- (6) 기간/마감기한 (XOR) -->
+        <div class="form-group">
+            <label>유효 기간 선택</label>
+            <select id="timeType" class="form-control" onchange="toggleTimeFields()">
+                <option value="" disabled selected>선택하세요</option>
+                <option value="period">기간 (일)</option>
+                <option value="deadline">마감 기한</option>
+            </select>
+        </div>
+
+        <div class="form-group hidden" id="periodField">
+            <label for="period">기간(일)</label>
+            <input type="number" id="period"
+                   th:field="*{period}"
+                   class="form-control" min="1" />
+            <div class="error"
+                 th:if="${#fields.hasErrors('period')}"
+                 th:errors="*{period}">
+            </div>
+        </div>
+
+        <div class="form-group hidden" id="deadlineField">
+            <label for="deadline">마감 기한</label>
+            <input type="datetime-local" id="deadline"
+                   th:field="*{deadline}"
+                   class="form-control" />
+            <div class="error"
+                 th:if="${#fields.hasErrors('deadline')}"
+                 th:errors="*{deadline}">
+            </div>
+        </div>
+
+        <!-- (7) 스태킹 -->
+        <div class="form-check mb-3">
+            <input class="form-check-input"
+                   type="checkbox"
+                   id="stacking"
+                   th:field="*{stacking}" />
+            <label class="form-check-label" for="stacking">중복 사용</label>
+        </div>
+
+        <!-- (8) 서버 검증(Bean Validation) 클래스 레벨 에러 -->
+        <div th:if="${#fields.hasErrors('*')}" class="error mb-3">
+            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+        </div>
+
+        <!-- (9) 제출 버튼 -->
+        <button type="submit" class="btn btn-primary">생성</button>
+    </form>
+</div>
+
+<!-- Bootstrap JS -->
+<script th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js}"></script>
+<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"></script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // (A) BOOK/CATEGORY/ALL 표시
+    function toggleTargetSection() {
+        const typeSelect = document.getElementById('couponTargetType');
+        const bookListSection = document.getElementById('bookListSection');
+        const categorySection = document.getElementById('categorySection');
+
+        if (typeSelect.value === 'BOOK') {
+            bookListSection.classList.remove('hidden');
+            categorySection.classList.add('hidden');
+
+            // BOOK일 때 targetId 라디오 버튼 활성화
+            const bookInputs = bookListSection.querySelectorAll('input[name="targetId"]');
+            bookInputs.forEach(input => input.disabled = false);
+
+            // CATEGORY 섹션의 select 비활성화 및 값 초기화
+            const categorySelect = categorySection.querySelector('select[name="targetId"]');
+            categorySelect.disabled = true;
+            categorySelect.value = '';
+        } else if (typeSelect.value === 'CATEGORY') {
+            categorySection.classList.remove('hidden');
+            bookListSection.classList.add('hidden');
+
+            // CATEGORY일 때 targetId select 활성화
+            const categorySelect = categorySection.querySelector('select[name="targetId"]');
+            categorySelect.disabled = false;
+
+            // BOOK 섹션의 라디오 버튼 비활성화 및 선택 해제
+            const bookInputs = bookListSection.querySelectorAll('input[name="targetId"]');
+            bookInputs.forEach(input => {
+                input.disabled = true;
+                input.checked = false;
+            });
+        } else {
+            // ALL 또는 기타 타입일 때
+            bookListSection.classList.add('hidden');
+            categorySection.classList.add('hidden');
+
+            // 모든 targetId 필드 비활성화 및 값 제거
+            const targetInputs = document.querySelectorAll('input[name="targetId"], select[name="targetId"]');
+            targetInputs.forEach(input => {
+                if (input.type === 'radio' || input.type === 'checkbox') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+                input.disabled = true;
+            });
+        }
+    }
+
+    // (B) 기간 / 마감기한 필드 표시/숨김
+    function toggleTimeFields() {
+        const selected = document.getElementById('timeType').value;
+        const periodField = document.getElementById('periodField');
+        const deadlineField = document.getElementById('deadlineField');
+
+        if (selected === 'period') {
+            periodField.classList.remove('hidden');
+            deadlineField.classList.add('hidden');
+            document.getElementById('deadline').value = '';
+        } else if (selected === 'deadline') {
+            deadlineField.classList.remove('hidden');
+            periodField.classList.add('hidden');
+            document.getElementById('period').value = '';
+        } else {
+            periodField.classList.add('hidden');
+            deadlineField.classList.add('hidden');
+            document.getElementById('period').value = '';
+            document.getElementById('deadline').value = '';
+        }
+    }
+
+    // (C) 페이지네이션 링크에 couponTargetType 실시간 반영
+    function updatePageLinks() {
+        const newType = document.getElementById('couponTargetType').value;
+        const pageLinks = document.querySelectorAll('.page-link-target');
+        pageLinks.forEach(link => {
+            const url = new URL(link.href, window.location.origin);
+            url.searchParams.set("couponTargetType", newType);
+            link.href = url.toString();
+        });
+    }
+
+    // (D) 폼 제출 시 추가 유효성 검사
+    function validateForm(event) {
+        // 1) couponPolicyId >= 1
+        const policyId = document.getElementById('couponPolicyId').value;
+        if (!policyId || parseInt(policyId) < 1) {
+            alert('쿠폰 정책 ID는 1 이상의 값이어야 합니다!');
+            event.preventDefault();
+            return;
+        }
+
+        // 2) couponTypeName not blank + <= 40자
+        const name = document.getElementById('couponTypeName').value.trim();
+        if (!name) {
+            alert('쿠폰 종류 이름을 입력해주세요!');
+            event.preventDefault();
+            return;
+        }
+        if (name.length > 40) {
+            alert('쿠폰 종류 이름은 최대 40자까지입니다!');
+            event.preventDefault();
+            return;
+        }
+
+        // 3) deadline > 현재 시각
+        const deadlineVal = document.getElementById('deadline').value;
+        if (deadlineVal) {
+            const now = new Date();
+            const selectedDeadline = new Date(deadlineVal);
+            if (selectedDeadline <= now) {
+                alert('마감 기한은 현재 시간보다 이후여야 합니다!');
+                event.preventDefault();
+                return;
+            }
+        }
+
+        // 4) period/deadline XOR
+        const periodVal = document.getElementById('period').value;
+        if (periodVal && deadlineVal) {
+            alert('기간과 마감 기한은 동시에 설정 불가능합니다!');
+            event.preventDefault();
+            return;
+        }
+        if (!periodVal && !deadlineVal) {
+            alert('기간 또는 마감 기한 중 하나를 반드시 설정해주세요!');
+            event.preventDefault();
+            return;
+        }
+
+        // 5) ALL이면 targetId 없어야 함 → 필수 제거
+        const targetType = document.getElementById('couponTargetType').value;
+        if (targetType === 'ALL') {
+            // targetId 필드가 비활성화 되어 있으므로 별도의 체크 불필요
+        } else {
+            // 'ALL'이 아닌 경우 targetId가 필수인지 여부에 따라 추가 검증 가능
+            if (targetType === 'BOOK') {
+                const bookInputs = document.querySelectorAll('input[name="targetId"]');
+                const isChecked = Array.from(bookInputs).some(input => input.checked);
+                if (!isChecked) {
+                    alert('책을 하나 이상 선택해주세요!');
+                    event.preventDefault();
+                    return;
+                }
+            } else if (targetType === 'CATEGORY') {
+                const categorySelect = document.querySelector('select[name="targetId"]');
+                if (!categorySelect.value) {
+                    alert('카테고리를 선택해주세요!');
+                    event.preventDefault();
+                    return;
+                }
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // 페이지 로드 시 BOOK/CATEGORY/ALL 표시
+        toggleTargetSection();
+
+        // 폼 제출 이벤트 시 validateForm
+        document.getElementById('couponForm')
+            .addEventListener('submit', validateForm);
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

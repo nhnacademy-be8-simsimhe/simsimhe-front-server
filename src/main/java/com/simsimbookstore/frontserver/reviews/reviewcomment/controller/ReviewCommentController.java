@@ -47,7 +47,7 @@ public class ReviewCommentController {
     ){
         reviewServiceClient.updateReviewComment(reviewId, commentId, requestDTO);
 
-        return "/review/reviewList";
+        return "reviews/reviewList";
     }
 
     @DeleteMapping("/{commentId}")
@@ -71,7 +71,7 @@ public class ReviewCommentController {
         model.addAttribute("comments", comments);
         model.addAttribute("loginUserId", loginUserId);
 
-        return "/reviews/comments";
+        return "reviews/comments";
     }
 
 }

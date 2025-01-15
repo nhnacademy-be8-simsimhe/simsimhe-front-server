@@ -40,10 +40,10 @@ public class OrderController {
     private final AddressService addressService;
 
     @GetMapping("/shop/order")
-    public String showOrderPage(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
+    public String showOrderPage(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
         return "order/order_page";
     }
-
 
     @PostMapping("/shop/order")
     public String createOrder(
@@ -57,26 +57,39 @@ public class OrderController {
             dtos.add(new BookListRequestDto(bookIdList.get(i), quantityList.get(i)));
         }
 
-        List<BookListResponseDto> responseDtos = orderService.doOrder(dtos);
-        Long userId = customUserDetails.getUserId();
+        // 로그인되어 있다면 userId가 존재, 아니면 null
+        Long userId = (customUserDetails != null) ? customUserDetails.getUserId() : null;
+
+        List<BookListResponseDto> responseDtos;
+        if (userId != null) {
+            responseDtos = orderService.doMemberOrder(userId, dtos);
+
+            // 회원 전용 추가 정보
+            redirectAttributes.addFlashAttribute("userId", userId);
+            redirectAttributes.addFlashAttribute("availablePoints", pointHistoryService.getPoints(userId));
+            redirectAttributes.addFlashAttribute("addresses", addressService.getAddress(userId));
+        } else {
+            responseDtos = orderService.doGuestOrder(dtos);
+        }
         redirectAttributes.addFlashAttribute("bookOrderList", responseDtos);
         redirectAttributes.addFlashAttribute("wrapTypes", wrapService.getAllAvailableWrapTypes());
-        redirectAttributes.addFlashAttribute("userId", userId);
-        redirectAttributes.addFlashAttribute("wrapTypes", wrapService.getAllAvailableWrapTypes());
-        redirectAttributes.addFlashAttribute("availablePoints", pointHistoryService.getPoints(userId));
-        redirectAttributes.addFlashAttribute("addresses", addressService.getAddress(userId));
 
+        // 주문 페이지 새로고침 & 데이터 재조회용
         return "redirect:/shop/order";
     }
-
 
 
     @PostMapping("/shop/order/total")
     @ResponseBody
     public ResponseEntity<?> calculateTotal(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                             @RequestBody TotalRequestDto dto) {
-        dto.setUserId(customUserDetails.getUserId());
-        log.info("Calculating total for user {}", customUserDetails.getUserId());
+        if (customUserDetails != null) {
+            log.info("userId = {}", customUserDetails.getUserId());
+            dto.setUserId(customUserDetails.getUserId());
+        } else {
+            dto.setUserId(null);
+        }
+        log.info("userId = {}", dto.getUserId());
         TotalResponseDto total = orderService.calculateTotal(dto);
         return ResponseEntity.ok(total);
     }
