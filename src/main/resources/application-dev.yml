@@ -21,6 +21,7 @@ spring:
             token-uri: "https://id.payco.com/oauth2.0/token"
             user-info-uri: "https://apis-payco.krp.toastoven.net/payco/friends/find_member_v2.json"
 
+
 #payco
 payco:
   client_id: "3RD97C4xPwwTq5ZOJ1YzohG"
@@ -48,3 +49,8 @@ logging:
 
 redis:
   database: 220
+
+rabbitmq:
+  secret-key: 7bcf9993624c4ccf9140a44e40608808
+  port: 5672
+  virtual-host: vh1_dev
