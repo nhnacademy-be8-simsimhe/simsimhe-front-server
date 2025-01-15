@@ -137,7 +137,7 @@ public class CouponAdminController {
     public String issueCoupon(@ModelAttribute @Valid IssueCouponsRequestDto requestDto,
                               Model model) {
         couponAdminService.issueCoupons(requestDto);
-        return "/admin/coupon/issue/successIssueCoupon";
+        return "admin/coupon/issue/successIssueCoupon";
     }
 
     @GetMapping("/coupons/selectUser")
