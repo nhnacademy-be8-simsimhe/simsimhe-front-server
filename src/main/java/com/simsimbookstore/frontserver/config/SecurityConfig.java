@@ -16,10 +16,7 @@ import com.simsimbookstore.frontserver.users.user.service.CustomOauth2UserServic
 
 import com.simsimbookstore.frontserver.users.user.service.CustomUserDetailsService;
 import com.simsimbookstore.frontserver.users.user.service.LoginSuccessHandlerService;
-import com.simsimbookstore.frontserver.users.user.service.UserService;
-import jakarta.servlet.ServletException;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -31,17 +28,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.io.IOException;
-import java.util.Map;
-
 
 @EnableWebSecurity
 @Configuration
