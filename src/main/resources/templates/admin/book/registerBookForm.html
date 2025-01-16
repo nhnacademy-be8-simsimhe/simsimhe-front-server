@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"/>
     <title>Register Book</title>
+    <!-- toastui CSS/JS 불러오기 (필요하면 유지) -->
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
     <style>
+        /* 간단한 스타일 */
         body {
             font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
         }
-
         h1 {
             text-align: center;
             margin-top: 20px;
-            color: #333;
         }
-
         form {
             max-width: 800px;
             margin: 20px auto;
@@ -28,168 +27,122 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
         label {
             display: block;
             margin: 10px 0 5px;
             font-weight: bold;
-            color: #555;
         }
-
-        input[type="text"], input[type="number"], input[type="date"], textarea, select {
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
         }
-
-        textarea {
-            resize: vertical;
-        }
-
-        input[type="checkbox"] {
-            margin-right: 5px;
-        }
-
         button {
-            display: inline-block;
             background-color: #007bff;
             color: #fff;
             padding: 10px 15px;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
         }
-
         button:hover {
             background-color: #0056b3;
         }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        ul li {
-            margin: 5px 0;
-            padding: 10px;
-            background-color: #f1f1f1;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        ul li button {
-            background-color: #dc3545;
-            color: #fff;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        ul li button:hover {
-            background-color: #a71d2a;
-        }
-
         .form-section {
             margin-bottom: 20px;
         }
-
+        /* toastUI 에디터 컨테이너 */
         #toast-editor {
             margin-bottom: 15px;
+            border: 1px solid #ccc;
         }
     </style>
-    <script>
-        function addSelectedItem(selectElementId, listElementId) {
-            const selectElement = document.getElementById(selectElementId);
-            const selectedOption = selectElement.options[selectElement.selectedIndex];
-            const listElement = document.getElementById(listElementId);
-
-            if (selectedOption.value) {
-                const li = document.createElement("li");
-                li.textContent = selectedOption.text;
-                li.setAttribute("data-id", selectedOption.value);
-
-                const hiddenInput = document.createElement("input");
-                hiddenInput.type = "hidden";
-                hiddenInput.name = listElementId + "[]";
-                hiddenInput.value = selectedOption.value;
-
-                li.appendChild(hiddenInput);
-
-                const removeButton = document.createElement("button");
-                removeButton.type = "button";
-                removeButton.textContent = "Remove";
-                removeButton.onclick = function () {
-                    listElement.removeChild(li);
-                };
-
-                li.appendChild(removeButton);
-                listElement.appendChild(li);
-            }
-        }
-    </script>
 </head>
 <body>
 <h1>Register Book</h1>
-<form th:action="@{/admin/books/create}" method="post" th:object="${book}">
+
+<!-- 중요: enctype="multipart/form-data" 추가 -->
+<form th:action="@{/admin/books/create}"
+      th:object="${book}"
+      method="post"
+      enctype="multipart/form-data">
+
+    <!-- 제목 -->
     <div class="form-section">
         <label for="title">Title:</label>
-        <input type="text" id="title" name="title" th:field="*{title}" required/>
+        <input type="text" id="title" name="title"
+               th:field="*{title}" required />
     </div>
 
+    <!-- toast-ui를 이용한 Description 입력 -->
     <div class="form-section">
         <label for="description">Description:</label>
         <div id="toast-editor"></div>
+        <!-- 숨겨진 필드: toast-ui의 내용을 담아서 서버로 전송 -->
         <input type="hidden" id="description" name="description" th:field="*{description}"/>
     </div>
 
+    <!-- 책 목차(bookIndex) -->
     <div class="form-section">
         <label for="bookIndex">Book Index:</label>
-        <textarea id="bookIndex" name="bookIndex" th:field="*{bookIndex}" required></textarea>
+        <textarea id="bookIndex" name="bookIndex"
+                  th:field="*{bookIndex}" required>
+        </textarea>
     </div>
 
+    <!-- 출판사 -->
     <div class="form-section">
         <label for="publisher">Publisher:</label>
-        <input type="text" id="publisher" name="publisher" th:field="*{publisher}" required/>
+        <input type="text" id="publisher" name="publisher"
+               th:field="*{publisher}" required/>
     </div>
 
+    <!-- ISBN -->
     <div class="form-section">
         <label for="isbn">ISBN:</label>
-        <input type="text" id="isbn" name="isbn" th:field="*{isbn}" required/>
+        <input type="text" id="isbn" name="isbn"
+               th:field="*{isbn}" required/>
     </div>
 
+    <!-- 수량 -->
     <div class="form-section">
         <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" name="quantity" th:field="*{quantity}" required/>
+        <input type="number" id="quantity" name="quantity"
+               th:field="*{quantity}" required/>
     </div>
 
+    <!-- 가격 -->
     <div class="form-section">
         <label for="price">Price:</label>
-        <input type="number" id="price" name="price" th:field="*{price}" required/>
+        <input type="number" id="price" name="price"
+               th:field="*{price}" required/>
     </div>
 
+    <!-- 할인 가격 -->
     <div class="form-section">
         <label for="saleprice">Sale Price:</label>
-        <input type="number" id="saleprice" name="saleprice" th:field="*{saleprice}" required/>
+        <input type="number" id="saleprice" name="saleprice"
+               th:field="*{saleprice}" required/>
     </div>
 
+    <!-- 출판일 -->
     <div class="form-section">
         <label for="publicationDate">Publication Date:</label>
-        <input type="date" id="publicationDate" name="publicationDate" th:field="*{publicationDate}" required/>
+        <input type="date" id="publicationDate" name="publicationDate"
+               th:field="*{publicationDate}" required/>
     </div>
 
+    <!-- 페이지 수 -->
     <div class="form-section">
         <label for="pages">Pages:</label>
-        <input type="number" id="pages" name="pages" th:field="*{pages}" required/>
+        <input type="number" id="pages" name="pages"
+               th:field="*{pages}" required/>
     </div>
 
+    <!-- 도서 상태 -->
     <div class="form-section">
         <label for="bookStatus">Book Status:</label>
         <select id="bookStatus" name="bookStatus" th:field="*{bookStatus}" required>
@@ -199,59 +152,108 @@
         </select>
     </div>
 
+    <!-- 선물 포장 여부 -->
     <div class="form-section">
         <label for="giftPackaging">
-            <input type="checkbox" id="giftPackaging" name="giftPackaging" th:field="*{giftPackaging}"/> Gift Packaging
+            <input type="checkbox" id="giftPackaging"
+                   name="giftPackaging" th:field="*{giftPackaging}"/>
+            Gift Packaging
         </label>
     </div>
 
+    <!-- 기여자(Contributors) -->
     <div class="form-section">
         <h2>Contributors</h2>
         <select id="contributors" th:field="*{contributoridList}">
-            <option th:each="contributor : ${contributorList}" th:value="${contributor.contributorId}"
-                    th:text="${contributor.contributorName + ' (' + contributor.contributorRole + ')'}"></option>
+            <option th:each="contributor : ${contributorList}"
+                    th:value="${contributor.contributorId}"
+                    th:text="${contributor.contributorName}"></option>
         </select>
         <button type="button" onclick="addSelectedItem('contributors', 'contributorIdList')">Add Contributor</button>
         <ul id="contributorIdList"></ul>
     </div>
 
+    <!-- 카테고리(Categories) -->
     <div class="form-section">
         <h2>Categories</h2>
         <select id="categories" th:field="*{categoryIdList}">
-            <option th:each="category : ${categoryList}" th:value="${category.categoryId}"
+            <option th:each="category : ${categoryList}"
+                    th:value="${category.categoryId}"
                     th:text="${category.categoryName}"></option>
         </select>
         <button type="button" onclick="addSelectedItem('categories', 'categoryIdList')">Add Category</button>
         <ul id="categoryIdList"></ul>
     </div>
 
+    <!-- 태그(Tags) -->
     <div class="form-section">
         <h2>Tags</h2>
         <select id="tags" th:field="*{tagIdList}">
-            <option th:each="tag : ${tagList}" th:value="${tag.tagId}"
+            <option th:each="tag : ${tagList}"
+                    th:value="${tag.tagId}"
                     th:text="${tag.tagName}"></option>
         </select>
         <button type="button" onclick="addSelectedItem('tags', 'tagIdList')">Add Tag</button>
         <ul id="tagIdList"></ul>
     </div>
 
+    <!-- 중요: 썸네일 파일 업로드 -->
+    <div class="form-section">
+        <label for="thumbnail">Thumbnail Image:</label>
+        <input type="file" id="thumbnail" name="thumbnail" required />
+    </div>
+
+    <!-- 전송 버튼 -->
     <button type="submit">Submit</button>
 </form>
+
 <script>
+    // toast-ui Editor 초기화
     document.addEventListener("DOMContentLoaded", function () {
         const editor = new toastui.Editor({
-            el: document.querySelector('#toast-editor'),
+            el: document.getElementById('toast-editor'),
             height: '400px',
             initialEditType: 'wysiwyg',
             previewStyle: 'vertical'
         });
 
+        // 폼 submit 시, 에디터 내용을 hidden 필드(#description)에 저장
         const form = document.querySelector('form');
         form.addEventListener('submit', function () {
             const hiddenInput = document.getElementById('description');
             hiddenInput.value = editor.getHTML();
         });
     });
+
+    // select에서 항목 추가 → ul에 li로 표시하는 스크립트
+    function addSelectedItem(selectElementId, listElementId) {
+        const selectElement = document.getElementById(selectElementId);
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const listElement = document.getElementById(listElementId);
+
+        if (selectedOption && selectedOption.value) {
+            const li = document.createElement("li");
+            li.textContent = selectedOption.text;
+            li.setAttribute("data-id", selectedOption.value);
+
+            // 숨겨진 input에 실제 value를 담아 서버로 전송
+            const hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = listElementId + "[]";
+            hiddenInput.value = selectedOption.value;
+            li.appendChild(hiddenInput);
+
+            const removeButton = document.createElement("button");
+            removeButton.type = "button";
+            removeButton.textContent = "Remove";
+            removeButton.onclick = function () {
+                listElement.removeChild(li);
+            };
+
+            li.appendChild(removeButton);
+            listElement.appendChild(li);
+        }
+    }
 </script>
 </body>
 </html>

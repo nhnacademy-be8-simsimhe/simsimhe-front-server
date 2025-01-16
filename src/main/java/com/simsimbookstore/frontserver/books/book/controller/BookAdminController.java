@@ -11,14 +11,17 @@ import com.simsimbookstore.frontserver.books.contributor.dto.ContributorResponse
 import com.simsimbookstore.frontserver.books.contributor.service.ContributorService;
 import com.simsimbookstore.frontserver.books.tag.dto.TagResponseDto;
 import com.simsimbookstore.frontserver.books.tag.service.TagService;
+import com.simsimbookstore.frontserver.reviews.object.feign.ObjectServiceClient;
 import com.simsimbookstore.frontserver.util.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -31,6 +34,7 @@ public class BookAdminController {
     private final ContributorService contributorService;
     private final TagService tagService;
     private final CategoryService categoryService;
+    private final ObjectServiceClient objectServiceClient;
 
 
     /**
@@ -66,10 +70,18 @@ public class BookAdminController {
     public String createBook(@ModelAttribute @Valid BookRequestDto requestDto,
                              @RequestParam(value = "categoryIdList") List<Long> categoryIdList,
                              @RequestParam(value = "contributorIdList") List<Long> contributorIdList,
-                             @RequestParam(value = "tagIdList") List<Long> tagIdList) {
+                             @RequestParam(value = "tagIdList") List<Long> tagIdList,
+                             @RequestParam MultipartFile thumbnail) {
         requestDto.setCategoryIdList(categoryIdList != null ? categoryIdList : List.of());
         requestDto.setContributoridList(contributorIdList != null ? contributorIdList : List.of());
         requestDto.setTagIdList(tagIdList != null ? tagIdList : List.of());
+
+        List<MultipartFile> multipartFiles = new ArrayList<>();
+        multipartFiles.add(thumbnail);
+
+        List<String> strings = objectServiceClient.uploadObjects(multipartFiles); //오브젝트스토리지에 올라온 스트링문자열리스트
+        String thumbnailImage = strings.getFirst(); // 백앤드 도서 이미지에 넣을 변수
+        requestDto.setThumbnailImage(thumbnailImage);
 
         bookManagementService.createBook(requestDto);
         return "redirect:/admin/books/list";
