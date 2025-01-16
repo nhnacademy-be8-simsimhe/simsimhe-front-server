@@ -19,13 +19,13 @@ import java.util.*;
 @Getter
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails, OAuth2User {
-    private String principalName;
+    private String principalName; // 로컬인 경우 loginId, social인 경우 oauthId
     private String password;
     private Long userId;
     private List<GrantedAuthority> authorities;
     private UserStatus userStatus;
     private LocalDateTime latestLoginDate;
-
+    private boolean isSocial;
 
 
 

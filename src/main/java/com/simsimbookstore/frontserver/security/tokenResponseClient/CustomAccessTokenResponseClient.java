@@ -46,46 +46,5 @@ public class CustomAccessTokenResponseClient implements OAuth2AccessTokenRespons
         }
 
         return null;
-        //나머지는 디폴트로
     }
-
-//    private OAuth2AccessTokenResponse makePaycoToken(OAuth2AuthorizationCodeGrantRequest grantRequest){
-//        String tokenResponse = paycoAuthServiceClient.getAccessToken(
-//                "authorization_code",
-//                grantRequest.getClientRegistration().getClientId(),
-//                grantRequest.getClientRegistration().getClientSecret(),
-//                grantRequest.getAuthorizationExchange().getAuthorizationResponse().getCode()
-//        );
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        JsonNode rootNode = null;
-//        try {
-//            rootNode = objectMapper.readTree(userInfoJson);
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//        JsonNode memberNode = rootNode.path("data").path("member");
-//        String genderCode = memberNode.path("genderCode").asText();
-//
-//        Gender gender = null;
-//        if (Objects.nonNull(genderCode) && !genderCode.isEmpty()) {
-//            gender = Gender.valueOf(genderCode);
-//        }
-//
-//        SocialUserRequestDto socialUserRequestDto = SocialUserRequestDto.builder()
-//                .oauthId(memberNode.path("idNo").asText())
-//                .email(memberNode.path("email").asText())
-//                .mobile(memberNode.path("mobile").asText())
-//                .name(memberNode.path("name").asText())
-//                .gender(gender)
-//                .build();
-//
-//
-//        return OAuth2AccessTokenResponse
-//                .withToken(tokenResponse.accessToken())
-//                .refreshToken(tokenResponse.refreshToken())
-//                .expiresIn(Long.parseLong(tokenResponse.expiresIn()))
-//                .tokenType(OAuth2AccessToken.TokenType.BEARER)
-//                .build();
-//    }
 }

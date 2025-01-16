@@ -202,8 +202,8 @@
         <div class="col-md-12">
             <p class="fs-6 my-2 text-center">심심한 하루, 책 한권으로 채우기!</p>
             <div class="d-flex justify-content-between">
-                <form action="/logout" class="d-flex ms-auto" th:if="${isAuthenticated}">
-                    <button class="btn-light">로그아웃</button>
+                <form action="/logout" class="d-flex ms-auto" th:if="${isAuthenticated}" method="post">
+                    <button class="btn btn-danger">로그아웃</button>
                 </form>
             </div>
         </div>
@@ -317,14 +317,7 @@
                                 <li>
                                     <a href="index.html" class="dropdown-item fw-light">Single Post</a>
                                 </li>
-                                <li>
-                                    <a href="index.html" class="dropdown-item fw-light">Contact</a>
-                                </li>
-
                             </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link me-4" href="index.html">Contact</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link me-4" href="/users/myPage/user/userInfo">My Page</a>

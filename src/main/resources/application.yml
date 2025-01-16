@@ -31,7 +31,7 @@ server:
 
 
 jwt:
-  security: new-ultra-secure-secret-key-for-jwt!
+  security: super-strong-secret-key-that-is-256-bits-long!
 
 secure-key-manager:
   password: simsimbook
