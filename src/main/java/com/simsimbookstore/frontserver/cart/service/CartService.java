@@ -1,6 +1,6 @@
 package com.simsimbookstore.frontserver.cart.service;
 
-import com.simsimbookstore.frontserver.books.book.dto.BookRequestDto;
+
 import com.simsimbookstore.frontserver.cart.client.CartClient;
 import com.simsimbookstore.frontserver.cart.dto.CartRequestDto;
 import com.simsimbookstore.frontserver.cart.dto.CartResponseDto;
@@ -9,13 +9,11 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -23,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class CartService {
 
     private final CartClient cartClient;
@@ -32,7 +31,6 @@ public class CartService {
     /**
      * 도서 장바구니에 담는 메서드
      */
-
     public CartResponseDto addBookInCart(String customerId, CartRequestDto cartRequestDto) {
         // Redis에서 기존 장바구니 데이터 가져오기
         CartResponseDto cart = (CartResponseDto) redisTemplate.opsForHash().get(customerId, cartRequestDto.getBookId());
@@ -81,8 +79,10 @@ public class CartService {
         cookie.setMaxAge(7 * 24 * 60 * 60); // 쿠키 유지 7일
         response.addCookie(cookie);
 
+        redisTemplate.expire(guestId, 7, TimeUnit.DAYS);
+
         // Redis에 장바구니 초기화 및 TTL 설정
-        generateCart(guestId);
+//        generateCart(guestId);
 
         return guestId;
     }
@@ -91,7 +91,6 @@ public class CartService {
     /**
      * 유저 아이디에 맞는 장바구니 도서 정보를 가져오는 메서드
      */
-
     public List<CartResponseDto> getCartByUser(String customerId) {
         // Redis에서 장바구니 데이터 가져오기
         if (customerId == null || customerId.isEmpty()) {
@@ -105,9 +104,9 @@ public class CartService {
         for (Object cart : cartList.values()) {
             bookListInCart.add((CartResponseDto) cart);
         }
-
         return bookListInCart;
     }
+
 
     /**
      * 로그아웃,토큰 만료시 DB에 장바구니테이블로 옮기기 -> 회원이 로그아웃 할때
@@ -180,15 +179,15 @@ public class CartService {
         return getOrCreateGuestCustomerId(request, response);
     }
 
-    private void generateCart(String customerId) {
-        // 비회원 장바구니가 존재하지 않을 경우 초기화
-        Map<Object, Object> entries = redisTemplate.opsForHash().entries(customerId);
-        if (entries.isEmpty()) {
-            //비회원 장바구니 7일동안 유지
-            redisTemplate.opsForHash().put(customerId, "expire", LocalDateTime.now().plusDays(7).toString());
-            // Redis Key에 7일 TTL 설정
-            redisTemplate.expire(customerId, 7, TimeUnit.DAYS);
-        }
-    }
+//    private void generateCart(String customerId) {
+//        // 비회원 장바구니가 존재하지 않을 경우 초기화
+//        Map<Object, Object> entries = redisTemplate.opsForHash().entries(customerId);
+//        if (entries.isEmpty()) {
+//            //비회원 장바구니 7일동안 유지
+//            redisTemplate.opsForHash().put(customerId, "expire", LocalDateTime.now().plusDays(7).toString());
+//            // Redis Key에 7일 TTL 설정
+//            redisTemplate.expire(customerId, 7, TimeUnit.DAYS);
+//        }
+//    }
 
 }
