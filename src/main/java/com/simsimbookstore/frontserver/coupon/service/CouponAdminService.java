@@ -42,4 +42,20 @@ public class CouponAdminService {
     public PageResponseDto<CouponResponseDto> getTotalCoupons(int page, int size) {
         return couponAdminClient.getTotalCoupons(page, size);
     }
+
+    public List<CouponResponseDto> getExpiredCoupons() {
+        return couponAdminClient.getExpiredCoupons();
+    }
+
+    public List<CouponResponseDto> getUnusedButDeadlinePassedCoupon() {
+        return couponAdminClient.getUnusedButDeadlinePassedCoupon();
+    }
+
+    public void deleteCoupon(Long userId, Long couponId) {
+        couponAdminClient.deleteCoupon(userId, couponId);
+    }
+
+    public CouponResponseDto expiredCoupon(Long userId, Long couponId) {
+        return couponAdminClient.expiredCoupon(userId, couponId);
+    }
 }
