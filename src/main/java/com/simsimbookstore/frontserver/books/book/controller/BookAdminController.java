@@ -72,7 +72,7 @@ public class BookAdminController {
         requestDto.setTagIdList(tagIdList != null ? tagIdList : List.of());
 
         bookManagementService.createBook(requestDto);
-        return "redirect:/books";
+        return "redirect:/admin/books/list";
     }
 
     /**

@@ -29,26 +29,6 @@ public class CartController {
      * @param customUserDetails
      * @return
      */
-//    @GetMapping("/customer")
-//    public String getCartByUser(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-//
-//        if (customUserDetails == null || customUserDetails.getUserId() == null) {
-//            model.addAttribute("message", "로그인 부탁드립니다.");
-//            return "cart/cartDetail"; // 메시지와 함께 동일한 화면으로 이동
-//        }
-//        Long userId = customUserDetails.getUserId();
-//        List<CartResponseDto> cartList = cartService.getCartByUser(String.valueOf(userId));
-//
-//        int totalPrice = cartList.stream()
-//                .mapToInt(c -> c.getPrice() * c.getQuantity())
-//                .sum();
-//
-//        model.addAttribute("cartList", cartList);
-//        model.addAttribute("totalPrice", totalPrice);
-//        model.addAttribute("userId", String.valueOf(userId));
-//
-//        return "cart/cartDetail";
-//    }
     @GetMapping("/customer")
     public String getCartByUser(Model model,
                                 @AuthenticationPrincipal CustomUserDetails customUserDetails,

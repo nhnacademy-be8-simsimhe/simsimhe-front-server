@@ -31,7 +31,7 @@ server:
 
 
 jwt:
-  security: new-ultra-secure-secret-key-for-jwt!
+  security: super-strong-secret-key-that-is-256-bits-long!
 
 secure-key-manager:
   password: simsimbook
@@ -43,3 +43,4 @@ redis:
   host: 7098f39a110b4eb88c68ffd65f18774f
   port: 6379
   password: d183598bca794d998bada10b352f57ad
+

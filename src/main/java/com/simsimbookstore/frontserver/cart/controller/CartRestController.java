@@ -8,12 +8,12 @@ import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -31,20 +31,6 @@ public class CartRestController {
      * @param customUserDetails
      * @return
      */
-//    @PostMapping
-//    public ResponseEntity<?> addBookInCart(@RequestBody CartRequestDto requestDto,
-//                                           @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-//
-//        if (customUserDetails == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
-//        }
-//
-//        Long userId = customUserDetails.getUserId();
-//
-//        CartResponseDto cartResponseDto = cartService.addBookInCart(String.valueOf(userId), requestDto);
-//
-//        return ResponseEntity.ok(cartResponseDto);
-//    }
     @PostMapping
     public ResponseEntity<?> addBookInCart(@RequestBody CartRequestDto requestDto,
                                            @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -67,20 +53,6 @@ public class CartRestController {
      * @param customUserDetails
      * @return
      */
-//    @DeleteMapping("/book/{bookId}")
-//    public ResponseEntity<?> deleteBookInCart(@PathVariable(name = "bookId") String bookId,
-//                                              @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-//        if (customUserDetails == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
-//        }
-//
-//        Long userId = customUserDetails.getUserId();
-//
-//        CartResponseDto cartResponseDto = cartService.deleteBookInCart(String.valueOf(userId), bookId);
-//
-//
-//        return ResponseEntity.ok(cartResponseDto);
-//    }
     @DeleteMapping("/book/{bookId}")
     public ResponseEntity<?> deleteBookInCart(@PathVariable(name = "bookId") String bookId,
                                               @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -101,19 +73,6 @@ public class CartRestController {
      * @param customUserDetails
      * @return
      */
-//    @PatchMapping
-//    public ResponseEntity<?> updateCartQuantity(@RequestBody CartRequestDto requestDto,
-//                                                @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-//        if (customUserDetails == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
-//        }
-//
-//        Long userId = customUserDetails.getUserId();
-//
-//        CartResponseDto cartResponseDto = cartService.updateCartQuantity(String.valueOf(userId), requestDto);
-//
-//        return ResponseEntity.ok(cartResponseDto);
-//    }
     @PatchMapping
     public ResponseEntity<?> updateCartQuantity(@RequestBody CartRequestDto requestDto,
                                                 @AuthenticationPrincipal CustomUserDetails customUserDetails,
