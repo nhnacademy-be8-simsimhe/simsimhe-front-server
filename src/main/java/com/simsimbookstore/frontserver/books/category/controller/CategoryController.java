@@ -4,7 +4,6 @@ package com.simsimbookstore.frontserver.books.category.controller;
 import com.simsimbookstore.frontserver.books.category.dto.CategoryRequestDto;
 import com.simsimbookstore.frontserver.books.category.dto.CategoryResponseDto;
 import com.simsimbookstore.frontserver.books.category.service.CategoryService;
-import com.simsimbookstore.frontserver.books.contributor.dto.ContributorRequestDto;
 import com.simsimbookstore.frontserver.util.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

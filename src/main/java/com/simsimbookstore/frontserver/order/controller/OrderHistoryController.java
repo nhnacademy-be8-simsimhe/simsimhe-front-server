@@ -4,6 +4,7 @@ package com.simsimbookstore.frontserver.order.controller;
 import com.simsimbookstore.frontserver.order.dto.OrderHistoryResponseDto;
 import com.simsimbookstore.frontserver.order.service.OrderService;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
+import com.simsimbookstore.frontserver.util.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,7 +24,8 @@ public class OrderHistoryController {
 
     @GetMapping("/shop/users/orders")
     public String viewOrderHistory(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                   @PageableDefault(size = 10) Pageable pageable,
+                                   @RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "15") int size,
                                    Model model) {
 
         if (customUserDetails == null) {
@@ -31,13 +34,12 @@ public class OrderHistoryController {
 
         Long userId = customUserDetails.getUserId();
 
-        Page<OrderHistoryResponseDto> orderHistoryPage = orderService.getOrderHistory(userId, pageable);
+        PageResponse<OrderHistoryResponseDto> orderHistoryPage = orderService.getOrderHistory(userId, page, size);
 
-        model.addAttribute("orderHistories", orderHistoryPage.getContent());
-        model.addAttribute("page", orderHistoryPage);
+        model.addAttribute("orderHistories", orderHistoryPage); // 이름 확인
         model.addAttribute("userId", userId);
 
-
-        return "order/history/order_history"; // order-history.html 파일을 렌더링
+        return "order/history/order_history"; // Thymeleaf 템플릿 이름
     }
+
 }
