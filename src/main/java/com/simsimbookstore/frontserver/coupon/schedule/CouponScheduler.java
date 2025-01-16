@@ -3,7 +3,6 @@ package com.simsimbookstore.frontserver.coupon.schedule;
 import com.simsimbookstore.frontserver.config.RabbitMqConfig;
 import com.simsimbookstore.frontserver.coupon.dto.CouponType;
 import com.simsimbookstore.frontserver.coupon.dto.IssueCouponsRequestDto;
-import com.simsimbookstore.frontserver.coupon.service.CouponAdminService;
 import com.simsimbookstore.frontserver.users.user.dto.UserResponse;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.lang.Thread.sleep;
