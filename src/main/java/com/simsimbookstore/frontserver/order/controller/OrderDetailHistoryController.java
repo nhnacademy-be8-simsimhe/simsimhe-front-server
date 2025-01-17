@@ -96,6 +96,6 @@ public class OrderDetailHistoryController {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         model.addAttribute("totalWrapPrice", totalWrapPrice);
 
-        return "order/history/detail/order_history_detail";
+        return "order/history/detail/orderHistoryDetail";
     }
 }
