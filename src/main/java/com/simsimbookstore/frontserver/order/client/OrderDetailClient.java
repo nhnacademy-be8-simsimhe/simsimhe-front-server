@@ -9,5 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "order-detail-api-server", url = "http://localhost:8000/api/shop/users")
 public interface OrderDetailClient {
     @GetMapping("/{userId}/orders/{orderNumber}")
-    ResponseEntity<OrderDetailResponseDto> getOrderDetailHistory(@PathVariable Long userId, @PathVariable String orderNumber);
+    ResponseEntity<OrderDetailResponseDto> getOrderDetailHistory(@PathVariable Long userId,
+                                                                 @PathVariable String orderNumber);
 }
