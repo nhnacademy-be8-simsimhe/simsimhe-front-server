@@ -32,6 +32,8 @@ public class OrderRefundController {
             return "order/refund/cancelApplyPage";
         } else {
             // 반품 신청
+            model.addAttribute("orderName", orderName);
+            model.addAttribute("quantity", quantity);
             return "order/refund/returnApplyPage";
         }
     }
