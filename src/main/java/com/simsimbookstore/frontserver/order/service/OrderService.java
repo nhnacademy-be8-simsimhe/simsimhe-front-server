@@ -9,13 +9,10 @@ import com.simsimbookstore.frontserver.util.PageResponse;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -47,5 +44,9 @@ public class OrderService {
     public OrderDetailResponseDto orderDetailHistory(Long userId, String orderNumber) {
         ResponseEntity<OrderDetailResponseDto> orderDetailDto = orderDetailClient.getOrderDetailHistory(userId, orderNumber);
         return orderDetailDto.getBody();
+    }
+
+    public OrderDetailResponseDto guestOrderDetail(String orderNumber, String email) {
+        return orderDetailClient.guestOrderDetail(orderNumber, email);
     }
 }
