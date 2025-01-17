@@ -1,5 +1,6 @@
 package com.simsimbookstore.frontserver.order.dto;
 
+import com.simsimbookstore.frontserver.delivery.policy.dto.Delivery;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +33,7 @@ public class OrderDetailInfoDto {
     private String roadAddress;
     private String detailedAddress;
     private String reference;
+    private Delivery.DeliveryState deliveryState;
 
     // payment_method
     private String paymentMethod;
