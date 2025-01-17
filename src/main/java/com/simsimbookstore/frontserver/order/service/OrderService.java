@@ -52,7 +52,7 @@ public class OrderService {
 
     public OrderDetailResponseDto guestOrderDetail(String orderNumber, String email) {
         return orderDetailClient.guestOrderDetail(orderNumber, email);
-
+    }
     // 환불 신청
     public ResponseEntity<Void> applyRefund(String orderNumber, CancelRequestDto cancelRequestDto, Long userId) {
         return orderRefundClient.refund(userId, orderNumber, cancelRequestDto);
