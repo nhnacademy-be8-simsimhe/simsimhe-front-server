@@ -27,8 +27,8 @@ public class CouponScheduler {
     private final UserService userService;
     private final CouponAdminService couponAdminService;
 // 멀티 쓰레드 처리해야함. 스케줄러는 한개의 쓰레드로 동작하는것을 기본으로 함
-// 쿠폰 만료 처리도 해야함 -> 1시간에 한번씩 만료 처리, 하루에 한번씩 만료 쿠폰 삭제
 
+    // 매달 1일 0시 0분에 생일 쿠폰 발급
     @Scheduled(cron = "0 0 0 1 * *") //초 분 시 일 월 요일 -> 매달 1일 0시 0분 0초 (*은 모든 조건을 의미)
     public void issueBirthDayCoupon() throws InterruptedException {
         String month = String.valueOf(LocalDate.now().getMonthValue());
@@ -43,6 +43,8 @@ public class CouponScheduler {
             couponAdminService.issueCoupons(issueCouponsRequestDto);
         }
     }
+
+    // 매 시간마다 CouponStatus가 미사용상태인데 deadline이 지난 쿠폰들을 가져와서 만료상태 처리한다.
     @Scheduled(cron = "0 0 * * * *")
     public void setExpiredCoupon() {
         List<CouponResponseDto> coupons = couponAdminService.getUnusedButDeadlinePassedCoupon();
@@ -53,6 +55,8 @@ public class CouponScheduler {
             rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE_NAME,RabbitMqConfig.COUPON_EXPIRE_QUEUE_ROUTING_KEY,requestBody);
         }
     }
+
+    // 매일 0시 0분에 만료상태인 쿠폰들의 데이터를 삭제한다.
     @Scheduled(cron = "0 0 0 * * *")
     public void deleteCoupon() {
         List<CouponResponseDto> expiredCoupons = couponAdminService.getExpiredCoupons();
