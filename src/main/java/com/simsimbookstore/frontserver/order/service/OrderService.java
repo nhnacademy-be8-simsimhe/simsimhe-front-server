@@ -10,13 +10,10 @@ import com.simsimbookstore.frontserver.util.PageResponse;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,8 +49,13 @@ public class OrderService {
         return orderDetailDto.getBody();
     }
 
+
+    public OrderDetailResponseDto guestOrderDetail(String orderNumber, String email) {
+        return orderDetailClient.guestOrderDetail(orderNumber, email);
+
     // 환불 신청
     public ResponseEntity<Void> applyRefund(String orderNumber, CancelRequestDto cancelRequestDto, Long userId) {
         return orderRefundClient.refund(userId, orderNumber, cancelRequestDto);
+
     }
 }
