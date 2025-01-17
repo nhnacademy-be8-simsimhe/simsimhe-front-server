@@ -16,4 +16,5 @@ public interface OrderDetailClient {
     OrderDetailResponseDto guestOrderDetail(@RequestParam String orderNumber,
                                             @RequestParam String email);
 
+
 }
