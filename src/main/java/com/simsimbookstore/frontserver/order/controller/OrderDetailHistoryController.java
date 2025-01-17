@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -95,6 +96,6 @@ public class OrderDetailHistoryController {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         model.addAttribute("totalWrapPrice", totalWrapPrice);
 
-        return "order/history/detail/order_history_detail";
+        return "order/history/detail/orderHistoryDetail";
     }
 }
