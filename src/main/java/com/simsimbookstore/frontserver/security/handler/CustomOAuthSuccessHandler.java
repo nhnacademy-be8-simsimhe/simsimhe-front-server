@@ -2,7 +2,7 @@ package com.simsimbookstore.frontserver.security.handler;
 
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import com.simsimbookstore.frontserver.users.user.dto.JwtGenerateRequestDto;
-import com.simsimbookstore.frontserver.users.user.service.LoginSuccessHandlerService;
+import com.simsimbookstore.frontserver.users.user.service.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,16 +11,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
 public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private final LoginSuccessHandlerService loginSuccessHandlerService;
+    private final TokenService loginSuccessHandlerService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
@@ -49,7 +46,7 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 .isSocial(userDetails.isSocial())
                 .build();
 
-        loginSuccessHandlerService.loginProcess(jwtGenerateRequestDto,response);
+        loginSuccessHandlerService.createJwtCookie(jwtGenerateRequestDto,response);
 
         super.onAuthenticationSuccess(request, response, authentication);
     }

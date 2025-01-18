@@ -1,10 +1,8 @@
 package com.simsimbookstore.frontserver.config;
 
 
-import com.simsimbookstore.frontserver.cart.service.CartService;
 import com.simsimbookstore.frontserver.security.filter.TokenAuthenticationFilter;
 import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler;
-import com.simsimbookstore.frontserver.security.handler.CustomLogoutHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomLocalLoginSuccessHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomOAuthSuccessHandler;
 import com.simsimbookstore.frontserver.security.provider.CustomAuthenticationProvider;
@@ -15,7 +13,9 @@ import com.simsimbookstore.frontserver.users.user.feign.PaycoAuthServiceClient;
 import com.simsimbookstore.frontserver.users.user.service.CustomOauth2UserService;
 
 import com.simsimbookstore.frontserver.users.user.service.CustomUserDetailsService;
-import com.simsimbookstore.frontserver.users.user.service.LoginSuccessHandlerService;
+import com.simsimbookstore.frontserver.users.user.service.TokenService;
+import com.simsimbookstore.frontserver.users.user.service.UserService;
+import com.simsimbookstore.frontserver.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,16 +31,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final CustomOauth2UserService oauth2UserService;
-    private final LoginSuccessHandlerService loginSuccessHandlerService;
+    private final TokenService tokenService;
     private final PaycoAuthServiceClient paycoAuthServiceClient;
-    private final CartService cartService;
     private final TokenProvider tokenProvider;
+    private final UserService userservice;
+    private final JwtUtil jwtUtil;
 
 
     @Bean
@@ -73,7 +75,7 @@ public class SecurityConfig {
                 .tokenEndpoint(tokenEndpoint -> tokenEndpoint.accessTokenResponseClient(new CustomAccessTokenResponseClient(paycoAuthServiceClient)))
                 .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(oauth2UserService))
                 .loginPage("/index?showLoginModal=true")
-                .successHandler(new CustomOAuthSuccessHandler(loginSuccessHandlerService)))
+                .successHandler(new CustomOAuthSuccessHandler(tokenService)))
                 ;
 
 
@@ -81,7 +83,7 @@ public class SecurityConfig {
         http.formLogin(form->form.loginPage("/index?showLoginModal=true")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
-                .successHandler(new CustomLocalLoginSuccessHandler(loginSuccessHandlerService))
+                .successHandler(new CustomLocalLoginSuccessHandler(tokenService,userservice))
                 .failureHandler(new CustomAuthFailureHandler())
         );
 
@@ -90,7 +92,7 @@ public class SecurityConfig {
 //                .logoutUrl("/logout"));
 
 //      filter
-        http.addFilterBefore(new TokenAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new TokenAuthenticationFilter(jwtUtil,tokenProvider,tokenService), UsernamePasswordAuthenticationFilter.class);
 //        http
 //                .addFilterAt(new JwtAuthenticationFilter(authenticationManager(null),userService), UsernamePasswordAuthenticationFilter.class)
 //                .anonymous(AbstractHttpConfigurer::disable);
