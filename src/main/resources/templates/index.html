@@ -203,11 +203,15 @@
             <p class="fs-6 my-2 text-center">심심한 하루, 책 한권으로 채우기!</p>
             <div class="d-flex justify-content-between">
                 <form action="/logout" class="d-flex ms-auto" th:if="${isAuthenticated}" method="post">
-                    <button class="btn btn-danger">로그아웃</button>
+                    <button class="btn btn-danger btn-sm">로그아웃</button>
+                </form>
+                <form action="/shop/guest-order/search" method="get" class="d-flex ms-auto" th:if="${!isAuthenticated}">
+                    <button class="btn btn-primary btn-sm">비회원 주문 조회</button>
                 </form>
             </div>
         </div>
     </div>
+
 
     <nav id="header-nav" class="navbar navbar-expand-lg py-3">
         <div class="container">
