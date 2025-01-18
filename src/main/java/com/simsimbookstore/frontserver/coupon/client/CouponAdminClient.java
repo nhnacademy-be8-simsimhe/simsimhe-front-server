@@ -26,7 +26,7 @@ public interface CouponAdminClient {
                                                                    @RequestParam("size") int size);
 
     @PostMapping("/coupons/issue")
-    public Map<String, List<Long>> issueCoupons(@RequestBody IssueCouponsRequestDto requestDto);
+    public void issueCoupons(@RequestBody IssueCouponsRequestDto requestDto);
 
     @GetMapping("/users/{userId}/coupons")
     public PageResponseDto<CouponResponseDto> getCoupons(@PathVariable Long userId,

@@ -5,6 +5,7 @@ import com.simsimbookstore.frontserver.books.book.dto.BookRequestDto;
 import com.simsimbookstore.frontserver.books.book.dto.BookResponseDto;
 import com.simsimbookstore.frontserver.books.book.dto.BookStatusResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "book-admin-api-server", url = "http://localhost:8000/api/admin/shop/books")
@@ -12,10 +13,11 @@ public interface BookAdminClient {
 
     /**
      * 도서 등록
+     *
      * @param bookRequestDto
      * @return
      */
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     BookResponseDto createBook(@RequestBody BookRequestDto bookRequestDto);
 
     /**
@@ -40,6 +42,7 @@ public interface BookAdminClient {
 
     /**
      * 도서 포장 여부만 수정
+     *
      * @param bookId
      * @param requestDto
      * @return

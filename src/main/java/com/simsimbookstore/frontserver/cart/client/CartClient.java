@@ -16,6 +16,6 @@ public interface CartClient {
                                    @RequestParam(name = "quantity") int quantity);
 
     @PutMapping("/migrate/user/{userId}")
-    void CartToDB(@PathVariable(name = "userId") Long userId,
+    void cartToDb(@PathVariable(name = "userId") Long userId,
                   @RequestBody List<CartRequestDto> requestDtoList);
 }

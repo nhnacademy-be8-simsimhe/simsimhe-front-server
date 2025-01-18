@@ -1,33 +1,23 @@
 package com.simsimbookstore.frontserver.security.filter;
 
 
-import com.simsimbookstore.frontserver.util.JsonUtil;
-import io.jsonwebtoken.Claims;
+import com.simsimbookstore.frontserver.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 
 public class UserAuthenticationFilter extends OncePerRequestFilter {
 
     private final String HEADER = "Authorization";
     private final String PREFIX = "Bearer ";
 
-    private final JsonUtil jsonUtil;
+    private final JwtUtil jsonUtil;
 
-    public UserAuthenticationFilter(JsonUtil jsonUtil) {
+    public UserAuthenticationFilter(JwtUtil jsonUtil) {
         this.jsonUtil = jsonUtil;
     }
 
