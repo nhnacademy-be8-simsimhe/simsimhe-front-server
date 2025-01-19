@@ -4,6 +4,44 @@
   <title>Klover 리뷰</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .col-md-2 {
+      display: flex;
+      align-items: center; /* 수직 중앙 정렬 */
+      justify-content: center; /* 가로 중앙 정렬 */
+      padding-top: 8px; /* 상단 여백 줄임 */
+      padding-bottom: 0; /* 하단 여백 제거 */
+    }
+
+    .card img {
+      max-height: 120px;
+      object-fit: cover;
+    }
+
+
+    .review-content {
+      display: none;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .review-content.open {
+      display: block;
+    }
+
     .tab-button {
       cursor: pointer;
     }
@@ -11,6 +49,98 @@
       font-weight: bold;
       text-decoration: underline;
     }
+
+    .review-score {
+      display: flex;
+      gap: 2px; /* 별 사이 간격 */
+    }
+
+    .star-rating {
+      direction: rtl; /* 오른쪽에서 왼쪽으로 별 채우기 */
+      font-size: 1.5rem; /* 별 크기 조절 */
+      unicode-bidi: bidi-override; /* 별의 시각적 방향 유지 */
+      display: inline-flex;
+    }
+
+    .star-rating input[type="radio"] {
+      display: none; /* 라디오 버튼 숨기기 */
+    }
+
+    .star-rating label {
+      color: #ccc; /* 기본 별 색상 */
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .star-rating input[type="radio"]:checked ~ label {
+      color: #f5c518; /* 선택된 별 색상 (노란색) */
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+      color: #f5c518; /* 마우스를 올릴 때 색상 */
+    }
+
+    .review-score {
+      display: flex;
+      gap: 2px; /* 별 사이 간격 */
+    }
+
+    .star {
+      font-size: 1.5rem; /* 별 크기 */
+      color: #ccc; /* 기본 비활성 상태 색상 */
+    }
+
+    .star.filled {
+      color: #f5c518; /* 채워진 별 색상 (노란색) */
+    }
+
+    .review-header {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .review-header img {
+      width: 80px;
+      height: 110px;
+      object-fit: cover;
+    }
+
+
+    .review-content {
+      -webkit-line-clamp: 2; /* 최대 줄 수 설정 */
+      -webkit-box-orient: vertical; /* 수직 방향 설정 */
+      overflow: hidden; /* 넘치는 내용 숨김 */
+      display: block;
+      margin-top: 10px;
+      line-height: 1.6;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: all 0.3s ease; /* 애니메이션 효과 */
+    }
+
+    .review-content.expanded {
+      max-height: none;
+      white-space: normal;
+      overflow: visible;
+    }
+
+    /* 열기/닫기 버튼 스타일 */
+    .toggle-button {
+      cursor: pointer;
+      color: #007bff;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .toggle-button:focus {
+      outline: none;
+    }
+
+
   </style>
 </head>
 <body>
@@ -54,28 +184,254 @@
 
   <!-- 작성한 리뷰 -->
   <div id="submitted-reviews-section" class="mt-4 d-none">
-    <div th:if="${#lists.isEmpty(submittedReviews)}" class="text-center">
-      <p>작성한 리뷰가 없습니다.</p>
-    </div>
-    <div th:each="review : ${submittedReviews}">
-      <div class="row mb-4">
-        <div class="col-md-2">
-          <img th:src="${review.bookImagePath}" class="img-fluid rounded" alt="책 이미지">
-        </div>
-        <div class="col-md-8">
-          <h5 th:text="${review.bookTitle}">책 제목</h5>
-          <p th:text="${review.contributor}">저자</p>
-          <p>작성일: <span th:text="${review.createdAt}">2025.01.02</span></p>
-        </div>
-        <div class="col-md-2 d-flex align-items-center">
-          <button class="btn btn-secondary" disabled>작성 완료</button>
+    <div th:class="review-list">
+      <div th:if="${#lists.isEmpty(submittedReviews)}" class="text-center">
+        <p>작성한 리뷰가 없습니다.</p>
+      </div>
+
+
+      <div th:each="review : ${submittedReviews}" class="card mb-4 shadow-sm">
+        <div class="row g-0">
+          <div class="review-header">
+            <img th:src="${review.bookImagePath}" alt="책 이미지">
+            <div>
+              <h5 th:text="${review.bookTitle}" class="mb-1">책 제목</h5>
+              <p th:text="${review.contributor}" class="mb-0 text-muted">저자</p>
+            </div>
+          </div>
+          <hr/>
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                  <span id="reviewScore" class="review-score">
+                                  <span class="star" th:classappend="${review.score >= 1 ? 'filled' : ''}">&#9733;</span>
+                                  <span class="star" th:classappend="${review.score >= 2 ? 'filled' : ''}">&#9733;</span>
+                                  <span class="star" th:classappend="${review.score >= 3 ? 'filled' : ''}">&#9733;</span>
+                                  <span class="star" th:classappend="${review.score >= 4 ? 'filled' : ''}">&#9733;</span>
+                                  <span class="star" th:classappend="${review.score >= 5 ? 'filled' : ''}">&#9733;</span>
+                              </span>
+                </div>
+                <div>
+                  <span class="text-muted me-3">작성일: <span th:text="${review.createdAt}"></span></span>
+                  <a href="#" class="review-edit" th:data-review-id="${review.reviewId}">수정</a>
+<!--                  <a href="#" class="review-delete" th:data-review-id="${review.reviewId}">삭제</a>-->
+                </div>
+              </div>
+            </div>
+            <div class="review-content">
+              <p class="review-content" th:id="'content-'+${review.reviewId}" th:text="${review.content}">리뷰 내용</p>
+              <span class="toggle-button" th:onclick="'toggleReviewContent('+${review.reviewId}+')'">열기</span>
+            </div>
+
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<script>
+
+<div class="modal fade" id="editReviewModal" tabindex="-1" aria-labelledby="editReviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editReviewModalLabel">리뷰 수정</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editReviewForm">
+          <input type="hidden" id="editReviewId">
+          <div class="mb-3">
+            <label for="editReviewTitle" class="form-label">제목</label>
+            <input type="text" class="form-control" id="editReviewTitle" required>
+          </div>
+          <div class="mb-3">
+            <label for="editReviewContent" class="form-label">내용</label>
+            <textarea maxlength="3000" class="form-control" id="editReviewContent" rows="3" required></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="editReviewScore" class="form-label">평점</label>
+            <div id="editReviewScore" class="star-rating">
+              <input type="radio" id="star5" name="score" value="5"><label for="star5">&#9733;</label>
+              <input type="radio" id="star4" name="score" value="4"><label for="star4">&#9733;</label>
+              <input type="radio" id="star3" name="score" value="3"><label for="star3">&#9733;</label>
+              <input type="radio" id="star2" name="score" value="2"><label for="star2">&#9733;</label>
+              <input type="radio" id="star1" name="score" value="1"><label for="star1">&#9733;</label>
+            </div>
+          </div>
+
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary" id="saveReviewChanges">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+
+    function toggleReviewContent(reviewId) {
+      console.log("hello")
+      const content = document.getElementById(`content-${reviewId}`);
+      const toggleButton = content.nextElementSibling;
+
+      if (content.classList.contains("expanded")) {
+        content.classList.remove("expanded");
+        toggleButton.textContent = "열기";
+      } else {
+        content.classList.add("expanded");
+        toggleButton.textContent = "접기";
+      }
+    }
+
+    // 리뷰 평점 설정
+    document.addEventListener("DOMContentLoaded", () => {
+      // 리뷰 리스트의 별점 설정
+      const starRatings = document.querySelectorAll('.review-score');
+      starRatings.forEach(starRating => {
+        const labels = starRating.querySelectorAll('.star');
+        // 클릭 이벤트 차단
+        labels.forEach(label => {
+          label.style.pointerEvents = 'none'; // 클릭 비활성화
+        });
+      });
+
+      // 수정 모달에서 별점 설정
+      const editReviewModal = document.getElementById('editReviewModal');
+      editReviewModal.addEventListener('show.bs.modal', () => {
+        const modalStarRating = document.getElementById('editReviewScore');
+        const labels = modalStarRating.querySelectorAll('label');
+        const inputs = modalStarRating.querySelectorAll('input[type="radio"]');
+
+        // 별점 초기화
+        labels.forEach(label => {
+          label.style.pointerEvents = 'auto'; // 클릭 활성화
+        });
+
+        // 별 클릭 시 색상 업데이트
+        inputs.forEach(input => {
+          input.addEventListener('change', () => {
+            const selectedValue = parseInt(input.value, 10);
+            labels.forEach((label, index) => {
+              if (5 - index <= selectedValue) {
+                label.style.color = '#f5c518'; // 선택된 별 색상 (노란색)
+              } else {
+                label.style.color = '#ccc'; // 기본 색상 (회색)
+              }
+            });
+          });
+        });
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", () =>{
+      const reviewListContainer = document.querySelector(".review-list")
+      console.log("reviews section in")
+      if (reviewListContainer){
+        reviewListContainer.addEventListener("click", (event) => {
+          const target = event.target;
+          console.log("click")
+
+          if (target.closest(".review-edit")){
+            const reviewEditButton = target.closest(".review-edit");
+            handleReviewEditButtonClick(reviewEditButton);
+          }
+
+
+          if (target.closest(".review-delete")){
+            const reviewDeleteButton = target.closest(".review-delete");
+            handleReviewDeleteButtonClick(reviewDeleteButton);
+          }
+
+        })
+      }
+    })
+
+
+
+    function handleReviewEditButtonClick(button){
+      const reviewId = button.getAttribute('data-review-id');
+
+      // 서버에서 리뷰 데이터를 가져오기
+      fetch(`/reviews/${reviewId}`)
+              .then(response => response.json())
+              .then(data => {
+                // 모달에 데이터 채우기
+                document.getElementById('editReviewId').value = data.reviewId;
+                document.getElementById('editReviewTitle').value = data.title;
+                document.getElementById('editReviewContent').value = data.content;
+
+                const score = data.score;
+                const starInput = document.querySelector(`#editReviewScore input[value="${score}"]`);
+                if (starInput) {
+                  starInput.checked = true;
+                }
+
+
+                // 모달 열기
+                const editReviewModal = new bootstrap.Modal(document.getElementById('editReviewModal'));
+                editReviewModal.show();
+              })
+              .catch(error => {
+                console.error('리뷰 데이터를 불러오는데 실패했습니다.', error);
+                alert('리뷰 데이터를 불러오는데 실패했습니다.');
+              });
+    }
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // 저장 버튼 클릭 이벤트
+      document.getElementById('saveReviewChanges').addEventListener('click', () => {
+        const reviewId = document.getElementById('editReviewId').value;
+        const updatedReview = {
+          score: Number(document.querySelector('#editReviewScore input:checked').value),
+          title: document.getElementById('editReviewTitle').value,
+          content: document.getElementById('editReviewContent').value
+        };
+
+        console.log("Content length:", document.getElementById('editReviewContent').value.length);
+
+
+        const formData = new URLSearchParams();
+        formData.append('score', document.querySelector('#editReviewScore input:checked').value);
+        formData.append('title', document.getElementById('editReviewTitle').value);
+        formData.append('content', document.getElementById('editReviewContent').value);
+
+
+        // 서버에 수정 요청 보내기
+        fetch(`/reviews/${reviewId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: formData.toString()
+        })
+                .then(response => {
+                  if (response.ok) {
+                    alert('리뷰가 수정되었습니다.');
+                    location.reload(); // 페이지 새로고침
+                  } else {
+                    throw new Error('리뷰 수정에 실패했습니다.');
+                  }
+                })
+                .catch(error => {
+                  console.error('리뷰 수정 중 문제가 발생했습니다.', error);
+                  alert('리뷰 수정 중 문제가 발생했습니다.');
+                });
+      });
+    });
+
+
+
+
   document.addEventListener('DOMContentLoaded', function () {
     const availableTab = document.getElementById('available-reviews-tab');
     const submittedTab = document.getElementById('submitted-reviews-tab');

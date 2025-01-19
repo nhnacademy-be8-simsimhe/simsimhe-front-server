@@ -7,20 +7,21 @@ import com.simsimbookstore.frontserver.delivery.policy.service.DeliveryPolicySer
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/delivery-policies")
 public class DeliveryPolicyController {
-
+    private static final String DELIVERY_POLICY_MAIN ="redirect:/admin/delivery-policies";
     private final DeliveryPolicyService deliveryPolicyService;
 
     /**
@@ -47,14 +48,12 @@ public class DeliveryPolicyController {
      * 배달 정책 추가
      */
     @PostMapping("/create")
-    public String createDeliveryPolicy(@ModelAttribute("deliveryPolicy") @Valid DeliveryPolicyRequestDto requestDto,
-                                       BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "admin/delivery/deliveryPolicyCreate";
-        }
+    public String createDeliveryPolicy(
+            @ModelAttribute("deliveryPolicy") @Valid DeliveryPolicyRequestDto requestDto) {
         deliveryPolicyService.createDeliveryPolicy(requestDto);
-        return "redirect:/admin/delivery-policies";
+        return DELIVERY_POLICY_MAIN;
     }
+
 
     /**
      * 배달 정책 활성/비활성화
@@ -62,7 +61,7 @@ public class DeliveryPolicyController {
     @PostMapping("/toggle/{id}")
     public String toggleDeliveryPolicy(@PathVariable("id") Long id) {
         deliveryPolicyService.toggleDeliveryPolicy(id);
-        return "redirect:/admin/delivery-policies";
+        return DELIVERY_POLICY_MAIN;
     }
 
     /**
@@ -71,6 +70,6 @@ public class DeliveryPolicyController {
     @PostMapping("/delete/{id}")
     public String deleteDeliveryPolicy(@PathVariable("id") Long id) {
         deliveryPolicyService.deleteDeliveryPolicy(id);
-        return "redirect:/admin/delivery-policies";
+        return DELIVERY_POLICY_MAIN;
     }
 }

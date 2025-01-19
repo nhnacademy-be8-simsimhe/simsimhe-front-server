@@ -12,7 +12,7 @@ public interface ElasticsearchClient {
     public void saveData(@RequestBody SearchBookDto searchBookDto);
 
     @GetMapping("/document")
-    public PageResponse<SearchBookDto> getDatas(@RequestParam String keyword, @RequestParam(required = false) String sort, @RequestParam(defaultValue = "0") int page);
+    public PageResponse<SearchBookDto> getDatas(@RequestParam String keyword, @RequestParam(required = false) String sort, @RequestParam(defaultValue = "1") int page);
 
     @DeleteMapping("/document/{id}")
     public void deleteData(@PathVariable String id);

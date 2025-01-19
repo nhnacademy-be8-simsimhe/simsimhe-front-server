@@ -38,8 +38,6 @@
             <option value="">새로운 배송지</option>
             <option th:each="address : ${addresses}"
                     th:value="${address.addressId}"
-                    th:data-receiver-name="${address.receiverName}"
-                    th:data-receiver-number="${address.receiverPhoneNumber}"
                     th:data-zip-code="${address.postalCode}"
                     th:data-address="${address.roadAddress}"
                     th:data-detail-address="${address.detailedAddress}"

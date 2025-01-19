@@ -28,8 +28,8 @@ public interface ReviewServiceClient {
     @GetMapping("/{bookId}/reviews/like")
     public Page<Review> getAllReviewsOrderByLike(@PathVariable Long bookId, @RequestParam int page, @RequestParam int size);
 
-    @GetMapping("/{bookId}/reviews/recent")
-    public Page<ReviewLikeCountDTO> getAllReviewsOrderByRecent(@PathVariable Long bookId, @RequestParam Long userId, @RequestParam int page, @RequestParam int size);
+    @GetMapping("/{bookId}/reviews")
+    public Page<ReviewLikeCountDTO> getAllReviewsOrderByRecent(@PathVariable Long bookId, @RequestParam Long userId, @RequestParam int page, @RequestParam int size, @RequestParam String sort);
 
     @PostMapping("/{bookId}/reviews/{reviewId}")
     public Review updateReview(@PathVariable Long bookId, @PathVariable Long reviewId, @RequestBody ReviewRequestDTO reviewRequestDTO);

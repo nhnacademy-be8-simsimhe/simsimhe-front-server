@@ -35,7 +35,7 @@ public class DormantController {
         }
 
         String code = doorayService.sendReleaseCode();
-        ModelAndView modelAndView = new ModelAndView("/users/dormant");
+        ModelAndView modelAndView = new ModelAndView("users/dormant");
         session.setAttribute("userId", userId);
         session.setAttribute("code", code);
 //        modelAndView.addObject("code", code);

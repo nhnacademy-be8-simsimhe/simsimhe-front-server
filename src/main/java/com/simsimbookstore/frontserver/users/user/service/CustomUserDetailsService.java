@@ -37,6 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .authorities(new ArrayList<>())
                 .userStatus(localUserResponse.getUserStatus())
                 .latestLoginDate(localUserResponse.getLatestLoginDate())
+                .isSocial(false)
                 .build();
 
         for (RoleName role : localUserResponse.getRoles()){

@@ -31,6 +31,7 @@ public class HomeController {
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("isAuthenticated", Objects.nonNull(principal));
 
+        
         List<BookListResponse> newBooks = bookGetService.getNewBooks();
         List<TagResponseDto> tags = tagService.getAllTags();
         List<CategoryResponseDto> categorys = categoryService.getALlCategorys();

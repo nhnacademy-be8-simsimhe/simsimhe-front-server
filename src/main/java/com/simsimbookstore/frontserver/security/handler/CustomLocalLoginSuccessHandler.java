@@ -1,13 +1,13 @@
 package com.simsimbookstore.frontserver.security.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
+import com.simsimbookstore.frontserver.token.dto.JwtGenerateRequestDto;
+import com.simsimbookstore.frontserver.token.mapper.JwtMapper;
 import com.simsimbookstore.frontserver.users.user.dto.UserLateLoginDateUpdateRequestDto;
-import com.simsimbookstore.frontserver.users.user.dto.UserResponse;
+import com.simsimbookstore.frontserver.token.service.TokenService;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +16,11 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+
 
 @RequiredArgsConstructor
-public class LocalLoginSuccessHandler implements AuthenticationSuccessHandler {
+public class CustomLocalLoginSuccessHandler implements AuthenticationSuccessHandler {
+    private final TokenService tokenService;
     private final UserService userService;
 
     @Override
@@ -29,29 +30,18 @@ public class LocalLoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        // 토큰 발급
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        String jsonResponse = userService.generateJwt(customUserDetails.getUsername());
-        ObjectMapper objectMapper = new ObjectMapper();
-        HashMap<String,String> tokens = objectMapper.readValue(jsonResponse, HashMap.class);
-        String accessToken = tokens.get("accessToken");
-        String refreshToken = tokens.get("refreshToken");
+        JwtGenerateRequestDto jwtGenerateRequestDto = JwtMapper.toJwtGenerateRequestDto(customUserDetails);
 
-
-        Cookie accessTokenCookie = new Cookie("accessToken",accessToken);
-        accessTokenCookie.setMaxAge(3600); //1시간
-        response.addCookie(accessTokenCookie);
-
-        Cookie refreshTokenCookie = new Cookie("refreshToken",refreshToken);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setMaxAge(7 * 24 * 3600); //7일
-        response.addCookie(refreshTokenCookie);
+        // 토큰 발급
+        tokenService.createJwtCookie(jwtGenerateRequestDto, response);
 
         // 마지막 로그인 시간 업데이트
         UserLateLoginDateUpdateRequestDto requestDto = UserLateLoginDateUpdateRequestDto.builder()
                 .latestLoginDate(LocalDateTime.now())
                 .build();
-        userService.updateUserLatestLoginDate(customUserDetails.getUserId(), requestDto);
+
+        userService.updateUserLatestLoginDate(jwtGenerateRequestDto.getUserId(), requestDto);
     }
 }

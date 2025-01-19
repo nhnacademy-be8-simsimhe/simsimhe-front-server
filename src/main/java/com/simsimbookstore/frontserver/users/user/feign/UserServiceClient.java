@@ -1,16 +1,15 @@
 package com.simsimbookstore.frontserver.users.user.feign;
 
+import com.simsimbookstore.frontserver.config.AuthenticationFeignConfig;
 import com.simsimbookstore.frontserver.users.user.dto.UserLateLoginDateUpdateRequestDto;
 import com.simsimbookstore.frontserver.users.user.dto.UserResponse;
-import com.simsimbookstore.frontserver.users.user.dto.UserStatus;
 import com.simsimbookstore.frontserver.users.user.dto.UserStatusUpdateRequestDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-@FeignClient(name = "userApi", url = "http://localhost:8000/api/users")
+@FeignClient(name = "userApi", url = "http://localhost:8000/api/users", configuration = AuthenticationFeignConfig.class)
 public interface UserServiceClient {
 
     @GetMapping("/{userId}")
@@ -27,5 +26,4 @@ public interface UserServiceClient {
 
     @GetMapping
     List<UserResponse> getAllUserByBirth(@RequestParam("birthMonth") String birthMonth);
-
 }

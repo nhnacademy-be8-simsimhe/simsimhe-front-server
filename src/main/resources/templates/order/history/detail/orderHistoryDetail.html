@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>주문 상세 내역</title>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .order-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .section {
+      margin-bottom: 30px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 20px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    .info-row {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    .info-label {
+      width: 150px;
+      font-weight: bold;
+      color: #666;
+    }
+    .info-value {
+      flex: 1;
+    }
+    .order-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .order-table th {
+      background-color: #f8f8f8;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 2px solid #ddd;
+    }
+    .order-table td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+    .price-info {
+      background-color: #f8f8f8;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .price-method {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      color: #6c757d;
+    }
+    .total-price {
+      font-size: 18px;
+      font-weight: bold;
+      color: #dc3545;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      background-color: #007bff;
+      color: white;
+      font-size: 14px;
+    }
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+    }
+    .btn-refund {
+      background-color: #F86D72;
+      color: white;
+    }
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+<div class="order-container">
+  <div class="section">
+    <div class="section-title">주문 상세 내역</div>
+    <div class="info-row">
+      <div class="info-label">주문번호</div>
+      <div class="info-value" th:text="${orderDetail.orderNumber}"> </div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">주문일자</div>
+      <div class="info-value" th:text="${orderDetail.getOrderDate()}"> </div>
+    </div>
+    <div class="info-row">
+      <!-- 주문 상태 : 주문대기, 배송중, 완료, 반품, 주문취소 -->
+      <div class="info-label">주문상태</div>
+      <div class="info-value">
+        <span class="status-badge" th:text="${orderDetail.orderState}"> </span>
+      </div>
+      <div class="info-label">|&nbsp &nbsp 송장번호</div>
+      <div class="info-value" th:text="${orderDetail.trackingNumber}"> </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">주문 상품</div>
+    <table class="order-table">
+      <thead>
+      <tr>
+        <th>상품정보</th>
+        <th>수량</th>
+        <th>상품금액</th>
+        <th>할인된금액</th>
+        <th>포장선택</th>
+        <th>쿠폰사용</th>
+        <th>배송상태</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="orderList : ${orderProductInfo}">
+        <td th:text="${orderList.bookTitle}"></td>
+        <td th:text="${orderList.quantity}"></td>
+        <td th:text="${orderList.originalPrice}"></td>
+        <td th:text="${orderList.discountPrice}"></td>
+        <td th:text="${orderList.packageName} + '(' + ${orderList.packagePrice} + ')'"></td>
+        <td th:text="${orderList.couponName} + '(' + ${orderList.couponPrice} + ')'"></td>
+        <td class="status-badge" th:text="${orderDetail.deliveryState}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">구매자 정보</div>
+    <div class="info-row">
+      <div class="info-label">주문자</div>
+      <div class="info-value" th:text="${orderDetail.senderName}"> </div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">연락처</div>
+      <div class="info-value" th:text="${orderDetail.senderPhoneNumber}"> </div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">이메일</div>
+      <div class="info-value" th:text="${orderDetail.senderEmail}"> </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">배송지 정보</div>
+    <div class="info-row">
+      <div class="info-label">수령인</div>
+      <div class="info-value" th:text="${orderDetail.receiverName}"> </div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">연락처</div>
+      <div class="info-value" th:text="${orderDetail.receiverPhoneNumber}"> </div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">우편번호</div>
+      <div class="info-value" th:text="${orderDetail.postalCode}"> </div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">배송주소</div>
+      <div class="info-value" th:text="${orderDetail.roadAddress}"> </div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">배송요청사항</div>
+      <div class="info-value" th:text="${orderDetail.reference}"> </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">주문 금액</div>
+    <div class="price-info">
+      <div class="price-row">
+        <span>상품 금액</span>
+        <span th:text="${orderDetail.originalTotalPrice}">원</span>
+      </div>
+      <div class="price-row">
+        <span>포장 비용</span>
+        <span th:text="'+' + ${totalWrapPrice} + '원'"></span>
+      </div>
+      <div class="price-row">
+        <span>쿠폰 할인</span>
+        <span th:text="'-' + ${totalCouponPrice} + '원'"></span>
+      </div>
+      <div class="price-row">
+        <span>포인트 사용</span>
+        <span th:text="'-' + ${orderDetail.pointUse} + 'P'">
+        </span>
+      </div>
+      <div class="price-row">
+        <span>배송비</span>
+        <span th:text="'+' + ${orderDetail.deliveryPrice} + '원'">
+        </span>
+      </div>
+      <hr>
+      <div class="price-row total-price">
+        <span>최종 결제금액</span>
+        <span th:text="${orderDetail.totalPrice}">원</span>
+      </div>
+      <div class="price-method">
+        <span>&nbsp; ㄴ 결제 방법</span>
+        <span th:text="${orderDetail.paymentMethod}"></span>
+      </div>
+      <div class="price-method">
+        <span>포인트 적립</span>
+        <span th:text="'+' + ${orderDetail.pointEarn} + '원'"></span>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align: center;">
+    <form method="get" th:action="'/shop/users/orders/detail/' + ${orderNumber} + '/refund'">
+      <div th:each="item : ${orderProductInfo}">
+        <input type="hidden" name="orderName" th:value="${item.bookTitle}" />
+        <input type="hidden" name="quantity" th:value="${item.quantity}" min="1" />
+      </div>
+      <input type="hidden" name="deliveryState" th:value="${orderDetail.deliveryState}" />
+      <button class="btn btn-refund" type="submit" value="환불 신청"> 환불 신청 </button>
+    </form>
+    <button class="btn btn-secondary" onclick="goBack()">목록으로</button>
+  </div>
+</div>
+
+<script>
+  function printOrder() {
+    window.print();
+  }
+
+  function goBack() {
+    window.history.back();
+  }
+
+  // 동적으로 주문 정보를 업데이트하는 함수
+  function updateOrderInfo(orderData) {
+    // 주문 정보 업데이트 로직
+    console.log('주문 정보가 업데이트되었습니다.');
+  }
+
+  window.onload = function() {
+    // 초기 데이터 로드
+    console.log('페이지가 로드되었습니다.');
+  }
+</script>
+</body>
+</html>
