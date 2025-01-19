@@ -6,14 +6,14 @@ import com.simsimbookstore.frontserver.security.handler.CustomAuthFailureHandler
 import com.simsimbookstore.frontserver.security.handler.CustomLocalLoginSuccessHandler;
 import com.simsimbookstore.frontserver.security.handler.CustomOAuthSuccessHandler;
 import com.simsimbookstore.frontserver.security.provider.CustomAuthenticationProvider;
-import com.simsimbookstore.frontserver.security.provider.TokenProvider;
+import com.simsimbookstore.frontserver.token.provider.TokenProvider;
 import com.simsimbookstore.frontserver.security.requestRepository.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.simsimbookstore.frontserver.security.tokenResponseClient.CustomAccessTokenResponseClient;
 import com.simsimbookstore.frontserver.users.user.feign.PaycoAuthServiceClient;
 import com.simsimbookstore.frontserver.users.user.service.CustomOauth2UserService;
 
 import com.simsimbookstore.frontserver.users.user.service.CustomUserDetailsService;
-import com.simsimbookstore.frontserver.users.user.service.TokenService;
+import com.simsimbookstore.frontserver.token.service.TokenService;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
 import com.simsimbookstore.frontserver.util.JwtUtil;
 import lombok.RequiredArgsConstructor;

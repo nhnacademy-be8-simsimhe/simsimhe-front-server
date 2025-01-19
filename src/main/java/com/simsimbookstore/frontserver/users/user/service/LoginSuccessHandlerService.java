@@ -1,8 +1,7 @@
 package com.simsimbookstore.frontserver.users.user.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
-import com.simsimbookstore.frontserver.users.user.dto.JwtGenerateRequestDto;
+import com.simsimbookstore.frontserver.token.dto.JwtGenerateRequestDto;
 import com.simsimbookstore.frontserver.users.user.dto.UserLateLoginDateUpdateRequestDto;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;

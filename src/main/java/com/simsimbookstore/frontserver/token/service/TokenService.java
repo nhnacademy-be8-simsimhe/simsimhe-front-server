@@ -1,18 +1,16 @@
-package com.simsimbookstore.frontserver.users.user.service;
+package com.simsimbookstore.frontserver.token.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.simsimbookstore.frontserver.users.user.dto.JwtGenerateRequestDto;
-import com.simsimbookstore.frontserver.users.user.dto.UserLateLoginDateUpdateRequestDto;
-import com.simsimbookstore.frontserver.users.user.feign.JwtServiceClient;
+import com.simsimbookstore.frontserver.token.dto.JwtGenerateRequestDto;
+import com.simsimbookstore.frontserver.token.feign.JwtServiceClient;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -24,7 +22,7 @@ public class TokenService {
         return jwtServiceClient.generateJwt(requestDto);
     }
 
-    public void createJwtCookie(JwtGenerateRequestDto jwtGenerateRequestDto, HttpServletResponse response){
+    public Map<String,String> createJwtCookie(JwtGenerateRequestDto jwtGenerateRequestDto, HttpServletResponse response){
         // JWT 생성 및 응답 설정
         String jsonResponse = jwtServiceClient.generateJwt(jwtGenerateRequestDto);
         HashMap<String, String> tokens = null;
@@ -33,8 +31,14 @@ public class TokenService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+
         addCookieToResponse("accessToken", tokens.get("accessToken"), 3600, response); // 1시간
         addCookieToResponse("refreshToken", tokens.get("refreshToken"), 7 * 24 * 3600, response); // 7일
+
+        Map<String,String> tokenMap = new HashMap<>();
+        tokenMap.put("accessToken", tokens.get("accessToken"));
+        tokenMap.put("refreshToken", tokens.get("refreshToken"));
+        return tokenMap;
     }
 
     private void addCookieToResponse(String name, String value, int maxAge, HttpServletResponse response) {
