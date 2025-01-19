@@ -1,8 +1,7 @@
-package com.simsimbookstore.frontserver.users.user.feign;
+package com.simsimbookstore.frontserver.token.feign;
 
-import com.simsimbookstore.frontserver.users.user.dto.JwtGenerateRequestDto;
+import com.simsimbookstore.frontserver.token.dto.JwtGenerateRequestDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 

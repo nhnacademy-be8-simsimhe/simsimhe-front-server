@@ -1,11 +1,14 @@
 package com.simsimbookstore.frontserver.payment.controller;
 
 import com.simsimbookstore.frontserver.order.dto.OrderFacadeRequestDto;
+import com.simsimbookstore.frontserver.order.dto.RetryOrderRequestDto;
 import com.simsimbookstore.frontserver.payment.dto.ConfirmResponseDto;
 import com.simsimbookstore.frontserver.payment.service.PaymentService;
+import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -56,5 +59,11 @@ public class PaymentController {
             model.addAttribute("message", request.getParameter("message"));
         }
         return "payment/fail";
+    }
+
+    @PostMapping("/shop/payment/retry")
+    public ResponseEntity<?> paymentRetry(@AuthenticationPrincipal CustomUserDetails customUserDetail, @RequestBody RetryOrderRequestDto dto) {
+        dto.setUserId(customUserDetail.getUserId());
+        return ResponseEntity.ok(paymentService.paymentRetry(dto));
     }
 }

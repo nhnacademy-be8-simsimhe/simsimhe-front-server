@@ -1,8 +1,8 @@
 package com.simsimbookstore.frontserver.users.user.service;
 
+import com.simsimbookstore.frontserver.token.dto.JwtGenerateRequestDto;
 import com.simsimbookstore.frontserver.users.user.dto.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserService {
