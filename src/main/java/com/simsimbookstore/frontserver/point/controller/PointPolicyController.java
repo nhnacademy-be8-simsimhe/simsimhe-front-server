@@ -18,13 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("admin/pointPolicies")
 public class PointPolicyController {
-
+    private static final String POINT_POLICY = "redirect:/admin/pointPolicies";
     private final PointPolicyService pointPolicyService;
 
     @GetMapping
     public String getAllPolicies(Model model) {
         List<PointPolicyResponseDto> policies = pointPolicyService.getAll();
-        System.out.println("Policies: " + policies); // 디버깅: 데이터 확인
         model.addAttribute("policies", policies);
         return "admin/point/policy/list";
     }
@@ -41,7 +40,7 @@ public class PointPolicyController {
     @PostMapping
     public String createPolicy(@ModelAttribute PointPolicyRequestDto dto) {
         pointPolicyService.create(dto);
-        return "redirect:/admin/pointPolicies";
+        return POINT_POLICY;
 
     }
 
@@ -57,17 +56,14 @@ public class PointPolicyController {
     @PostMapping("/update/{id}")
     public String updatePolicy(@PathVariable Long id,
                                @ModelAttribute("policy") PointPolicyRequestDto dto) {
-        // 디버깅
-        System.out.println("Received isAvailable = " + dto.isAvailable());
-        // 서비스 호출
         pointPolicyService.update(id, dto);
-        return "redirect:/admin/pointPolicies";
+        return POINT_POLICY;
     }
 
     @PostMapping("/delete/{id}")
     public String deletePolicy(@PathVariable Long id) {
         pointPolicyService.delete(id);
-        return "redirect:/admin/pointPolicies";
+        return POINT_POLICY;
 
     }
 }

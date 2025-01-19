@@ -1,7 +1,6 @@
 package com.simsimbookstore.frontserver.point.service;
 
 import com.simsimbookstore.frontserver.point.client.PointPolicyClient;
-import com.simsimbookstore.frontserver.point.dto.PointPolicy;
 import com.simsimbookstore.frontserver.point.dto.PointPolicyRequestDto;
 import com.simsimbookstore.frontserver.point.dto.PointPolicyResponseDto;
 import java.util.List;

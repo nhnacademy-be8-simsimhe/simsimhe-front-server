@@ -72,9 +72,9 @@ public class ReviewController {
 
 
     @GetMapping("/reviews")
-    public ResponseEntity<?> getReviewsView(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long bookId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    public ResponseEntity<?> getReviewsView(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long bookId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "latest") String sort){
         Long loginUserId = customUserDetails != null ? customUserDetails.getUserId() : -1;
-        Page<ReviewLikeCountDTO> reviews = reviewServiceClient.getAllReviewsOrderByRecent(bookId, loginUserId, page, size);
+        Page<ReviewLikeCountDTO> reviews = reviewServiceClient.getAllReviewsOrderByRecent(bookId, loginUserId, page, size, sort);
         for (ReviewLikeCountDTO review : reviews){
             log.info("review : {}", review);
         }
