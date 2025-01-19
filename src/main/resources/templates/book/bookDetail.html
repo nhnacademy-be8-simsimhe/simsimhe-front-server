@@ -319,10 +319,14 @@
     <section class="mt-5">
         <div>
             <h5 class="text-center fs-6 mb-4" th:text="'리뷰 (' + ${reviews.getTotalElements()} + ')'"></h5>
-<!--            <form action="/reviews/create" class="d-flex ms-auto">-->
-<!--                <input type="hidden" name="bookId" th:value="${book.bookId}">-->
-<!--                <button>리뷰 작성</button>-->
-<!--            </form>-->
+
+            <label for="sort" class="me-2 align-self-center"></label>
+            <select id="sort" name="sort" class="form-select w-auto" th:onchange="handleSortChange(this.value)">
+                <option value="latest" th:selected="${sort == 'latest'}">최신순</option>
+                <option value="recommend" th:selected="${sort == 'recommend'}">좋아요순</option>
+                <option value="score" th:selected="${sort == 'score'}">별점순</option>
+            </select>
+
         </div>
 
         <div th:if="${#lists.isEmpty(reviews.content)}" class="text-center">
@@ -478,6 +482,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
+    function handleSortChange(selectedValue){
+        console.log("선택된 값 : ", selectedValue);
+        // fetch api로 리뷰 다시 정렬하게 만들기
+    }
 
 
     // 리뷰 평점 설정
@@ -905,7 +914,6 @@
         }
 
     });
-
 
 
 </script>
