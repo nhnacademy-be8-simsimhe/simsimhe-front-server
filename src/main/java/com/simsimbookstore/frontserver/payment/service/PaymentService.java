@@ -1,6 +1,7 @@
 package com.simsimbookstore.frontserver.payment.service;
 
 import com.simsimbookstore.frontserver.order.dto.OrderFacadeRequestDto;
+import com.simsimbookstore.frontserver.order.dto.RetryOrderRequestDto;
 import com.simsimbookstore.frontserver.payment.client.PaymentClient;
 import com.simsimbookstore.frontserver.payment.dto.ConfirmResponseDto;
 import com.simsimbookstore.frontserver.payment.dto.SuccessRequestDto;
@@ -24,5 +25,9 @@ public class PaymentService {
 
     public ResponseEntity<ConfirmResponseDto> confirm(String paymentKey, String orderId, BigDecimal amount) {
         return paymentClient.successRequestDto(paymentKey, orderId, amount);
+    }
+
+    public String paymentRetry(RetryOrderRequestDto dto) {
+        return paymentClient.paymentRetry(dto);
     }
 }

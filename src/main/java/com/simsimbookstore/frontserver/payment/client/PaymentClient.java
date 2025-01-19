@@ -1,6 +1,7 @@
 package com.simsimbookstore.frontserver.payment.client;
 
 import com.simsimbookstore.frontserver.order.dto.OrderFacadeRequestDto;
+import com.simsimbookstore.frontserver.order.dto.RetryOrderRequestDto;
 import com.simsimbookstore.frontserver.payment.dto.ConfirmResponseDto;
 import com.simsimbookstore.frontserver.payment.dto.SuccessRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,4 +25,7 @@ public interface PaymentClient {
     ResponseEntity<ConfirmResponseDto> successRequestDto(@RequestParam String paymentKey,
                                                          @RequestParam String orderId,
                                                          @RequestParam BigDecimal amount);
+
+    @PostMapping("/retry")
+    String paymentRetry(@RequestBody RetryOrderRequestDto dto);
 }
