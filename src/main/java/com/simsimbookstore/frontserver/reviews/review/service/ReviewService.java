@@ -16,8 +16,8 @@ public class ReviewService {
 
 
     // 생성한 날짜대로 리뷰 조회
-    public Page<ReviewLikeCountDTO> getAllReviewsOrderByRecent(Long bookId, Long userId, int page, int size){
-        return reviewClient.getAllReviewsOrderByRecent(bookId,userId, page, size);
+    public Page<ReviewLikeCountDTO> getAllReviewsOrderByRecent(Long bookId, Long userId, int page, int size, String sort){
+        return reviewClient.getAllReviewsOrderByRecent(bookId,userId, page, size, sort);
     };
 
 
