@@ -41,6 +41,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             try {
                 jwtUtil.parse(accessToken);
                 setAuthentication(accessToken);
+                response.addHeader("Authorization", "Bearer " + accessToken);
             } catch (ExpiredJwtException accessTokenExpiredException) {
                 // 리프레쉬토큰으로 재발급
                 Optional<Cookie> optionalRefreshToken = CookieUtils.getCookie(request, "refreshToken");
@@ -48,8 +49,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                     String refreshToken = optionalRefreshToken.get().getValue();
                     try {
                         refreshTokenAuthenticate(refreshToken,response);
-                        response.sendRedirect(request.getRequestURI());
-                        return;
+//                        response.sendRedirect(request.getRequestURI());
+//                        return;
                     } catch (Exception e) {
                         log.error(e.getMessage());
                         filterChain.doFilter(request, response);
@@ -69,8 +70,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                     String refreshToken = optionalRefreshToken.get().getValue();
                     try {
                         refreshTokenAuthenticate(refreshToken,response);
-                        response.sendRedirect(request.getRequestURI());
-                        return;
+//                        response.sendRedirect(request.getRequestURI());
+//                        return;
                     } catch (Exception e) {
                         filterChain.doFilter(request, response);
                         return;
@@ -97,6 +98,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         // 토큰 쿠키 생성
         Map<String, String> tokenMap = tokenService.createJwtCookie(jwtGenerateRequestDto, response);
         String newAccessToken = tokenMap.get("accessToken");
+        response.addHeader("Authorization", "Bearer " + newAccessToken);
         setAuthentication(newAccessToken);
     }
 }
