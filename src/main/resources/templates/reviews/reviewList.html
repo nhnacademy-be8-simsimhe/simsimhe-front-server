@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Klover 리뷰</title>
+  <title>Review List</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
@@ -43,11 +43,28 @@
     }
 
     .tab-button {
+      padding: 8px 16px;
+      border: none;
+      background-color: #ddd; /* 비활성화 상태 색상 */
+      color: #333;
       cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: background-color 0.3s, color 0.3s;
     }
+
+    .tab-button:last-child {
+      border-right: none; /* 마지막 버튼은 경계선 제거 */
+    }
+
+
     .tab-button.active {
-      font-weight: bold;
-      text-decoration: underline;
+      background-color: #dc3545; /* 활성화 상태 색상 (빨간색) */
+      color: white;
+    }
+
+    .tab-button:hover {
+      background-color: #bbb; /* 비활성화 버튼 hover 색상 */
     }
 
     .review-score {
@@ -140,94 +157,127 @@
       outline: none;
     }
 
+    .card-header {
+      display: flex; /* Flexbox 사용 */
+      align-items: center; /* 세로 가운데 정렬 */
+      padding: 10px;
+      gap: 10px;
+      background-color: #f8f9fa; /* 배경색 추가 (선택 사항) */
+      border-bottom: 1px solid #ddd; /* 하단 경계선 추가 (선택 사항) */
+    }
+
+    .card-header h4 {
+      margin: 0; /* 기본 여백 제거 */
+      font-size: 16px; /* 글씨 크기 조정 (필요에 따라 변경 가능) */
+    }
+
+
 
   </style>
+  <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 <body>
+
+<div th:replace="~{users/myPage/myPageNav.html}"></div>
+
 <div class="container mt-5">
-  <h2 class="text-center mb-4">심심이의 서재 리뷰</h2>
+  <h4 class="text-center mb-4">심심이의 서재 리뷰</h4>
   <div class="d-flex justify-content-between align-items-center">
     <div>
+<!--      <button class="tab-button active" id="available-reviews-tab">작성 가능한 리뷰(<span th:text="${!#lists.isEmpty(availableReviews) ? availableReviews.totalElements : 0}">0</span>)</button>-->
+<!--      <button class="tab-button" id="submitted-reviews-tab">작성한 리뷰(<span th:text="${!#lists.isEmpty(submittedReviews) ? submittedReviews.totalElements : 0}">0</span>)</button>-->
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
       <button class="tab-button active" id="available-reviews-tab">작성 가능한 리뷰(<span th:text="${!#lists.isEmpty(availableReviews) ? availableReviews.totalElements : 0}">0</span>)</button>
       <button class="tab-button" id="submitted-reviews-tab">작성한 리뷰(<span th:text="${!#lists.isEmpty(submittedReviews) ? submittedReviews.totalElements : 0}">0</span>)</button>
     </div>
-    <button class="btn btn-outline-secondary">결제 완료 순</button>
-  </div>
 
-  <!-- 작성 가능한 리뷰 -->
-  <div id="available-reviews-section" class="mt-4">
-    <div th:if="${#lists.isEmpty(availableReviews)}" class="text-center">
-      <p>작성 가능한 리뷰가 없습니다.</p>
-    </div>
-    <div th:each="review : ${availableReviews}">
-      <div class="row mb-4">
-        <div class="col-md-2">
-          <img th:src="${review.bookImagePath}" class="img-fluid rounded" alt="책 이미지">
+    <div class="card-body">
+
+      <div id="available-reviews-section" class="mt-4">
+        <div th:if="${#lists.isEmpty(availableReviews)}" class="text-center">
+          <p>작성 가능한 리뷰가 없습니다.</p>
         </div>
-        <div class="col-md-8">
-          <h5 th:text="${review.bookTitle}">책 제목</h5>
-          <p th:text="${review.contributor}">저자</p>
-          <p>결제일: <span th:text="${review.orderDate}">2025.01.01</span></p>
-<!--          <p>리워드: e교환권 <span th:text="${review.reward}">200</span>원</p>-->
-<!--          <p>작성기한: <span th:text="${review.expirationDate}">2025.04.01</span> (<span th:text="${review.daysLeft}">D-82</span>)</p>-->
-        </div>
-        <div class="col-md-2 d-flex align-items-center">
-<!--          <button >구매 리뷰 작성</button>-->
-          <form action="/reviews/create" class="d-flex ms-auto">
-            <input type="hidden" name="bookId" th:value="${review.bookId}">
-            <button class="btn btn-primary">리뷰 작성</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 작성한 리뷰 -->
-  <div id="submitted-reviews-section" class="mt-4 d-none">
-    <div th:class="review-list">
-      <div th:if="${#lists.isEmpty(submittedReviews)}" class="text-center">
-        <p>작성한 리뷰가 없습니다.</p>
-      </div>
-
-
-      <div th:each="review : ${submittedReviews}" class="card mb-4 shadow-sm">
-        <div class="row g-0">
-          <div class="review-header">
-            <img th:src="${review.bookImagePath}" alt="책 이미지">
-            <div>
-              <h5 th:text="${review.bookTitle}" class="mb-1">책 제목</h5>
-              <p th:text="${review.contributor}" class="mb-0 text-muted">저자</p>
+        <div th:each="review : ${availableReviews}">
+          <div class="row mb-4">
+            <div class="col-md-2">
+              <img th:src="${review.bookImagePath}" class="img-fluid rounded" alt="책 이미지">
+            </div>
+            <div class="col-md-8">
+              <h5 th:text="${review.bookTitle}">책 제목</h5>
+              <p th:text="${review.contributor}">저자</p>
+              <p>결제일: <span th:text="${review.orderDate}">2025.01.01</span></p>
+              <!--          <p>리워드: e교환권 <span th:text="${review.reward}">200</span>원</p>-->
+              <!--          <p>작성기한: <span th:text="${review.expirationDate}">2025.04.01</span> (<span th:text="${review.daysLeft}">D-82</span>)</p>-->
+            </div>
+            <div class="col-md-2 d-flex align-items-center">
+              <!--          <button >구매 리뷰 작성</button>-->
+              <form action="/reviews/create" class="d-flex ms-auto">
+                <input type="hidden" name="bookId" th:value="${review.bookId}">
+                <button class="btn btn-primary">리뷰 작성</button>
+              </form>
             </div>
           </div>
-          <hr/>
-            <div class="card-body">
-              <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                  <span id="reviewScore" class="review-score">
+        </div>
+      </div>
+
+      <!-- 작성한 리뷰 -->
+      <div id="submitted-reviews-section" class="mt-4 d-none">
+        <div th:class="review-list">
+          <div th:if="${#lists.isEmpty(submittedReviews)}" class="text-center">
+            <p>작성한 리뷰가 없습니다.</p>
+          </div>
+
+
+          <div th:each="review : ${submittedReviews}" class="card mb-4 shadow-sm">
+            <div class="row g-0">
+              <div class="review-header">
+                <img th:src="${review.bookImagePath}" alt="책 이미지">
+                <div>
+                  <h5 th:text="${review.bookTitle}" class="mb-1">책 제목</h5>
+                  <p th:text="${review.contributor}" style="color: #F86D72 !important;" class="mb-0 text-muted">저자</p>
+                </div>
+              </div>
+              <hr/>
+              <div class="review-body">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center">
+                  <span id="reviewScore" style="padding-left: 10px;" class="review-score">
                                   <span class="star" th:classappend="${review.score >= 1 ? 'filled' : ''}">&#9733;</span>
                                   <span class="star" th:classappend="${review.score >= 2 ? 'filled' : ''}">&#9733;</span>
                                   <span class="star" th:classappend="${review.score >= 3 ? 'filled' : ''}">&#9733;</span>
                                   <span class="star" th:classappend="${review.score >= 4 ? 'filled' : ''}">&#9733;</span>
                                   <span class="star" th:classappend="${review.score >= 5 ? 'filled' : ''}">&#9733;</span>
                               </span>
-                </div>
-                <div>
-                  <span class="text-muted me-3">작성일: <span th:text="${review.createdAt}"></span></span>
-                  <a href="#" class="review-edit" th:data-review-id="${review.reviewId}">수정</a>
-<!--                  <a href="#" class="review-delete" th:data-review-id="${review.reviewId}">삭제</a>-->
+                  </div>
+                  <div>
+                    <span class="text-muted me-3" style= "color: #3A3A3A !important;" >작성일: <span th:text="${#strings.substringBefore(review.createdAt, 'T')}"></span></span>
+                    <a href="#" class="review-edit" style="padding-right: 10px" th:data-review-id="${review.reviewId}">수정</a>
+                    <!--                  <a href="#" class="review-delete" th:data-review-id="${review.reviewId}">삭제</a>-->
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="review-content">
-              <p class="review-content" th:id="'content-'+${review.reviewId}" th:text="${review.content}">리뷰 내용</p>
-              <span class="toggle-button" th:onclick="'toggleReviewContent('+${review.reviewId}+')'">열기</span>
-            </div>
+              <div class="review-content">
+                <p class="review-content" style="padding: 5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" th:id="'content-'+${review.reviewId}" th:text="${review.content}">리뷰 내용</p>
+                <span class="toggle-button" style="display: none;" th:id="'toggle-button-'+${review.reviewId}" th:onclick="'toggleReviewContent('+${review.reviewId}+')'">열기</span>
+              </div>
 
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    </div>
+
+
   </div>
-</div>
+
+  <!-- 작성 가능한 리뷰 -->
+
 
 
 <div class="modal fade" id="editReviewModal" tabindex="-1" aria-labelledby="editReviewModalLabel" aria-hidden="true">
@@ -289,6 +339,28 @@
         toggleButton.textContent = "접기";
       }
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const reviewContents = document.querySelectorAll(".review-content");
+
+      reviewContents.forEach(content => {
+        console.log("content-id "+ content)
+        console.log("content-id "+ content.id)
+        const toggleButton = document.getElementById(`toggle-button-${content.id.split('-')[1]}`);
+
+        if (toggleButton == null){
+            return;
+        }
+
+        // Check if content is truncated
+        console.log("scrollWidth : " + content.scrollWidth)
+        console.log("clientWidth : " + content.clientWidth)
+        if (content.scrollWidth > content.clientWidth) {
+          toggleButton.style.display = "inline-block"; // Show the button if truncated
+        }
+      });
+    });
+
 
     // 리뷰 평점 설정
     document.addEventListener("DOMContentLoaded", () => {
