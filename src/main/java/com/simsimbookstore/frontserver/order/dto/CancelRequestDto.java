@@ -9,9 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class CancelRequestDto {
-    private List<String> cancelProduct;
     private String cancelReason;
-    private List<Integer> quantity;
     private LocalDateTime refundedAt;
 
     public CancelRequestDto() {
