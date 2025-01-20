@@ -243,9 +243,11 @@
     <form method="get" th:action="'/shop/users/orders/detail/' + ${orderNumber} + '/refund'">
       <div th:each="item : ${orderProductInfo}">
         <input type="hidden" name="orderName" th:value="${item.bookTitle}" />
-        <input type="hidden" name="quantity" th:value="${item.quantity}" min="1" />
+        <input type="hidden" name="quantity" th:value="${item.quantity}" />
+        <input type="hidden" name="orderBookState" th:value="${item.orderBookState}" />
       </div>
       <input type="hidden" name="deliveryState" th:value="${orderDetail.deliveryState}" />
+      <input type="hidden" name="orderState" th:value="${orderDetail.orderState}" />
       <button class="btn btn-refund" type="submit" value="환불 신청"> 환불 신청 </button>
     </form>
     <button class="btn btn-secondary" onclick="goBack()">목록으로</button>

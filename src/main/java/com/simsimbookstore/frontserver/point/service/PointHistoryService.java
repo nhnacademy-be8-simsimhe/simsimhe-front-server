@@ -5,7 +5,6 @@ import com.simsimbookstore.frontserver.point.dto.PointHistoryResponseDto;
 import com.simsimbookstore.frontserver.util.PageResponse;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
