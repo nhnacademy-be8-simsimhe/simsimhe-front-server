@@ -44,9 +44,9 @@ logging:
   level:
     org:
       springframework:
-        security: debug
-        security.oauth2: debug
-
+        security: info
+        security.oauth2: info
+        cache: trace
 redis:
   database: 220
 
