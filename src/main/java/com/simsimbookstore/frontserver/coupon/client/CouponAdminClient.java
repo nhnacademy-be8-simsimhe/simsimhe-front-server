@@ -4,6 +4,7 @@ import com.simsimbookstore.frontserver.coupon.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,4 +38,18 @@ public interface CouponAdminClient {
     @GetMapping("/coupons")
     public PageResponseDto<CouponResponseDto> getTotalCoupons(@RequestParam("page") int page,
                                                               @RequestParam("size") int size);
+
+    @GetMapping("/coupons/expired")
+    public List<CouponResponseDto> getExpiredCoupons();
+
+    @GetMapping("/coupons/unused/deadline-pass")
+    public List<CouponResponseDto> getUnusedButDeadlinePassedCoupon();
+
+    @PostMapping("/users/{userId}/coupons/expired")
+    public CouponResponseDto expiredCoupon(@PathVariable Long userId,
+                                                           @RequestParam Long couponId);
+
+    @DeleteMapping("/users/{userId}/coupons/{couponId}")
+    public void deleteCoupon(@PathVariable Long userId,
+                                             @PathVariable Long couponId);
 }
