@@ -8,7 +8,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,9 +47,8 @@ public class WrapTypeAdminController {
      * 포장지 추가
      */
     @PostMapping("/create")
-    public String createWrapType(@ModelAttribute("wrapType") @Valid WrapTypeRequestDto requestDto,
-                                 BindingResult bindingResult,
-                                 Model model) {
+    public String createWrapType(@ModelAttribute("wrapType") @Valid WrapTypeRequestDto requestDto
+    ) {
         wrapService.createWrapType(requestDto);
         return "redirect:/admin/wrap-types";
     }

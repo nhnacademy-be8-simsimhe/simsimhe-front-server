@@ -1,7 +1,8 @@
 package com.simsimbookstore.frontserver.users.user.service.impl;
 
+import com.simsimbookstore.frontserver.token.dto.JwtGenerateRequestDto;
 import com.simsimbookstore.frontserver.users.user.dto.*;
-import com.simsimbookstore.frontserver.users.user.feign.JwtServiceClient;
+import com.simsimbookstore.frontserver.token.feign.JwtServiceClient;
 import com.simsimbookstore.frontserver.users.user.feign.UserServiceClient;
 import com.simsimbookstore.frontserver.users.user.service.UserService;
 import lombok.RequiredArgsConstructor;

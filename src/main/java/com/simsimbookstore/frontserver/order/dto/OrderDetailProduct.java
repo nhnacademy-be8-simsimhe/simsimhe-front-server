@@ -21,4 +21,5 @@ public class OrderDetailProduct {
     private BigDecimal packagePrice; // 포장지 가격
     private String couponName; // 쿠폰 이름
     private BigDecimal couponPrice;  // 할인 가격 (쿠폰)
+    private OrderBookState orderBookState;  // 주문 도서 상태
 }
