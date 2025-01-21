@@ -244,9 +244,10 @@
               <img th:src="${review.bookImagePath}" class="img-fluid rounded" alt="책 이미지">
             </div>
             <div class="col-md-8">
-              <h5 th:text="${review.bookTitle}">책 제목</h5>
+              <p th:text="${review.title}">책 제목</p>
               <p th:text="${review.contributor}">저자</p>
-              <p>결제일: <span th:text="${review.orderDate}">2025.01.01</span></p>
+
+              <p>결제일: <span th:text="${#strings.substringBefore(review.orderDate, 'T')}">2025.01.01</span></p>
               <!--          <p>리워드: e교환권 <span th:text="${review.reward}">200</span>원</p>-->
               <!--          <p>작성기한: <span th:text="${review.expirationDate}">2025.04.01</span> (<span th:text="${review.daysLeft}">D-82</span>)</p>-->
             </div>

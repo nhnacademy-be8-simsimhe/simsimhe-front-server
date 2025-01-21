@@ -43,7 +43,7 @@ public class ReviewController {
         }
         Long l = pointHistoryClient.earnReviewPoint(customUserDetails.getUserId(), review.getReviewId());
         log.info("earnpoint: {}", l);
-        return "redirect:/";
+        return "redirect:/users/myPage/reviews";
     }
 
     @GetMapping("/reviews/create")

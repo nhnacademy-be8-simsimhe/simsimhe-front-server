@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UserAvailableReviewsDTO {
     private Long bookId;
-    private String bookTitle;
+    private String title;
     private String contributor;
     private String bookImagePath;
     private LocalDateTime orderDate;
