@@ -6,6 +6,7 @@ import com.simsimbookstore.frontserver.books.book.dto.BookListResponse;
 import com.simsimbookstore.frontserver.books.book.dto.BookResponseDto;
 import com.simsimbookstore.frontserver.util.PageResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

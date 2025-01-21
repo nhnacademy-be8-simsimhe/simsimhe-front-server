@@ -6,14 +6,16 @@ import com.simsimbookstore.frontserver.books.category.dto.CategoryResponseDto;
 import com.simsimbookstore.frontserver.books.category.service.CategoryService;
 import com.simsimbookstore.frontserver.books.tag.dto.TagResponseDto;
 import com.simsimbookstore.frontserver.books.tag.service.TagService;
+import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
+import com.simsimbookstore.frontserver.users.role.dto.RoleName;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,29 +27,29 @@ public class HomeController {
     private final TagService tagService;
     private final CategoryService categoryService;
 
-
-    @GetMapping({"/index","/"})
-    public ModelAndView index(Principal principal) {
+    @GetMapping({"/index", "/"})
+    public ModelAndView index(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("isAuthenticated", Objects.nonNull(principal));
+        modelAndView.addObject("isAuthenticated", Objects.nonNull(customUserDetails));
 
-        
-        List<BookListResponse> newBooks = bookGetService.getNewBooks();
-        List<TagResponseDto> tags = tagService.getAllTags();
-        List<CategoryResponseDto> categorys = categoryService.getALlCategorys();
-        List<BookListResponse> popularityBooks = bookGetService.getPopularityBook();
-
-        // 카테고리를 6개씩 그룹화
-        List<List<CategoryResponseDto>> groupedCategories = new ArrayList<>();
-        int groupSize = 6;
-        for (int i = 0; i < categorys.size(); i += groupSize) {
-            groupedCategories.add(categorys.subList(i, Math.min(i + groupSize, categorys.size())));
+        if (Objects.nonNull(customUserDetails)) {
+            modelAndView.addObject("isAdmin", customUserDetails.isAdmin());
         }
 
+        List<BookListResponse> newBooks = bookGetService.getNewBooks();
+        List<TagResponseDto> tags = tagService.getAllTags();
+        List<CategoryResponseDto> categories = categoryService.getALlCategorys();
+
+        // 카테고리 계층 구조 가져오기
+        List<CategoryResponseDto> categoryHierarchy = categoryService.getCategoryHierarchy(categories);
+
+        List<BookListResponse> popularityBooks = bookGetService.getPopularityBook();
+
         modelAndView.addObject("newBooks", newBooks);
-        modelAndView.addObject("popularityBooks",popularityBooks);
+        modelAndView.addObject("popularityBooks", popularityBooks);
         modelAndView.addObject("tags", tags);
-        modelAndView.addObject("groupedCategories", groupedCategories);
+        modelAndView.addObject("categoryHierarchy", categoryHierarchy);
+
         return modelAndView;
     }
 }
