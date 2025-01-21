@@ -8,6 +8,7 @@ import com.simsimbookstore.frontserver.reviews.review.feign.ReviewServiceClient;
 import com.simsimbookstore.frontserver.reviews.review.feign.UserReviewServiceClient;
 import com.simsimbookstore.frontserver.reviews.reviewimage.feign.ReviewImageServcieClient;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -53,28 +54,28 @@ public class ReviewController {
     }
 
     @GetMapping("/users/myPage/reviews")
-    public String createReviewListView(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam(required = false) Long bookId, Model model){
+    public String createReviewListView(@AuthenticationPrincipal CustomUserDetails customUserDetails
+            , @RequestParam(required = false) Long bookId
+            , Model model
+            , HttpServletRequest request){
+
         Page<UserAvailableReviewsDTO> availableReviews = userReviewServiceClient.getEligibleBooksForReview(customUserDetails.getUserId(), 0, 10);
         Page<UserReviewsDTO> submittedReviews = userReviewServiceClient.getUserReviews(customUserDetails.getUserId(), 0,10);
 
         model.addAttribute("availableReviews",availableReviews);
         model.addAttribute("submittedReviews",submittedReviews);
+        model.addAttribute("requestURI", request.getRequestURI());
+
         return "reviews/reviewList";
     }
 
 
-    @GetMapping("/myPage/reviews")
-    public String getMyReviewList(@RequestParam Long bookId, Model model){
-
-        model.addAttribute("bookId", bookId);
-        return "reviews/review";
-    }
-
 
     @GetMapping("/reviews")
-    public ResponseEntity<?> getReviewsView(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long bookId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "latest") String sort){
+    public ResponseEntity<?> getReviewsView(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long bookId, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "latest") String sort){
         Long loginUserId = customUserDetails != null ? customUserDetails.getUserId() : -1;
-        Page<ReviewLikeCountDTO> reviews = reviewServiceClient.getAllReviewsOrderByRecent(bookId, loginUserId, page, size, sort);
+
+        Page<ReviewLikeCountDTO> reviews = reviewServiceClient.getAllReviewsOrderByRecent(bookId, loginUserId, page -1, size, sort);
         for (ReviewLikeCountDTO review : reviews){
             log.info("review : {}", review);
         }
@@ -85,6 +86,7 @@ public class ReviewController {
 
     @GetMapping("/reviews/{reviewId}")
     public ResponseEntity<?> getReviewById(@PathVariable Long reviewId){
+        log.info("?????? getReviewById in");
         Review review = reviewServiceClient.getReviewById(18L,reviewId);
 
         return ResponseEntity.ok(review);
@@ -93,7 +95,7 @@ public class ReviewController {
 
     @GetMapping("/reviews/edit/{reviewId}")
     public String updateReviewView(@PathVariable Long reviewId, Model model){
-
+        log.info("?????? updateReviewView in");
         Review existingReview = reviewServiceClient.getReviewById(18L, reviewId);
         model.addAttribute("review", existingReview);
         return "reviews/reviewUpdate";
@@ -102,7 +104,7 @@ public class ReviewController {
 
     @PostMapping("/reviews/{reviewId}")
     public ResponseEntity<?> updateReview(@PathVariable Long reviewId, @ModelAttribute ReviewRequestDTO dto){
-
+        log.info("?????? updateReviewPost in");
         reviewServiceClient.updateReview(18L, reviewId,dto);
 
         return ResponseEntity.ok("updated");

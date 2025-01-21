@@ -32,15 +32,15 @@
     }
 
 
-    .review-content {
-      display: none;
-      margin-top: 10px;
-      overflow: hidden;
-    }
+    /*.review-content {*/
+    /*  display: none;*/
+    /*  margin-top: 10px;*/
+    /*  overflow: hidden;*/
+    /*}*/
 
-    .review-content.open {
-      display: block;
-    }
+    /*.review-content.open {*/
+    /*  display: block;*/
+    /*}*/
 
     .tab-button {
       padding: 8px 16px;
@@ -66,6 +66,28 @@
     .tab-button:hover {
       background-color: #bbb; /* 비활성화 버튼 hover 색상 */
     }
+
+
+    .review-button {
+      padding: 8px 16px;
+      border: 1px solid #F86D72;
+      background-color: white; /* 비활성화 상태 색상 */
+      color: #F86D72;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .review-button.active {
+      background-color: #F6F6F6; /* 활성화 상태 색상 (빨간색) */
+      color: #F6F6F6;
+    }
+
+    .review-button:hover {
+      background-color: #F6F6F6; /* 비활성화 버튼 hover 색상 */
+    }
+
 
     .review-score {
       display: flex;
@@ -125,14 +147,18 @@
 
 
     .review-content {
-      -webkit-line-clamp: 2; /* 최대 줄 수 설정 */
-      -webkit-box-orient: vertical; /* 수직 방향 설정 */
-      overflow: hidden; /* 넘치는 내용 숨김 */
+      max-height: 4rem;
       display: block;
+      /*display: -webkit-box; !* Flexbox 기반의 레이아웃 *!*/
+      /*-webkit-line-clamp: 2; !* 최대 줄 수 설정 *!*/
+      /*-webkit-box-orient: vertical; !* 수직 방향 설정 *!*/
+      overflow: hidden; /* 넘치는 내용 숨김 */
+      -webkit-line-clamp: unset; /* 최대 줄 수 설정 */
+      -webkit-box-orient: unset; /* 수직 방향 설정 */
+      /*display: block;*/
       margin-top: 10px;
-      line-height: 1.6;
+      line-height: 1.5;
       text-overflow: ellipsis;
-      white-space: nowrap;
       transition: all 0.3s ease; /* 애니메이션 효과 */
     }
 
@@ -170,6 +196,17 @@
       margin: 0; /* 기본 여백 제거 */
       font-size: 16px; /* 글씨 크기 조정 (필요에 따라 변경 가능) */
     }
+
+    .row.mb-4 {
+      border-bottom: 1px solid #3A3A3A; /* 회색 경계선 */
+      padding-bottom: 5px; /* 경계선과 내용 간 간격 */
+      margin-bottom: 5px; /* 다음 항목과의 간격 */
+    }
+
+    .row.mb-4:last-child {
+      border-bottom: none; /* 마지막 항목은 경계선 없음 */
+    }
+
 
 
 
@@ -217,10 +254,12 @@
               <!--          <button >구매 리뷰 작성</button>-->
               <form action="/reviews/create" class="d-flex ms-auto">
                 <input type="hidden" name="bookId" th:value="${review.bookId}">
-                <button class="btn btn-primary">리뷰 작성</button>
+                <button class="review-button" >구매 리뷰 작성</button>
+<!--                <button class="btn btn-primary">구매 리뷰 작성</button>-->
               </form>
             </div>
           </div>
+<!--          <hr>-->
         </div>
       </div>
 
@@ -260,9 +299,9 @@
                   </div>
                 </div>
               </div>
-              <div class="review-content">
-                <p class="review-content" style="padding: 5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" th:id="'content-'+${review.reviewId}" th:text="${review.content}">리뷰 내용</p>
-                <span class="toggle-button" style="display: none;" th:id="'toggle-button-'+${review.reviewId}" th:onclick="'toggleReviewContent('+${review.reviewId}+')'">열기</span>
+              <div class="review-container">
+                <p class="review-content" style="padding: 7px; overflow: hidden; text-overflow: ellipsis;" th:id="'content-'+${review.reviewId}" th:text="${review.content}">리뷰 내용</p>
+                <span class="toggle-button"  th:id="'toggle-button-'+${review.reviewId}" >열기</span>
               </div>
 
             </div>
@@ -340,26 +379,47 @@
       }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      const reviewContents = document.querySelectorAll(".review-content");
+    document.addEventListener("DOMContentLoaded", () => {
+      // DOM 로드 후 실행
+      setTimeout(() => {
+        const reviews = document.querySelectorAll(".review-content");
 
-      reviewContents.forEach(content => {
-        console.log("content-id "+ content)
-        console.log("content-id "+ content.id)
-        const toggleButton = document.getElementById(`toggle-button-${content.id.split('-')[1]}`);
+        reviews.forEach((review) => {
+          const reviewId = review.id.split("-")[1];
+          const toggleButton = document.querySelector(`#toggle-button-${reviewId}`);
 
-        if (toggleButton == null){
-            return;
-        }
+          if (!review || !toggleButton) return; // 요소가 없으면 건너뜀
 
-        // Check if content is truncated
-        console.log("scrollWidth : " + content.scrollWidth)
-        console.log("clientWidth : " + content.clientWidth)
-        if (content.scrollWidth > content.clientWidth) {
-          toggleButton.style.display = "inline-block"; // Show the button if truncated
-        }
-      });
+          // display: none 대신 visibility가 설정된 상태에서 높이를 계산
+          review.style.visibility = "visible";
+          review.style.height = "auto";
+
+          console.log(review.scrollHeight)
+          console.log(review.offsetHeight)
+
+          // 텍스트가 2줄 이상인 경우
+          if (review.scrollHeight > review.offsetHeight) {
+            toggleButton.style.display = "inline-block"; // 버튼 활성화
+          }
+
+          // 다시 숨김 상태로 변경
+          review.style.visibility = "";
+          review.style.height = "";
+
+          // 열기/접기 버튼 클릭 이벤트 추가
+          toggleButton.addEventListener("click", () => {
+            if (review.classList.contains("expanded")) {
+              review.classList.remove("expanded");
+              toggleButton.textContent = "열기";
+            } else {
+              review.classList.add("expanded");
+              toggleButton.textContent = "접기";
+            }
+          });
+        });
+      }, 100); // DOM 렌더링 후 실행
     });
+
 
 
     // 리뷰 평점 설정

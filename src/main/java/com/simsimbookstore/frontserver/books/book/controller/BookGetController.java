@@ -110,6 +110,7 @@ public class BookGetController {
     @GetMapping("/{bookId}")
     public String getBookDetails(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                  @PathVariable Long bookId,
+                                 @RequestParam(defaultValue = "1") int page,
                                  Model model) {
 
         Long loginUserId = -1L;
@@ -128,8 +129,9 @@ public class BookGetController {
         // 추천 도서 조회
         List<BookListResponse> recommendBooks = bookGetService.getRecommendBooks(bookId, categoryIdList);
 
-        // 해당 도서 리뷰 조회
-        Page<ReviewLikeCountDTO> reviews = reviewService.getAllReviewsOrderByRecent(bookId, loginUserId, 0, 10,"latest");
+
+
+        Page<ReviewLikeCountDTO> reviews = reviewService.getAllReviewsOrderByRecent(bookId, loginUserId, page -1, 10,"latest");
 
         model.addAttribute("book", book);
         model.addAttribute("recommendBooks", recommendBooks);
