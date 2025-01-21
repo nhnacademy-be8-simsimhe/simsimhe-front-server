@@ -245,7 +245,7 @@
                         <li class="nav-item">
                             <a class="nav-link me-4 active" href="/">Home</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" th:if="${isAdmin ?: false}">
                             <a class="nav-link me-4" href="/admin">Admin</a>
                         </li>
                         <li class="nav-item dropdown">
@@ -312,7 +312,9 @@
                                 </a>
                             </li>
                             <li class="pe-3">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#authModal">
+                                <a th:href="${isAuthenticated ? '/users/myPage/user/userInfo' : '#'}"
+                                   th:attr="data-bs-toggle=${isAuthenticated ? null : 'modal'},
+                                            data-bs-target=${isAuthenticated ? null : '#authModal'}">
                                     <svg class="user">
                                         <use xlink:href="#user"></use>
                                     </svg>
