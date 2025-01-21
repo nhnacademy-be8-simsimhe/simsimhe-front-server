@@ -23,4 +23,7 @@ public interface CategoryClient {
 
     @PostMapping
     CategoryResponseDto createCategory(@RequestBody CategoryRequestDto categoryRequestDto);
+
+    @GetMapping("/{categoryId}")
+    CategoryResponseDto getCategoryById(@PathVariable Long categoryId);
 }
