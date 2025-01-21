@@ -11,27 +11,64 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
 
     <style>
-        /* ✅ 네비게이션 바 스타일 */
+        /* ✅ 네비게이션 바 조정 */
         .navbar {
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            height: 100px !important; /* 네비게이션 바 높이 증가 */
+            padding: 15px 0 !important;
+            display: flex !important;
+            align-items: center !important;
         }
+
+        /* ✅ 로고 크기 조정 */
         .navbar-brand img {
-            height: 40px;
+            height: 60px !important; /* 네비게이션 바 높이에 맞게 조정 */
         }
+
+        /* ✅ 네비게이션 항목 크기 줄이기 */
         .navbar-nav .nav-link {
-            font-size: 1rem;
-            font-weight: 600;
-            padding: 10px 15px;
-            color: #333;
+            font-size: 1.4rem !important; /* ✅ 너무 크던 폰트 크기 조정 */
+            font-weight: 600 !important;
+            padding: 10px 20px !important;
+            color: #333 !important;
         }
-        .navbar-nav .nav-link:hover {
-            color: var(--primary-color);
+
+        /* ✅ 네비게이션 항목 간격 조정 */
+        .navbar-nav {
+            gap: 15px !important; /* ✅ 메뉴 간격 줄이기 */
         }
+
+        /* ✅ 드롭다운 항목 크기 조정 */
+        .dropdown-menu .dropdown-item {
+            font-size: 1.2rem !important; /* ✅ 드롭다운 폰트 크기 줄이기 */
+        }
+
+        /* ✅ 햄버거 메뉴 크기 조정 */
         .navbar-toggler {
-            border: none;
-            outline: none;
+            border: none !important;
+            outline: none !important;
+            font-size: 1.6rem !important; /* ✅ 크기 조금 줄이기 */
+            padding: 10px !important;
         }
+
+        /* ✅ 모바일에서도 크기 유지 */
+        @media (max-width: 992px) {
+            .navbar {
+                height: 90px !important; /* ✅ 모바일에서 높이 조정 */
+                padding: 20px 0 !important;
+            }
+
+            .navbar-nav .nav-link {
+                font-size: 1.6rem !important; /* ✅ 모바일에서도 적절한 크기 */
+                padding: 15px !important;
+            }
+
+            .navbar-brand img {
+                height: 50px !important; /* ✅ 모바일에서 로고 크기 조정 */
+            }
+        }
+
 
         /* ✅ 도서 카드 스타일 */
         .book-card {
@@ -41,27 +78,33 @@
             background: #fff;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+
         .book-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
+
         .book-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
         }
+
         .book-card .card-body {
             padding: 15px;
             text-align: center;
         }
+
         .book-card h6 {
             font-weight: 600;
             font-size: 1rem;
         }
+
         .book-card p {
             font-size: 0.9rem;
             color: #777;
         }
+
         .book-card .btn {
             margin-top: 10px;
             font-size: 0.9rem;
@@ -73,6 +116,7 @@
             border-radius: 5px;
             padding: 8px 15px;
         }
+
         .pagination .page-item.active .page-link {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
@@ -94,7 +138,7 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <img src="/images/main-logo.png" alt="로고">
+            <img src="/images/main-logo2.png" class="logo main-logo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -151,7 +195,8 @@
                 <img th:src="${book.imagePath}" class="card-img-top">
                 <div class="card-body">
                     <h6 th:text="${book.title ?: '제목 미정'}">도서 제목</h6>
-                    <p class="text-muted small">출판사: <span th:text="${book.publisher ?: '미정'}"></span></p>
+                    <p class="card-title text-truncate fw-bold">출판사: <span th:text="${book.publisher ?: '미정'}"></span>
+                    </p>
                     <p>
                         <span class="fw-bold text-primary"
                               th:text="${book.saleprice != null ? book.saleprice : book.price}"></span> 원
@@ -163,10 +208,13 @@
     </div>
 
     <!-- 📌 페이지 네비게이션 -->
-    <nav aria-label="도서 페이지네이션" class="mt-4" th:if="${currentPage != null and totalPages != null}">
+    <nav aria-label="도서 페이지네이션" class="mt-4"
+         th:if="${books != null and not #lists.isEmpty(books) and currentPage != null and totalPages != null and totalPages > 0}">
+
         <ul class="pagination justify-content-center">
             <li class="page-item" th:if="${currentPage > 1}">
-                <a class="page-link" th:href="@{'/books/user/like?page=' + (${currentPage} - 1) + '&size=' + ${size}}">◀ 이전</a>
+                <a class="page-link" th:href="@{'/books/user/like?page=' + (${currentPage} - 1) + '&size=' + ${size}}">◀
+                    이전</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
                 th:classappend="${i == currentPage} ? 'active'">
@@ -174,12 +222,12 @@
                    th:text="${i}"></a>
             </li>
             <li class="page-item" th:if="${currentPage < totalPages}">
-                <a class="page-link" th:href="@{'/books/user/like?page=' + (${currentPage} + 1) + '&size=' + ${size}}">다음 ▶</a>
+                <a class="page-link" th:href="@{'/books/user/like?page=' + (${currentPage} + 1) + '&size=' + ${size}}">다음
+                    ▶</a>
             </li>
         </ul>
     </nav>
 </div>
-
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
