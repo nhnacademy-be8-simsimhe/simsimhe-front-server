@@ -1,5 +1,6 @@
 package com.simsimbookstore.frontserver.coupon.client;
 
+import com.simsimbookstore.frontserver.config.AuthenticationFeignConfig;
 import com.simsimbookstore.frontserver.coupon.dto.CouponResponseDto;
 import com.simsimbookstore.frontserver.coupon.dto.PageResponseDto;
 import com.simsimbookstore.frontserver.coupon.dto.UserCouponDiscountResponseDto;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "coupon-api-server", url = "http://localhost:8000/api/shop")
+@FeignClient(name = "coupon-api-server", url = "http://localhost:8000/api/shop",configuration = AuthenticationFeignConfig.class)
 public interface CouponClient {
     @GetMapping(value = "/users/{userId}/coupons/unused")
     public PageResponseDto<CouponResponseDto> getUnusedCoupons(@PathVariable Long userId,
