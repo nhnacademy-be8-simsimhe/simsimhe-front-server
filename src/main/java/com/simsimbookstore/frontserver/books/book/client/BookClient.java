@@ -3,6 +3,7 @@ package com.simsimbookstore.frontserver.books.book.client;
 
 import com.simsimbookstore.frontserver.books.book.dto.BookListResponse;
 import com.simsimbookstore.frontserver.books.book.dto.BookResponseDto;
+import com.simsimbookstore.frontserver.config.AuthenticationFeignConfig;
 import com.simsimbookstore.frontserver.util.PageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "book-api-server", url = "http://localhost:8000/api/shop/books")
+@FeignClient(name = "book-api-server", url = "http://localhost:8000/api/shop/books", configuration = AuthenticationFeignConfig.class)
 public interface BookClient {
 
 

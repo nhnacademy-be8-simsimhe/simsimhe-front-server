@@ -5,6 +5,7 @@ import com.simsimbookstore.frontserver.books.book.dto.BookResponseDto;
 import com.simsimbookstore.frontserver.books.book.service.BookGetService;
 import com.simsimbookstore.frontserver.books.category.dto.CategoryResponseDto;
 import com.simsimbookstore.frontserver.books.category.service.CategoryService;
+import com.simsimbookstore.frontserver.books.tag.dto.TagResponseDto;
 import com.simsimbookstore.frontserver.books.tag.service.TagService;
 import com.simsimbookstore.frontserver.reviews.review.domain.ReviewLikeCountDTO;
 import com.simsimbookstore.frontserver.reviews.review.service.ReviewService;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,11 +59,23 @@ public class BookGetController {
         }
         Long userId = customUserDetails.getUserId();
         PageResponse<BookListResponse> userLikeBook = bookGetService.getUserLikeBook(page, size, userId);
+
+        List<TagResponseDto> tags = tagService.getAllTags();
+        List<CategoryResponseDto> categorys = categoryService.getALlCategorys();
+        List<List<CategoryResponseDto>> groupedCategories = new ArrayList<>();
+
+        int groupSize = 6;
+        for (int i = 0; i < categorys.size(); i += groupSize) {
+            groupedCategories.add(categorys.subList(i, Math.min(i + groupSize, categorys.size())));
+        }
+
         model.addAttribute("books", userLikeBook.getData()); // 도서 리스트
         model.addAttribute("userId", userId);
         model.addAttribute("currentPage", page); // 현재 페이지 번호
         model.addAttribute("totalPages", userLikeBook.getTotalPage()); // 총 페이지 수
         model.addAttribute("size", size); // 페이지 크기
+        model.addAttribute("tags",tags);
+        model.addAttribute("groupedCategories",groupedCategories);
 
         return "book/wishlist";
     }
@@ -87,6 +101,17 @@ public class BookGetController {
                                      Model model) {
         // 카테고리와 관련된 도서 조회
         PageResponse<BookListResponse> booksPage = bookGetService.getBooksByCategory(categoryId, userId, page, size, sort);
+        CategoryResponseDto category = categoryService.getCategory(categoryId);
+        String categoryName = category.getCategoryName();
+
+        List<TagResponseDto> tags = tagService.getAllTags();
+        List<CategoryResponseDto> categorys = categoryService.getALlCategorys();
+        List<List<CategoryResponseDto>> groupedCategories = new ArrayList<>();
+
+        int groupSize = 6;
+        for (int i = 0; i < categorys.size(); i += groupSize) {
+            groupedCategories.add(categorys.subList(i, Math.min(i + groupSize, categorys.size())));
+        }
 
         model.addAttribute("sort", sort);                 // 현재 정렬 기준
         model.addAttribute("books", booksPage.getData()); // 도서 리스트
@@ -94,6 +119,10 @@ public class BookGetController {
         model.addAttribute("currentPage", page); // 현재 페이지 번호
         model.addAttribute("totalPages", booksPage.getTotalPage()); // 총 페이지 수
         model.addAttribute("size", size); // 페이지 크기
+        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("groupedCategories", groupedCategories);
+        model.addAttribute("tags", tags);
+
 
         return "book/booksByCategory"; // 카테고리별 도서 목록을 보여줄 뷰 이름
     }
@@ -129,7 +158,7 @@ public class BookGetController {
         List<BookListResponse> recommendBooks = bookGetService.getRecommendBooks(bookId, categoryIdList);
 
         // 해당 도서 리뷰 조회
-        Page<ReviewLikeCountDTO> reviews = reviewService.getAllReviewsOrderByRecent(bookId, loginUserId, 0, 10,"latest");
+        Page<ReviewLikeCountDTO> reviews = reviewService.getAllReviewsOrderByRecent(bookId, loginUserId, 0, 10, "latest");
 
         model.addAttribute("book", book);
         model.addAttribute("recommendBooks", recommendBooks);
@@ -150,6 +179,18 @@ public class BookGetController {
                                 Model model) {
         // 태그에 맞는 도서 목록 조회
         PageResponse<BookListResponse> booksByTag = bookGetService.getBooksByTag(tagId, userId, page, size, sort);
+        TagResponseDto findTag = tagService.getTag(tagId);
+        String tagName = findTag.getTagName();
+
+        List<TagResponseDto> tags = tagService.getAllTags();
+        List<CategoryResponseDto> categorys = categoryService.getALlCategorys();
+        List<List<CategoryResponseDto>> groupedCategories = new ArrayList<>();
+
+        int groupSize = 6;
+        for (int i = 0; i < categorys.size(); i += groupSize) {
+            groupedCategories.add(categorys.subList(i, Math.min(i + groupSize, categorys.size())));
+        }
+
 
         model.addAttribute("books", booksByTag.getData()); // 도서 목록
         model.addAttribute("currentTagId", tagId);        // 현재 선택된 태그 ID
@@ -157,6 +198,9 @@ public class BookGetController {
         model.addAttribute("totalPages", booksByTag.getTotalPage()); // 총 페이지 수
         model.addAttribute("size", size);                 // 한 페이지에 표시할 항목 수
         model.addAttribute("sort", sort);                 // 현재 정렬 기준
+        model.addAttribute("tagName", tagName);
+        model.addAttribute("groupedCategories", groupedCategories);
+        model.addAttribute("tags", tags);
 
         return "book/bookListByTag"; // 태그별 도서 목록 뷰
     }
