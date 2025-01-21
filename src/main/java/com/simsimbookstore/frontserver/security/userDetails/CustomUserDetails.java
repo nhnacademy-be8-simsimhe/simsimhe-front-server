@@ -74,12 +74,14 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     @Override
     public boolean isAccountNonExpired() {
         return true;
-//        if(Objects.nonNull(latestLocalDate) && latestLocalDate.isBefore(LocalDateTime.now().minusMonths(1))){
-//        if(Objects.nonNull(latestLoginDate) && latestLoginDate.isBefore(LocalDateTime.now().minusSeconds(1))){
-//            return false;
-//        }
-//        else{
-//            return true;
-//        }
+    }
+
+    public boolean isAdmin(){
+        if (Objects.isNull(authorities)){
+            return false;
+        }
+
+        return authorities.stream()
+                .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
     }
 }
