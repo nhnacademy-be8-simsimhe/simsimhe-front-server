@@ -211,7 +211,7 @@
                 <form action="/admin" class="d-flex" th:if="${isAdmin}" method="get">
                     <button class="btn btn-blue btn-sm px-3 py-1">관리자</button>
                 </form>
-                <form action="/logout" class="d-flex" th:if="${isAuthenticated}" method="post">
+                <form action="/logout" class="d-flex" th:if="${isAuthenticated}" method="get">
                     <button class="btn btn-danger btn-sm px-3 py-1">로그아웃</button>
                 </form>
                 <form action="/shop/guest-order/search" method="get" class="d-flex" th:if="${!isAuthenticated}">
