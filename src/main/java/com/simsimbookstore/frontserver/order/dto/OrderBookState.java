@@ -11,5 +11,5 @@ public enum OrderBookState {
     IN_DELIVERY,      // 배송중
     COMPLETED,        // 완료
     RETURNED,         // 반품
-    CANCELED          // 결제취소
+    PAYMENT_CANCELED          // 결제취소
 }
