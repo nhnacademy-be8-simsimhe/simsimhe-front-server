@@ -2,33 +2,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimSim Admin</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #ffe9ec;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header img {
+            height: 50px;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            padding: 15px;
+        }
+
+        .card h3 {
+            color: #f06464;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .card a {
+            display: block;
+            margin: 5px 0;
+            text-decoration: none;
+            color: #f06464;
+            font-weight: bold;
+            background-color: #fff;
+            border: 1px solid #f06464;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .card a:hover {
+            background-color: #f06464;
+            color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #ffe9ec;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-<a href="/admin/contributors">기여자 목록 조회</a><br><br>
-<a href="/admin/contributors/create">기여자 등록 폼</a><br><br>
-<a href="/admin/tags">태그 목록 조회</a><br><br>
-<a href="/admin/tags/create">태그 등록 폼</a><br><br>
-<a href="/admin/categories">카테고리 리스트</a><br><br>
-<a href="/admin/categories/create">카테고리 등록폼</a><br><br>
-<a href="/admin/books/create">도서 등록폼</a><br><br>
-<a href="/admin/books/list">도서 목록</a><br><br>
 
-<a href="/admin/delivery-policies">배송비 정책 목록</a><br><br>
-<a href="/admin/wrap-types">포장지 관리</a><br><br>
-<a href="/admin/pointPolicies">포인트적립 정책 관리 폼</a><br><br>
+<header>
+    <img src="/path-to-your-logo/logo.png" alt="SimSim Logo">
+</header>
 
-<a href="/admin/couponPolicies/create">쿠폰 정책 등록 폼</a><br><br>
-<a href="/admin/couponPolicies">쿠폰 정책 목록</a><br><br>
-<a href="/admin/couponTypes/selectCouponPolicy">쿠폰 타입 등록 폼</a><br><br>
-<a href="/admin/couponTypes">쿠폰 타입 목록</a><br><br>
-<a href="/admin/coupons/selectCouponType">쿠폰 발급 폼</a><br><br>
-<a href="/admin/coupons/selectUser">쿠폰 발급 현황</a><br><br>
+<div class="card-container">
+    <div class="card">
+        <h3>카테고리 관리</h3>
+        <a href="/admin/categories">카테고리 리스트</a>
+        <a href="/admin/categories/create">카테고리 등록폼</a>
+    </div>
 
-<a href="/admin/deliveries">배송관리 폼</a><br><br>
-<a href="/admin/orders">배송관리 폼</a><br><br>
+    <div class="card">
+        <h3>쿠폰 관리</h3>
+        <a href="/admin/couponPolicies/create">쿠폰 정책 등록 폼</a>
+        <a href="/admin/couponPolicies">쿠폰 정책 목록</a>
+        <a href="/admin/couponTypes/selectCouponPolicy">쿠폰 타입 등록 폼</a>
+        <a href="/admin/couponTypes">쿠폰 타입 목록</a>
+        <a href="/admin/coupons/selectCouponType">쿠폰 발급 폼</a>
+        <a href="/admin/coupons/selectUser">쿠폰 발급 현황</a>
+    </div>
 
-<a href="/admin/order/refund" >주문 취소(반품, 교환, 환불) 관리</a><br><br>
+    <div class="card">
+        <h3>도서 관리</h3>
+        <a href="/admin/books/create">도서 등록폼</a>
+        <a href="/admin/books/list">도서 목록</a>
+    </div>
+
+    <div class="card">
+        <h3>주문 및 배송 관리</h3>
+        <a href="/admin/deliveries">배송관리 폼</a>
+        <a href="/admin/orders">주문 관리 폼</a>
+        <a href="/admin/order/refund">주문 취소(반품, 교환, 환불) 관리</a>
+    </div>
+
+    <div class="card">
+        <h3>기타 관리</h3>
+        <a href="/admin/contributors">기여자 목록 조회</a>
+        <a href="/admin/contributors/create">기여자 등록 폼</a>
+        <a href="/admin/tags">태그 목록 조회</a>
+        <a href="/admin/tags/create">태그 등록 폼</a>
+        <a href="/admin/delivery-policies">배송비 정책 목록</a>
+        <a href="/admin/wrap-types">포장지 관리</a>
+        <a href="/admin/pointPolicies">포인트적립 정책 관리 폼</a>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2025 SimSim Admin. All rights reserved.</p>
+</footer>
 
 </body>
 </html>
