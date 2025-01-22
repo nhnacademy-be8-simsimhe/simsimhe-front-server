@@ -215,12 +215,12 @@
         </div>
     </div>
 
-    <!-- :pushpin: 페이지 네비게이션 -->
+    <!-- 📌 페이지 네비게이션 -->
     <nav aria-label="도서 페이지네이션" class="mt-4">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} - 1) + '&size=' + ${size} + '&sort=' + ${sort}}">:arrow_backward:
+                   th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} - 1) + '&size=' + ${size} + '&sort=' + ${sort}}">◀
                     이전</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
@@ -232,7 +232,7 @@
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                 <a class="page-link"
                    th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} + 1) + '&size=' + ${size} + '&sort=' + ${sort}}">다음
-                    :arrow_forward:</a>
+                    ▶</a>
             </li>
         </ul>
     </nav>
