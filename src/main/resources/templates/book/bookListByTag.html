@@ -145,9 +145,9 @@
         </button>
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link active" href="/">:house: Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/">🏠 Home</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">:pushpin: Tags</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">📕 Tags</a>
                     <ul class="dropdown-menu">
                         <li th:each="tag : ${tags}">
                             <a th:href="@{'/books/tag/' + ${tag.tagId}}" th:text="${tag.tagName}"
@@ -156,7 +156,7 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">:books: Categories</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">📗 Categories</a>
                     <div class="dropdown-menu p-4"
                          style="min-width: 600px; max-width: 1000px; max-height: 500px; overflow-y: auto;">
                         <div class="row row-cols-1 row-cols-md-3 g-3">
@@ -174,7 +174,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="/users/myPage/user/userInfo">:woman-raising-hand: My Page</a></li>
+                <li class="nav-item"><a class="nav-link" href="/users/myPage/user/userInfo">📙 My Page</a></li>
             </ul>
         </div>
     </div>
@@ -182,7 +182,7 @@
 
 <!-- :books: 도서 목록 -->
 <div class="container mt-5">
-    <h4 class="text-center mb-4 text-primary" th:text="':books: Tag: ' + ${tagName}">태그명</h4>
+    <h4 class="text-center mb-4 text-primary" th:text="'📚 Tag: ' + ${tagName}">태그명</h4>
 
     <!-- :arrow_down_small: 정렬 기능 -->
     <form id="sortForm" method="get" class="mb-4 d-flex justify-content-end">
@@ -209,18 +209,18 @@
                         <span class="fw-bold text-primary"
                               th:text="${book.saleprice != null ? book.saleprice : book.price}"></span> 원
                     </p>
-                    <a class="btn w-100" th:href="@{'/books/' + ${book.bookId}}">:book: 상세보기</a>
+                    <a class="btn w-100" th:href="@{'/books/' + ${book.bookId}}">🔎 상세보기</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- :pushpin: 페이지 네비게이션 -->
+    <!-- 📌 페이지 네비게이션 -->
     <nav aria-label="도서 페이지네이션" class="mt-4">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} - 1) + '&size=' + ${size} + '&sort=' + ${sort}}">:arrow_backward:
+                   th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} - 1) + '&size=' + ${size} + '&sort=' + ${sort}}">◀
                     이전</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
@@ -232,7 +232,7 @@
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                 <a class="page-link"
                    th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} + 1) + '&size=' + ${size} + '&sort=' + ${sort}}">다음
-                    :arrow_forward:</a>
+                    ▶</a>
             </li>
         </ul>
     </nav>

@@ -1,10 +1,8 @@
 package com.simsimbookstore.frontserver.order.controller;
 
 import com.simsimbookstore.frontserver.delivery.policy.dto.Delivery;
-import com.simsimbookstore.frontserver.order.dto.CancelRequestDto;
 import com.simsimbookstore.frontserver.order.dto.OrderBookState;
 import com.simsimbookstore.frontserver.order.dto.OrderHistoryResponseDto;
-import com.simsimbookstore.frontserver.order.dto.ReturnRequestDto;
 import com.simsimbookstore.frontserver.order.service.OrderService;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Controller
@@ -23,16 +23,34 @@ import java.util.List;
 public class OrderRefundController {
     private final OrderService orderService;
 
+//    // 부분 환불 신청 페이지
+//    @GetMapping("/shop/users/orders/detail/{orderNumber}/refund")
+//    public String refund(@RequestParam List<String> orderName,
+//                         @RequestParam List<Integer> quantity,
+//                         @RequestParam Delivery.DeliveryState deliveryState,
+//                         @PathVariable String orderNumber,
+//                         Model model) {
+//        if (deliveryState.equals(Delivery.DeliveryState.PENDING)) {
+//            // 결제 취소
+//            model.addAttribute("orderName", orderName);
+//            model.addAttribute("quantity", quantity);
+//            return "order/refund/totalCanceledApply";
+//        } else {
+//            // 반품 신청
+//            model.addAttribute("orderName", orderName);
+//            model.addAttribute("quantity", quantity);
+//            return "order/refund/returnApplyPage";
+//        }
+//    }
+
     // 전체 환불 신청 페이지
-    @GetMapping("/shop/users/orders/{orderNumber}/refund")
-    public String refundTotal(@RequestParam String orderName,
+    @GetMapping("/shop/users/orders/detail/{orderNumber}/refund")
+    public String refund(@RequestParam String orderName,
                          @RequestParam int quantity,
                          @RequestParam OrderHistoryResponseDto.OrderState orderState,
                          @RequestParam List<OrderBookState> orderBookState,
                          @RequestParam Delivery.DeliveryState deliveryState,
-                         @RequestParam Long orderBookId,
                          @PathVariable String orderNumber,
-                         @RequestParam Long deliveryId,
                          Model model) {
         if ((orderState.equals(OrderHistoryResponseDto.OrderState.DELIVERY_READY))
         && (deliveryState.equals(Delivery.DeliveryState.READY))) {
@@ -40,52 +58,24 @@ public class OrderRefundController {
                     .allMatch(state -> state.equals(OrderBookState.DELIVERY_READY));
             if (isReady) {
                 // 결제 취소
-                model.addAttribute("orderNumber", orderNumber);
                 model.addAttribute("orderName", orderName);
                 model.addAttribute("quantity", quantity);
-                model.addAttribute("orderBookId", orderBookId);
                 return "order/refund/totalCanceledApply";
             }
         }
         // 반품 신청
         model.addAttribute("orderName", orderName);
         model.addAttribute("quantity", quantity);
-        model.addAttribute("orderNumber", orderNumber);
-        model.addAttribute("orderBookId", orderBookId);
-        model.addAttribute("deliveryId", deliveryId);
-        return "order/refund/totalReturnApplyPage";
+        return "order/refund/returnApplyPage";
     }
 
-    // 전체 결제 취소 저장
-    @PostMapping("/shop/users/orders/{orderNumber}/cancel")
-    public String createCanceled(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                               @PathVariable String orderNumber,
-                               @RequestParam String canceledReason,
-                               @RequestParam Long orderBookId) {
-        Long userId = customUserDetails.getUserId();
-
-        CancelRequestDto cancelRequestDto = new CancelRequestDto();
-        cancelRequestDto.setCancelReason(canceledReason);
-        cancelRequestDto.setOrderBookId(orderBookId);
-
-        orderService.applyCanceled(orderNumber, userId, cancelRequestDto);
-        return "order/refund/refundApplySuccess";
-    }
-
-    // 전체 주문 취소 저장
-    @PostMapping("/shop/users/orders/{orderNumber}/refund")
+    @PostMapping("/shop/users/orders/detail/{orderNumber}/refund")
     public String createRefund(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                @PathVariable String orderNumber,
-                               @RequestParam String canceledReason,
-                               @RequestParam Integer quantity,
-                               @RequestParam boolean damaged,
-                               @RequestParam Long orderBookId,
-                               @RequestParam Long deliveryId) {
+                               @RequestParam String canceledReason) {
         Long userId = customUserDetails.getUserId();
-
-        ReturnRequestDto returnRequestDto = new ReturnRequestDto(orderBookId, canceledReason, quantity, damaged, deliveryId);
-
-        orderService.applyRefund(userId, orderNumber, returnRequestDto);
-        return "order/refund/refundApplySuccess";
+        String reason = URLEncoder.encode(canceledReason, StandardCharsets.UTF_8);
+        orderService.applyCanceled(orderNumber, userId, canceledReason);
+        return "order/refund/canceledApplySuccess";
     }
 }

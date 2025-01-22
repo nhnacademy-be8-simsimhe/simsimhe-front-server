@@ -3,69 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>쿠폰 타입 목록</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f9f7f6;
-            color: #5a5a5a;
-            margin: 0;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #e87576;
-            margin-bottom: 30px;
+            font-family: Arial, sans-serif;
         }
         table {
             border-collapse: collapse;
             width: 100%;
             margin-top: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 12px;
-            text-align: center;
+            padding: 8px;
         }
         th {
-            background-color: #f8e9e9;
-            font-weight: bold;
-        }
-        tr:nth-child(even) {
-            background-color: #fef2f2;
+            background-color: #f9f9f9;
         }
         .pagination {
             margin: 20px 0;
             list-style: none;
             display: flex;
-            justify-content: center;
             gap: 8px;
         }
         .pagination li {
             display: inline-block;
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            cursor: pointer;
         }
-        .pagination a {
+        .pagination li.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .pagination li.disabled {
+            color: #aaa;
+            cursor: not-allowed;
+        }
+        a {
             text-decoration: none;
-            color: #e87576;
-            padding: 8px 12px;
-            border: 1px solid #e87576;
-            border-radius: 5px;
-        }
-        .pagination a:hover {
-            background-color: #e87576;
-            color: white;
-        }
-        .pagination .active a {
-            background-color: #e87576;
-            color: white;
-            border-color: #e87576;
-        }
-        .pagination .disabled {
-            pointer-events: none;
-            color: #ccc;
+            color: inherit;
         }
     </style>
 </head>
@@ -73,6 +52,10 @@
 <div class="container">
     <h1>쿠폰 타입 목록</h1>
 
+    <!-- PageResponseDto<CouponTypeResponseDto>가 pageResponse라는 이름으로 넘어온다고 가정 -->
+    <!-- pageResponse.content: CouponTypeResponseDto의 목록 -->
+
+    <!-- 쿠폰 타입 목록 테이블 -->
     <table>
         <thead>
         <tr>
@@ -87,9 +70,12 @@
         </tr>
         </thead>
         <tbody>
+        <!-- 목록이 없을 때 표시 -->
         <tr th:if="${#lists.isEmpty(pageResponse.content)}">
-            <td colspan="8">등록된 쿠폰 타입이 없습니다.</td>
+            <td colspan="9">등록된 쿠폰 타입이 없습니다.</td>
         </tr>
+
+        <!-- 목록이 있을 때 each -->
         <tr th:each="type : ${pageResponse.content}">
             <td th:text="${type.couponTypeId}">1</td>
             <td th:text="${type.couponTypeName}">쿠폰 타입 이름</td>
@@ -103,25 +89,39 @@
         </tbody>
     </table>
 
+    <!-- 페이지네이션 표시 (number, totalPages 등 이용) -->
+    <!-- number: 현재 페이지 인덱스(0-based), totalPages: 전체 페이지 수 -->
     <ul class="pagination">
+        <!-- 이전 페이지 버튼 -->
         <li th:classappend="${pageResponse.number == 0} ? 'disabled'">
             <a th:href="@{/admin/couponTypes(page=${pageResponse.number - 1}, size=${pageResponse.size})}"
-               th:if="${pageResponse.number > 0}">이전</a>
+               th:if="${pageResponse.number > 0}">
+                이전
+            </a>
             <span th:if="${pageResponse.number == 0}">이전</span>
         </li>
+
+        <!-- 페이지 번호 반복 (예: 1부터 totalPages까지) -->
+        <!-- 실제 프로젝트에선 start/end 계산 로직을 쓸 수도 있음 -->
         <li th:each="i : ${#numbers.sequence(0, pageResponse.totalPages - 1)}"
             th:classappend="${i == pageResponse.number} ? 'active'">
             <a th:text="${i+1}"
-               th:href="@{/admin/couponTypes(page=${i}, size=${pageResponse.size})}">1</a>
+               th:href="@{/admin/couponTypes(page=${i}, size=${pageResponse.size})}">
+                1
+            </a>
         </li>
+
+        <!-- 다음 페이지 버튼 -->
         <li th:classappend="${pageResponse.number + 1 >= pageResponse.totalPages} ? 'disabled'">
             <a th:href="@{/admin/couponTypes(page=${pageResponse.number + 1}, size=${pageResponse.size})}"
-               th:if="${pageResponse.number + 1 < pageResponse.totalPages}">다음</a>
+               th:if="${pageResponse.number + 1 < pageResponse.totalPages}">
+                다음
+            </a>
             <span th:if="${pageResponse.number + 1 >= pageResponse.totalPages}">다음</span>
         </li>
     </ul>
-
     <p><a th:href="@{/admin}">admin 페이지로 돌아가기</a></p>
+
 </div>
 </body>
 </html>

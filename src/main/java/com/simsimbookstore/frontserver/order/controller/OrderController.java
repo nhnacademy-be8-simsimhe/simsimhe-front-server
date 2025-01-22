@@ -41,21 +41,9 @@ public class OrderController {
 
     @GetMapping("/shop/order")
     public String showOrderPage(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            Model model
-    ) {
-        @SuppressWarnings("unchecked")
-        List<BookListResponseDto> bookOrderList
-                = (List<BookListResponseDto>) model.getAttribute("bookOrderList");
-
-        // bookOrderList가 null 이거나 비어있는 경우
-        if (bookOrderList == null || bookOrderList.isEmpty()) {
-            return "redirect:/index";
-        }
-
+            @AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
         return "order/order_page";
     }
-
 
     @PostMapping("/shop/order")
     public String createOrder(

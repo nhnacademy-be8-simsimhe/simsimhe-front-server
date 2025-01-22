@@ -3,63 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>쿠폰 발급</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        /* 기존 스타일 유지 */
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f9f7f6;
-            color: #5a5a5a;
-            margin: 0;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
         }
         .container {
             max-width: 800px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             padding: 20px;
             margin: 0 auto;
         }
         h1 {
-            color: #e87576;
-            text-align: center;
-            margin-bottom: 30px;
+            color: #333;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 16px;
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
         }
         th {
-            background-color: #f8e9e9;
-            font-weight: bold;
-        }
-        tr:nth-child(even) {
-            background-color: #fef2f2;
+            background-color: #f2f2f2;
         }
         .button-row {
-            margin-top: 20px;
+            margin-top: 16px;
             text-align: right;
         }
         button {
-            padding: 10px 20px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 5px;
-            background-color: #e87576;
-            color: white;
-            cursor: pointer;
+            border-radius: 4px;
+            background-color: #28a745;
+            color: #fff;
             font-size: 1em;
+            cursor: pointer;
         }
         button:hover {
-            background-color: #d76464;
+            background-color: #218838;
         }
         .error {
             color: red;
@@ -69,27 +58,6 @@
             color: green;
             margin: 8px 0;
         }
-        label {
-            font-weight: bold;
-        }
-        select {
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-        select:focus {
-            border-color: #e87576;
-            box-shadow: 0 0 5px rgba(232, 117, 118, 0.5);
-        }
-        @media (max-width: 800px) {
-            table, th, td {
-                font-size: 0.9em;
-            }
-            .button-row button {
-                width: 100%;
-                margin-top: 10px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -97,9 +65,10 @@
     <h1>쿠폰 발급 - 유저 목록에서 선택</h1>
     <p>아래 유저 목록 중, 쿠폰을 발급할 유저들을 선택하세요. (중복 체크 포함)</p>
 
+    <!-- 쿠폰 타입 이름 표시 (옵션) -->
     <p>발급할 쿠폰 타입: <strong th:text="${couponTypeName}">쿠폰 타입</strong></p>
 
-    <!-- 월별 필터링 폼 -->
+    <!-- 월별 필터링 폼 (GET) -->
     <form th:action="@{/admin/coupons/issue}" method="get" id="filterForm">
         <input type="hidden" name="couponTypeId" th:value="${issueCouponsRequestDto.couponTypeId}" />
         <input type="hidden" name="couponTypeName" th:value="${couponTypeName}" />
@@ -109,23 +78,31 @@
             <option th:each="month : ${#numbers.sequence(1,12)}"
                     th:value="${month}"
                     th:text="${month} + '월'"
-                    th:selected="${selectedBirthMonth != null} ? (${selectedBirthMonth} == ${month}) : false">
-            </option>
+                    th:selected="${selectedBirthMonth != null} ? (${selectedBirthMonth} == ${month}) : false"></option>
         </select>
         <button type="submit">필터링</button>
     </form>
 
+    <!--
+      userList: List<UserResponse> (ACTIVE 사용자 등)
+      issueCouponsRequestDto: IssueCouponsRequestDto (폼 바인딩)
+    -->
     <form th:action="@{/admin/coupons/issue}"
           method="post"
           th:object="${issueCouponsRequestDto}"
           id="issueCouponForm">
 
+        <!-- 쿠폰 타입 ID를 히든으로 전송 (필수) -->
         <input type="hidden" th:field="*{couponTypeId}" />
 
+        <!-- 유저 목록 테이블 -->
         <table>
             <thead>
             <tr>
-                <th><input type="checkbox" id="selectAll" /></th>
+                <th>
+                    <!-- 전체 선택 체크박스 -->
+                    <input type="checkbox" id="selectAll" />
+                </th>
                 <th>ID</th>
                 <th>이름</th>
                 <th>이메일</th>
@@ -135,6 +112,7 @@
             <tbody>
             <tr th:each="user : ${userList}">
                 <td>
+                    <!-- 체크박스 th:field="*{userIds}"는 리스트 바인딩을 지원 -->
                     <input type="checkbox"
                            th:field="*{userIds}"
                            th:value="${user.userId}"
@@ -152,6 +130,7 @@
             </tbody>
         </table>
 
+        <!-- 유효성 검증 오류 메시지 표시 -->
         <div class="error" th:if="${#fields.hasErrors()}"
              th:each="err : ${#fields.errors('*')}"
              th:text="${err}"></div>
@@ -163,6 +142,7 @@
 </div>
 
 <script>
+    // 전체 선택 체크박스 제어
     document.getElementById('selectAll').addEventListener('change', function() {
         const isChecked = this.checked;
         const checkboxes = document.querySelectorAll('.userCheckbox');
@@ -171,6 +151,7 @@
         });
     });
 
+    // 개별 체크박스 제어 시 전체 선택 체크박스 상태 업데이트
     function handleCheck(checkbox) {
         const selectAll = document.getElementById('selectAll');
         const checkboxes = document.querySelectorAll('.userCheckbox');
@@ -188,6 +169,7 @@
             selectAll.indeterminate = false;
         }
 
+        // 중복 체크 로직 (필요 시 구현)
         const userId = checkbox.value;
         const sameUserCheckboxes = document.querySelectorAll(`input[name="userIds"][value="${userId}"]`);
         if (sameUserCheckboxes.length > 1) {
@@ -196,13 +178,14 @@
         }
     }
 
+    // submit 시 "적어도 한명" 체크 여부
     function validateSelection() {
         const checkedBoxes = document.querySelectorAll('.userCheckbox:checked');
         if (checkedBoxes.length === 0) {
             alert("쿠폰을 발급할 유저를 최소 한 명 이상 선택해주세요.");
-            return false;
+            return false; // 폼 제출 방지
         }
-        return true;
+        return true; // 폼 제출 허용
     }
 </script>
 </body>
