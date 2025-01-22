@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>쿠폰 할인 내역</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+        }
+        .pagination li {
+            margin: 0 5px;
+        }
+        .pagination a {
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .pagination .active a {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .pagination .disabled a {
+            color: #ccc;
+            pointer-events: none;
+            border-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+<h1>사용자 쿠폰 할인 목록</h1>
+<table>
+    <thead>
+    <tr>
+        <th>쿠폰 이름</th>
+        <th>책 제목</th>
+        <th>할인 금액</th>
+        <th>사용 날짜</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="coupon : ${userCouponDiscount.content}">
+        <td th:text="${coupon.couponName}">쿠폰 이름</td>
+        <td th:text="${coupon.bookTitle}">책 제목</td>
+        <td th:text="${#numbers.formatDecimal(coupon.discountPrice, 1, 'COMMA', 0, 'POINT')} + '원'">할인 금액</td>
+        <td th:text="${#temporals.format(coupon.useDate, 'yyyy-MM-dd HH:mm')}">사용 날짜</td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(userCouponDiscount.content)}">
+        <td colspan="4">쿠폰 할인 내역이 없습니다.</td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이징 네비게이션 -->
+<ul class="pagination">
+    <!-- 이전 페이지 링크 -->
+    <li th:classappend="${userCouponDiscount.first} ? 'disabled'">
+        <a th:href="@{/users/coupon-discount(page=${userCouponDiscount.number - 1}, size=${userCouponDiscount.size})}"
+           th:if="${!userCouponDiscount.first}">이전</a>
+        <a th:if="${userCouponDiscount.first}" href="#">이전</a>
+    </li>
+
+    <!-- 페이지 번호 링크 -->
+    <li th:each="i : ${#numbers.sequence(0, userCouponDiscount.totalPages - 1)}"
+        th:classappend="${i == userCouponDiscount.number} ? 'active'">
+        <a th:href="@{/users/coupon-discount(page=${i}, size=${userCouponDiscount.size})}"
+           th:text="${i + 1}">1</a>
+    </li>
+
+    <!-- 다음 페이지 링크 -->
+    <li th:classappend="${userCouponDiscount.last} ? 'disabled'">
+        <a th:href="@{/users/coupon-discount(page=${userCouponDiscount.number + 1}, size=${userCouponDiscount.size})}"
+           th:if="${!userCouponDiscount.last}">다음</a>
+        <a th:if="${userCouponDiscount.last}" href="#">다음</a>
+    </li>
+</ul>
+</body>
+</html>

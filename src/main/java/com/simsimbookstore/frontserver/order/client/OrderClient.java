@@ -1,6 +1,7 @@
 package com.simsimbookstore.frontserver.order.client;
 
 
+import com.simsimbookstore.frontserver.config.AuthenticationFeignConfig;
 import com.simsimbookstore.frontserver.order.dto.BookListRequestDto;
 import com.simsimbookstore.frontserver.order.dto.BookListResponseDto;
 import com.simsimbookstore.frontserver.order.dto.TotalRequestDto;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "order-api-server", url = "http://localhost:8000/api/shop/order")
+@FeignClient(name = "order-api-server", url = "http://localhost:8000/api/shop/order", configuration = AuthenticationFeignConfig.class)
 public interface OrderClient {
 
     @PostMapping
