@@ -1,53 +1,72 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coupon Policy List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* 기본 스타일 설정 */
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f7f6;
+            color: #5a5a5a;
+            margin: 0;
+            padding: 20px;
         }
         h1 {
-            color: #333;
+            text-align: center;
+            color: #e87576;
+            margin-bottom: 30px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
         th, td {
-            border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
+            border-bottom: 1px solid #ddd;
         }
         th {
-            background-color: #f4f4f4;
+            background-color: #f8e9e9;
+            color: #333;
+            font-weight: bold;
         }
         tr:hover {
-            background-color: #f1f1f1;
+            background-color: #fef2f2;
         }
         .pagination {
             margin-top: 20px;
             display: flex;
+            justify-content: center;
             align-items: center;
+            gap: 10px;
         }
-        .pagination a {
-            margin-right: 10px;
+        .pagination a, .pagination span {
             text-decoration: none;
-            color: #007BFF;
+            color: #e87576;
+            padding: 8px 12px;
+            border: 1px solid #e87576;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .pagination a:hover {
-            text-decoration: underline;
+            background-color: #e87576;
+            color: white;
         }
         .pagination span {
-            margin-right: 10px;
-            color: #555;
+            background-color: #e87576;
+            color: white;
         }
     </style>
 </head>
 <body>
-<h1>Coupon Policies</h1>
+<h1>쿠폰 정책 목록</h1>
 
 <!-- 쿠폰 정책 목록 테이블 -->
 <table>
@@ -97,7 +116,4 @@
     <a th:if="${!couponPolicyList.last}"
        th:href="@{/admin/couponPolicies(page=${couponPolicyList.number + 1}, size=${couponPolicyList.size})}">
         다음
-    </a>
-</div>
-</body>
-</html>
+
