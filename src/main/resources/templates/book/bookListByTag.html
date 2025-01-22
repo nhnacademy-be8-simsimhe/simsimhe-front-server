@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>📚 심심이의 서재 - 도서 목록</title>
+    <title>:books: 심심이의 서재 - 도서 목록</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
 
     <style>
-        /* ✅ 네비게이션 바 조정 */
+        /* :white_check_mark: 네비게이션 바 조정 */
         .navbar {
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -21,56 +21,56 @@
             align-items: center !important;
         }
 
-        /* ✅ 로고 크기 조정 */
+        /* :white_check_mark: 로고 크기 조정 */
         .navbar-brand img {
             height: 60px !important; /* 네비게이션 바 높이에 맞게 조정 */
         }
 
-        /* ✅ 네비게이션 항목 크기 줄이기 */
+        /* :white_check_mark: 네비게이션 항목 크기 줄이기 */
         .navbar-nav .nav-link {
-            font-size: 1.4rem !important; /* ✅ 너무 크던 폰트 크기 조정 */
+            font-size: 1.4rem !important; /* :white_check_mark: 너무 크던 폰트 크기 조정 */
             font-weight: 600 !important;
             padding: 10px 20px !important;
             color: #333 !important;
         }
 
-        /* ✅ 네비게이션 항목 간격 조정 */
+        /* :white_check_mark: 네비게이션 항목 간격 조정 */
         .navbar-nav {
-            gap: 15px !important; /* ✅ 메뉴 간격 줄이기 */
+            gap: 15px !important; /* :white_check_mark: 메뉴 간격 줄이기 */
         }
 
-        /* ✅ 드롭다운 항목 크기 조정 */
+        /* :white_check_mark: 드롭다운 항목 크기 조정 */
         .dropdown-menu .dropdown-item {
-            font-size: 1.2rem !important; /* ✅ 드롭다운 폰트 크기 줄이기 */
+            font-size: 1.2rem !important; /* :white_check_mark: 드롭다운 폰트 크기 줄이기 */
         }
 
-        /* ✅ 햄버거 메뉴 크기 조정 */
+        /* :white_check_mark: 햄버거 메뉴 크기 조정 */
         .navbar-toggler {
             border: none !important;
             outline: none !important;
-            font-size: 1.6rem !important; /* ✅ 크기 조금 줄이기 */
+            font-size: 1.6rem !important; /* :white_check_mark: 크기 조금 줄이기 */
             padding: 10px !important;
         }
 
-        /* ✅ 모바일에서도 크기 유지 */
+        /* :white_check_mark: 모바일에서도 크기 유지 */
         @media (max-width: 992px) {
             .navbar {
-                height: 90px !important; /* ✅ 모바일에서 높이 조정 */
+                height: 90px !important; /* :white_check_mark: 모바일에서 높이 조정 */
                 padding: 20px 0 !important;
             }
 
             .navbar-nav .nav-link {
-                font-size: 1.6rem !important; /* ✅ 모바일에서도 적절한 크기 */
+                font-size: 1.6rem !important; /* :white_check_mark: 모바일에서도 적절한 크기 */
                 padding: 15px !important;
             }
 
             .navbar-brand img {
-                height: 50px !important; /* ✅ 모바일에서 로고 크기 조정 */
+                height: 50px !important; /* :white_check_mark: 모바일에서 로고 크기 조정 */
             }
         }
 
 
-        /* ✅ 도서 카드 스타일 */
+        /* :white_check_mark: 도서 카드 스타일 */
         .book-card {
             border-radius: 10px;
             overflow: hidden;
@@ -111,7 +111,7 @@
             padding: 10px;
         }
 
-        /* ✅ 페이지네이션 */
+        /* :white_check_mark: 페이지네이션 */
         .pagination .page-link {
             border-radius: 5px;
             padding: 8px 15px;
@@ -123,7 +123,7 @@
             color: #fff;
         }
 
-        /* ✅ 푸터 */
+        /* :white_check_mark: 푸터 */
         .footer {
             padding: 20px;
             text-align: center;
@@ -134,7 +134,7 @@
 </head>
 <body>
 
-<!-- ✅ 네비게이션 바 -->
+<!-- :white_check_mark: 네비게이션 바 -->
 <nav class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="/">
@@ -145,9 +145,9 @@
         </button>
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link active" href="/">🏠 Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/">:house: Home</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">📌 Tags</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">:pushpin: Tags</a>
                     <ul class="dropdown-menu">
                         <li th:each="tag : ${tags}">
                             <a th:href="@{'/books/tag/' + ${tag.tagId}}" th:text="${tag.tagName}"
@@ -156,7 +156,7 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">📚 Categories</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">:books: Categories</a>
                     <div class="dropdown-menu p-4"
                          style="min-width: 600px; max-width: 1000px; max-height: 500px; overflow-y: auto;">
                         <div class="row row-cols-1 row-cols-md-3 g-3">
@@ -174,17 +174,17 @@
                         </div>
                     </div>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="/users/myPage/user/userInfo">🙋 My Page</a></li>
+                <li class="nav-item"><a class="nav-link" href="/users/myPage/user/userInfo">:woman-raising-hand: My Page</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- 📚 도서 목록 -->
+<!-- :books: 도서 목록 -->
 <div class="container mt-5">
-    <h4 class="text-center mb-4 text-primary" th:text="'📚 Tag: ' + ${tagName}">태그명</h4>
+    <h4 class="text-center mb-4 text-primary" th:text="':books: Tag: ' + ${tagName}">태그명</h4>
 
-    <!-- 🔽 정렬 기능 -->
+    <!-- :arrow_down_small: 정렬 기능 -->
     <form id="sortForm" method="get" class="mb-4 d-flex justify-content-end">
         <label for="sort" class="me-2 align-self-center">정렬:</label>
         <select id="sort" name="sort" class="form-select w-auto"
@@ -196,7 +196,7 @@
         </select>
     </form>
 
-    <!-- 📚 도서 목록 카드 -->
+    <!-- :books: 도서 목록 카드 -->
     <div class="row">
         <div class="col-md-3 mb-4" th:each="book : ${books}">
             <div class="card book-card h-100">
@@ -209,18 +209,18 @@
                         <span class="fw-bold text-primary"
                               th:text="${book.saleprice != null ? book.saleprice : book.price}"></span> 원
                     </p>
-                    <a class="btn w-100" th:href="@{'/books/' + ${book.bookId}}">📖 상세보기</a>
+                    <a class="btn w-100" th:href="@{'/books/' + ${book.bookId}}">:book: 상세보기</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 📌 페이지 네비게이션 -->
+    <!-- :pushpin: 페이지 네비게이션 -->
     <nav aria-label="도서 페이지네이션" class="mt-4">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} - 1) + '&size=' + ${size} + '&sort=' + ${sort}}">◀
+                   th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} - 1) + '&size=' + ${size} + '&sort=' + ${sort}}">:arrow_backward:
                     이전</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
@@ -232,7 +232,7 @@
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                 <a class="page-link"
                    th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} + 1) + '&size=' + ${size} + '&sort=' + ${sort}}">다음
-                    ▶</a>
+                    :arrow_forward:</a>
             </li>
         </ul>
     </nav>

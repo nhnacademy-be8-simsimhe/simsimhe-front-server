@@ -7,6 +7,7 @@ import com.simsimbookstore.frontserver.books.category.service.CategoryService;
 import com.simsimbookstore.frontserver.books.tag.dto.TagResponseDto;
 import com.simsimbookstore.frontserver.books.tag.service.TagService;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
+import com.simsimbookstore.frontserver.users.role.dto.RoleName;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -51,6 +52,4 @@ public class HomeController {
 
         return modelAndView;
     }
-
-
 }
