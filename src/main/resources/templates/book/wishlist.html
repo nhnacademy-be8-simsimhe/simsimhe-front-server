@@ -214,7 +214,7 @@
 
         <ul class="pagination justify-content-center">
             <li class="page-item" th:if="${currentPage > 1}">
-                <a class="page-link" th:href="@{'/books/user/like?page=' + (${currentPage} - 1) + '&size=' + ${size}}">:arrow_backward:
+                <a class="page-link" th:href="@{'/books/user/like?page=' + (${currentPage} - 1) + '&size=' + ${size}}">◀
                     이전</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
@@ -223,8 +223,8 @@
                    th:text="${i}"></a>
             </li>
             <li class="page-item" th:if="${currentPage < totalPages}">
-                <a class="page-link" th:href="@{'/books/user/like?page=' + (${currentPage} + 1) + '&size=' + ${size}}">다음
-                    :arrow_forward:</a>
+                <a class="page-link" th:href="@{'/books/user/like?page=' + (${currentPage} + 1) + '&size=' + ${size}}">다음▶
+                    </a>
             </li>
         </ul>
     </nav>
