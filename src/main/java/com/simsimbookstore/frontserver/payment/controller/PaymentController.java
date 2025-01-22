@@ -35,13 +35,15 @@ public class PaymentController {
                              Model model) {
         ResponseEntity<ConfirmResponseDto> confirmYN = paymentService.confirm(paymentKey, orderId, amount);
 
-        if (confirmYN.getStatusCode().is2xxSuccessful()) {
-            model.addAttribute("orderId", confirmYN.getBody().getOrderId());
-            return "payment/success";
-        }
+        if (confirmYN.getBody() != null) {
+            if (confirmYN.getStatusCode().is2xxSuccessful()) {
+                model.addAttribute("orderId", confirmYN.getBody().getOrderId());
+                return "payment/success";
+            }
 
-        model.addAttribute("code", confirmYN.getBody().getCode());
-        model.addAttribute("message", confirmYN.getBody().getMessage());
+            model.addAttribute("code", confirmYN.getBody().getCode());
+            model.addAttribute("message", confirmYN.getBody().getMessage());
+        }
         return "payment/fail";
     }
 

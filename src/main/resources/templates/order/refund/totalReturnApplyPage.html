@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>반품 신청</title>
+  <title>전체 상품 반환 신청 (구매자)</title>
   <style>
     .modal {
       display: block;
@@ -76,46 +76,34 @@
     <h2>환불 신청</h2>
     <div class="form-group">
       <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-        <label>환불 신청 상품</label>
-        <label style="margin-right: 60px;">개수</label>
-        <label style="margin-right: 10px;">손상여부</label>
+        <label>전체 환불 신청</label>
       </div>
 
-      <div th:each="item, itemStat : ${orderName}"
-           style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <label>
-            <input type="checkbox" name="orderName" th:value="${item}"
-                   th:id="'product-' + ${itemStat.index}">
+      <form method="post" th:action="@{/shop/users/orders/{orderNumber}/refund(orderNumber=${orderNumber})}">
+        <div class="form-group">
+          <label>상품 이름
+            <span th:text="${orderName}"></span>
           </label>
-          <label th:text="${item}"></label>
+          <label>수량
+            <span th:text="${quantity}"></span>
+          </label>
+          <label>파손 여부
+            <input type="checkbox" name="damaged"
+                   style="width: 60px; text-align: center;">
+          </label>
+          <label>환불 사유
+            <!-- for="canceledReason" -->
+            <input type="text" id="canceledReason" name="canceledReason" required placeholder="환불 사유를 입력해주세요">
+          </label>
+          <input type="hidden" name="quantity" th:value="${quantity}" />
+          <input type="hidden" name="orderBookId" th:value="${orderBookId}" />
+          <input type="hidden" name="deliveryId" th:value="${deliveryId}" />
         </div>
-        <label>
-          <input type="number" name="quantity"
-                 th:value="${quantity[itemStat.index]}"
-                 th:id="'quantity-' + ${itemStat.index}"
-                 th:max="${quantity[itemStat.index]}"
-                 min="1"
-                 onkeydown="return false"
-                 style="width: 60px; text-align: center;">
-        </label>
-        <label>
-          <input type="checkbox" name="damaged"
-                 style="width: 60px; text-align: center;">
-        </label>
-      </div>
-    </div>
 
-    <div class="form-group">
-      <label for="reason">환불 사유</label>
-      <input type="text" id="reason" name="reason" required placeholder="환불 사유를 입력해주세요">
-    </div>
-
-    <div class="button-group">
-      <button class="cancel-btn" type="button" onclick="window.history.back()">취소</button>
-
-      <form method="post" th:action="'/admin/orders/refund/' + ${orderNumber}">
-        <button class="submit-btn" type="submit">신청</button>
+        <div class="button-group">
+          <button class="cancel-btn" type="button" onclick="window.history.back()">취소</button>
+          <button class="submit-btn" type="submit">신청</button>
+        </div>
       </form>
     </div>
   </div>
