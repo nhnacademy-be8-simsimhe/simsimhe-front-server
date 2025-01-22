@@ -22,7 +22,7 @@ public class LogoutController {
     private final CartService cartService;
 
 
-    @PostMapping
+    @GetMapping
     public String logout(
             @AuthenticationPrincipal CustomUserDetails user,
             HttpServletResponse response
