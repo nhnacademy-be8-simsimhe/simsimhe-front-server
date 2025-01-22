@@ -3,17 +3,17 @@ package com.simsimbookstore.frontserver.order.service;
 import com.simsimbookstore.frontserver.order.client.OrderAdminReturnClient;
 import com.simsimbookstore.frontserver.order.dto.RefundResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class OrderAdminReturnService {
     private final OrderAdminReturnClient orderAdminReturnClient;
 
-    public List<RefundResponseDto> refundList() {
-        return orderAdminReturnClient.refundList();
+    public Page<RefundResponseDto> refundList(Pageable pageable) {
+        return orderAdminReturnClient.refundList(pageable);
     }
 
     public void confirmReturn(Long orderBookId) {

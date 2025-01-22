@@ -3,6 +3,10 @@ package com.simsimbookstore.frontserver.order.controller;
 import com.simsimbookstore.frontserver.order.dto.RefundResponseDto;
 import com.simsimbookstore.frontserver.order.service.OrderAdminReturnService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,8 +22,11 @@ public class OrderAdminReturnController {
 
     // 환불 리스트
     @GetMapping("/admin/order/refund")
-    public String refundList(Model model) {
-        List<RefundResponseDto> refundInfoList = orderAdminReturnService.refundList();
+    public String refundList(Model model,
+                             @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("returnDate").descending());
+        Page<RefundResponseDto> refundInfoList = orderAdminReturnService.refundList(pageable);
 
         for (RefundResponseDto refundResponseDto : refundInfoList) {
             int quantity = refundResponseDto.getQuantity();
@@ -28,6 +34,11 @@ public class OrderAdminReturnController {
             BigDecimal price = salePrice.multiply(BigDecimal.valueOf(quantity));
             model.addAttribute("price", price);
         }
+
+        model.addAttribute("refundPage", refundInfoList.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", refundInfoList.getTotalPages());
+        model.addAttribute("totalItems", refundInfoList.getTotalElements());
 
         model.addAttribute("refundList", refundInfoList);
         return "admin/order/refundConfirm";

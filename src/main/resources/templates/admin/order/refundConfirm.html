@@ -119,6 +119,50 @@
   </tr>
   </tbody>
 </table>
+<!-- 페이지네이션 추가 -->
+<div class="pagination" style="margin-top: 20px; text-align: center;">
+    <!-- 이전 버튼 -->
+    <a th:if="${currentPage > 0}"
+       th:href="@{/admin/order/refund(page=${currentPage - 1})}"
+       class="button" style="margin: 0 5px;">이전</a>
+
+    <!-- 페이지 번호 -->
+    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+        <a th:href="@{/admin/order/refund(page=${i})}"
+           th:text="${i + 1}"
+           th:class="${currentPage == i ? 'button active' : 'button'}"
+           style="margin: 0 5px;">
+        </a>
+    </span>
+
+    <!-- 다음 버튼 -->
+    <a th:if="${currentPage < totalPages - 1}"
+       th:href="@{/admin/order/refund(page=${currentPage + 1})}"
+       class="button" style="margin: 0 5px;">다음</a>
+</div>
+
+<!-- 전체 건수 표시 -->
+<div style="text-align: center; margin-top: 10px;">
+    총 <span th:text="${totalItems}"></span>건의 환불 요청
+</div>
+
+<style>
+    /* 기존 스타일은 유지하고 페이지네이션 스타일 추가 */
+    .pagination .button {
+        padding: 5px 10px;
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        color: #333;
+        text-decoration: none;
+        border-radius: 3px;
+    }
+
+    .pagination .active {
+        background-color: #4CAF50;
+        color: white;
+        border-color: #4CAF50;
+    }
+</style>
 <script>
 
 </script>
