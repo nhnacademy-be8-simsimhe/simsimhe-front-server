@@ -206,19 +206,13 @@
                style="letter-spacing: 1px; font-family: 'Nunito', sans-serif;">
                 📖 심심한 하루, <span class="text-danger">책 한 권</span>으로 채우기! 📚
             </p>
-            <div class="container">
-            <div class="d-flex justify-content-end gap-2">
-                <form action="/admin" class="d-flex" th:if="${isAdmin}" method="get">
-                    <button class="btn btn-blue btn-sm px-3 py-1">관리자</button>
-                </form>
-                <form action="/logout" class="d-flex" th:if="${isAuthenticated}" method="get">
+            <div class="d-flex justify-content-between">
+                <form action="/logout" class="d-flex ms-auto" th:if="${isAuthenticated}" method="post">
                     <button class="btn btn-danger btn-sm px-3 py-1">로그아웃</button>
                 </form>
-                <form action="/shop/guest-order/search" method="get" class="d-flex" th:if="${!isAuthenticated}">
+                <form action="/shop/guest-order/search" method="get" class="d-flex ms-auto" th:if="${!isAuthenticated}">
                     <button class="btn btn-primary btn-sm px-3 py-1">비회원 주문 조회</button>
                 </form>
-            </div>
-
             </div>
         </div>
     </div>
@@ -227,7 +221,7 @@
     <nav id="header-nav" class="navbar navbar-expand-lg py-3">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <img src="/images/main-logo2.png" class="logo main-logo">
+                <img src="/images/main-logo.png" class="logo">
             </a>
             <button class="navbar-toggler d-flex d-lg-none order-3 p-2" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false"
@@ -239,7 +233,7 @@
             <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel">
                 <div class="offcanvas-header px-4 pb-0">
                     <a class="navbar-brand" href="/">
-                        <img src="/images/main-logo2.png" class="logo main-logo">
+                        <img src="/images/main-logo.png" class="logo">
                     </a>
                     <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas"
                             aria-label="Close"
@@ -251,9 +245,9 @@
                         <li class="nav-item">
                             <a class="nav-link me-4 active" href="/">Home</a>
                         </li>
-<!--                        <li class="nav-item" th:if="${isAdmin ?: false}">-->
-<!--                            <a class="nav-link me-4" href="/admin">Admin</a>-->
-<!--                        </li>-->
+                        <li class="nav-item">
+                            <a class="nav-link me-4" href="/admin">Admin</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <!-- 태그 메뉴 -->
                             <a class="nav-link me-4 dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
@@ -307,10 +301,6 @@
                         <li class="nav-item">
                             <a class="nav-link me-4" href="/users/myPage/user/userInfo">My Page</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link me-4" href="https://simsimbook.store/shop-api">Shop Api</a>
-                        </li>
                     </ul>
                     <div class="user-items d-flex">
                         <ul class="d-flex justify-content-end list-unstyled mb-0">
@@ -322,9 +312,7 @@
                                 </a>
                             </li>
                             <li class="pe-3">
-                                <a th:href="${isAuthenticated ? '/users/myPage/user/userInfo' : '#'}"
-                                   th:attr="data-bs-toggle=${isAuthenticated ? null : 'modal'},
-                                            data-bs-target=${isAuthenticated ? null : '#authModal'}">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#authModal">
                                     <svg class="user">
                                         <use xlink:href="#user"></use>
                                     </svg>
@@ -588,7 +576,7 @@
                 <div class="row d-flex flex-wrap justify-content-between">
                     <div class="col-lg-3 col-sm-6 pb-3">
                         <div class="footer-menu">
-                            <img src="/images/main-logo2.png" alt="logo" class="img-fluid mb-2 main-logo">
+                            <img src="/images/main-logo.png" alt="logo" class="img-fluid mb-2">
                             <p>Nisi, purus vitae, ultrices nunc. Sit ac sit suscipit hendrerit. Gravida massa volutpat
                                 aenean odio
                                 erat nullam fringilla.</p>
@@ -635,25 +623,22 @@
                     </div>
                     <div class="col-lg-2 col-sm-6 pb-3">
                         <div class="footer-menu text-capitalize">
-                            <h5 class="widget-title pb-2">Member</h5>
+                            <h5 class="widget-title pb-2">Quick Links</h5>
                             <ul class="menu-list list-unstyled text-capitalize">
                                 <li class="menu-item mb-1">
-                                    <a href="https://github.com/dw9706" target="_blank">Dongwon Ko</a>
+                                    <a href="#">Home</a>
                                 </li>
                                 <li class="menu-item mb-1">
-                                    <a href="https://github.com/gyeong22">Mingyeong Kim</a>
+                                    <a href="#">About</a>
                                 </li>
                                 <li class="menu-item mb-1">
-                                    <a href="https://github.com/gimzaezin">Jaejin Kim</a>
+                                    <a href="#">Shop</a>
                                 </li>
                                 <li class="menu-item mb-1">
-                                    <a href="https://github.com/jooh-yeon">Juhyeon Lee</a>
+                                    <a href="#">Blogs</a>
                                 </li>
                                 <li class="menu-item mb-1">
-                                    <a href="https://github.com/strongchaehwan">Chaehwan Lim</a>
-                                </li>
-                                <li class="menu-item mb-1">
-                                    <a href="https://github.com/jacobjea">Seungwook Je</a>
+                                    <a href="#">Contact</a>
                                 </li>
                             </ul>
                         </div>

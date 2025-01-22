@@ -1,150 +1,71 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>📚 심심이의 서재 - 도서 목록</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Bootstrap CSS -->
+    <title>도서 목록</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css"> <!-- 외부 스타일 적용 -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
-
     <style>
-        /* ✅ 네비게이션 바 스타일 */
-        .navbar {
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .navbar-brand img {
-            height: 40px;
-        }
-        .navbar-nav .nav-link {
-            font-size: 1rem;
-            font-weight: 600;
-            padding: 10px 15px;
-            color: #333;
-        }
-        .navbar-nav .nav-link:hover {
-            color: var(--primary-color);
-        }
-        .navbar-toggler {
-            border: none;
-            outline: none;
+        body {
+            background-color: #f8f9fa; /* 밝은 배경색 */
+            font-family: 'Arial', sans-serif;
         }
 
-        /* ✅ 도서 카드 스타일 */
-        .book-card {
-            border-radius: 10px;
-            overflow: hidden;
+        h2 {
+            color: #343a40; /* 다크 그레이 텍스트 */
+            font-weight: 500;
+        }
+
+        .card {
+            border: 1px solid #e0e0e0; /* 카드 테두리 */
+            border-radius: 8px;
             transition: transform 0.2s, box-shadow 0.2s;
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .book-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        .book-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .book-card .card-body {
-            padding: 15px;
-            text-align: center;
-        }
-        .book-card h6 {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        .book-card p {
-            font-size: 0.9rem;
-            color: #777;
-        }
-        .book-card .btn {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            padding: 10px;
+            background-color: #ffffff;
         }
 
-        /* ✅ 페이지네이션 */
-        .pagination .page-link {
-            border-radius: 5px;
-            padding: 8px 15px;
+        .card:hover {
+            transform: translateY(-5px); /* 호버 시 카드 상승 효과 */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* 호버 시 그림자 */
         }
-        .pagination .page-item.active .page-link {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
+
+        .btn-main {
+            background-color: #007bff; /* 기본 파란 버튼 */
             color: #fff;
+            font-weight: 500;
+            border-radius: 20px;
         }
 
-        /* ✅ 푸터 */
-        .footer {
-            padding: 20px;
+        .btn-main:hover {
+            background-color: #0056b3; /* 진한 파란색 */
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .pagination .page-link {
+            color: #007bff;
+        }
+
+        .pagination .page-link:hover {
+            color: #0056b3;
+        }
+
+        footer {
+            margin-top: 50px;
             text-align: center;
-            background: #f8f9fa;
-            margin-top: 40px;
         }
     </style>
 </head>
 <body>
-
-<!-- ✅ 네비게이션 바 -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        <a class="navbar-brand" href="/">
-            <img src="/images/main-logo.png" alt="로고">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link active" href="/">🏠 Home</a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">📌 Tags</a>
-                    <ul class="dropdown-menu">
-                        <li th:each="tag : ${tags}">
-                            <a th:href="@{'/books/tag/' + ${tag.tagId}}" th:text="${tag.tagName}"
-                               class="dropdown-item"></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">📚 Categories</a>
-                    <div class="dropdown-menu p-4"
-                         style="min-width: 600px; max-width: 1000px; max-height: 500px; overflow-y: auto;">
-                        <div class="row row-cols-1 row-cols-md-3 g-3">
-                            <div class="col d-flex flex-column" th:each="categoryGroup : ${groupedCategories}">
-                                <ul class="list-unstyled">
-                                    <li th:each="category : ${categoryGroup}">
-                                        <a th:href="@{'/books/category/' + ${category.categoryId}}"
-                                           th:text="${category.categoryName}"
-                                           class="dropdown-item text-truncate"
-                                           style="max-width: 280px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="/users/myPage/user/userInfo">🙋 My Page</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<!-- 📚 도서 목록 -->
 <div class="container mt-5">
-    <h4 class="text-center mb-4 text-primary" th:text="'📚 Tag: ' + ${tagName}">태그명</h4>
+    <h2 class="text-center mb-4" th:text="'태그 ID: ' + ${currentTagId}">도서 목록</h2>
 
-    <!-- 🔽 정렬 기능 -->
+    <!-- 정렬 드롭다운 -->
     <form id="sortForm" method="get" class="mb-4 d-flex justify-content-end">
+        <input type="hidden" name="page" th:value="${currentPage}"/>
+        <input type="hidden" name="size" th:value="${size}"/>
         <label for="sort" class="me-2 align-self-center">정렬:</label>
-        <select id="sort" name="sort" class="form-select w-auto"
-                onchange="document.getElementById('sortForm').submit()">
+        <select id="sort" name="sort" class="form-select w-auto" onchange="document.getElementById('sortForm').submit()">
             <option value="latest" th:selected="${sort == 'latest'}">최신순</option>
             <option value="price_high" th:selected="${sort == 'price_high'}">가격 높은 순</option>
             <option value="price_low" th:selected="${sort == 'price_low'}">가격 낮은 순</option>
@@ -152,46 +73,70 @@
         </select>
     </form>
 
-    <!-- 📚 도서 목록 카드 -->
     <div class="row">
+        <!-- 도서 카드 렌더링 -->
         <div class="col-md-3 mb-4" th:each="book : ${books}">
-            <div class="card book-card h-100">
-                <img th:src="${book.imagePath}" class="card-img-top">
+            <div class="card h-100">
+                <!-- 도서 이미지 -->
+                <img th:src="${book.imagePath}" class="card-img-top" alt="도서 이미지"
+                     th:alt="'이미지 없음 - ' + ${book.title}" style="width: 100%; height: 200px; object-fit: cover;">
+
                 <div class="card-body">
-                    <h6 th:text="${book.title ?: '제목 미정'}">도서 제목</h6>
-                    <p>출판사: <span th:text="${book.publisher ?: '미정'}"></span></p>
-                    <p>
-                        <span class="fw-bold text-primary"
+                    <!-- 도서 제목 -->
+                    <h6 class="card-title fw-bold" th:text="${book.title ?: '제목 미정'}">도서 제목</h6>
+
+                    <!-- 출판사 -->
+                    <p class="card-text text-muted small">출판사:
+                        <span th:text="${book.publisher ?: '미정'}"></span>
+                    </p>
+
+                    <!-- 가격 -->
+                    <p class="card-text">
+                        <span class="text-decoration-line-through text-secondary small"
+                              th:if="${book.saleprice != null}"
+                              th:text="${book.price}"></span>
+                        <span class="fw-bold"
                               th:text="${book.saleprice != null ? book.saleprice : book.price}"></span> 원
                     </p>
-                    <a class="btn w-100" th:href="@{'/books/' + ${book.bookId}}">📖 상세보기</a>
+
+                    <!-- 상세보기 버튼 -->
+                    <a href="#" class="btn btn-main w-100" th:href="@{'/books/' + ${book.bookId}}">상세보기</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 📌 페이지 네비게이션 -->
-    <nav aria-label="도서 페이지네이션" class="mt-4">
+    <!-- 페이지 네비게이션 -->
+    <nav aria-label="Page navigation" class="mt-4">
         <ul class="pagination justify-content-center">
+            <!-- 이전 버튼 -->
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} - 1) + '&size=' + ${size} + '&sort=' + ${sort}}">◀ 이전</a>
+                   th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} - 1) + '&size=' + ${size} + '&sort=' + ${sort}}">이전</a>
             </li>
+
+            <!-- 페이지 번호 -->
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
                 th:classappend="${i == currentPage} ? 'active'">
                 <a class="page-link"
                    th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + ${i} + '&size=' + ${size} + '&sort=' + ${sort}}"
                    th:text="${i}"></a>
             </li>
+
+            <!-- 다음 버튼 -->
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} + 1) + '&size=' + ${size} + '&sort=' + ${sort}}">다음 ▶</a>
+                   th:href="@{'/books/tag/' + ${currentTagId} + '?page=' + (${currentPage} + 1) + '&size=' + ${size} + '&sort=' + ${sort}}">다음</a>
             </li>
         </ul>
     </nav>
+
+    <!-- 메인 페이지로 이동 버튼 -->
+    <footer>
+        <a href="/" class="btn btn-main mt-4">메인 페이지로 이동</a>
+    </footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

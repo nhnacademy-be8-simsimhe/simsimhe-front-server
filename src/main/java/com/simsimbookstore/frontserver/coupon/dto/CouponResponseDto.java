@@ -44,6 +44,4 @@ public abstract class CouponResponseDto {
     private Long couponTargetId; //추후 고민
 
     private DisCountType disCountType;
-
-    private Long userId;
 }
