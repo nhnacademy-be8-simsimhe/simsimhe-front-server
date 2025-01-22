@@ -3,7 +3,6 @@ package com.simsimbookstore.frontserver.elastic.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 @RequiredArgsConstructor
