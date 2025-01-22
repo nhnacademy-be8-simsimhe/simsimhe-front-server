@@ -4,63 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coupon Policy Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .conditional { display: none; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f7f6;
+            color: #5a5a5a;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #e87576;
+            margin: 20px 0;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            font-weight: bold;
+            color: #333;
+        }
+        input, select, textarea, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #e87576;
+            outline: none;
+            box-shadow: 0 0 5px rgba(232, 117, 118, 0.5);
+        }
+        button {
+            background-color: #e87576;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #d76464;
+        }
+        .conditional {
+            display: none;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .note {
+            font-size: 0.9rem;
+            color: #777;
+        }
     </style>
 </head>
 <body>
 <h1>쿠폰 정책 등록</h1>
 <form action="/admin/couponPolicies/create" method="post">
     <!-- Coupon Policy Name -->
-    <label for="couponPolicyName">쿠폰 정책 이름:</label><br>
-    <input type="text" id="couponPolicyName" name="couponPolicyName" maxlength="100" required>
-    <span>최대 100 글자</span>
-    <br><br>
+    <div class="form-group">
+        <label for="couponPolicyName">쿠폰 정책 이름:</label>
+        <input type="text" id="couponPolicyName" name="couponPolicyName" maxlength="100" required>
+        <span class="note">최대 100 글자</span>
+    </div>
 
     <!-- Discount Type -->
-    <label for="discountType">할인 형태:</label><br>
-    <select id="discountType" name="discountType" required>
-        <option value="">-- 할인 형태 --</option>
-        <option value="RATE">정률</option>
-        <option value="FIX">정액</option>
-    </select>
-    <br><br>
+    <div class="form-group">
+        <label for="discountType">할인 형태:</label>
+        <select id="discountType" name="discountType" required>
+            <option value="">-- 할인 형태 --</option>
+            <option value="RATE">정률</option>
+            <option value="FIX">정액</option>
+        </select>
+    </div>
 
     <!-- Discount Price -->
-    <div id="discountPriceField" class="conditional">
-        <label for="discountPrice">할인 금액:</label><br>
+    <div id="discountPriceField" class="form-group conditional">
+        <label for="discountPrice">할인 금액:</label>
         <input type="number" id="discountPrice" name="discountPrice" step="100" min="0">
-        <br><br>
     </div>
 
     <!-- Discount Rate -->
-    <div id="discountRateField" class="conditional">
-        <label for="discountRate">할인률:</label><br>
+    <div id="discountRateField" class="form-group conditional">
+        <label for="discountRate">할인률:</label>
         <input type="number" id="discountRate" name="discountRate" step="1" min="0">
-        <br><br>
     </div>
 
     <!-- Max Discount Amount -->
-    <div id="maxDiscountAmountField" class="conditional">
-        <label for="maxDiscountAmount">최대 할인 금액:</label><br>
+    <div id="maxDiscountAmountField" class="form-group conditional">
+        <label for="maxDiscountAmount">최대 할인 금액:</label>
         <input type="number" id="maxDiscountAmount" name="maxDiscountAmount" step="100" min="0">
-        <br><br>
     </div>
 
     <!-- Min Order Amount -->
-    <div id="minOrderAmountField" class="conditional">
-        <label for="minOrderAmount">최소 주문 금액:</label><br>
+    <div id="minOrderAmountField" class="form-group conditional">
+        <label for="minOrderAmount">최소 주문 금액:</label>
         <input type="number" id="minOrderAmount" name="minOrderAmount" step="100" min="0">
-        <br><br>
     </div>
 
     <!-- Policy Description -->
-    <label for="policyDescription">정책 설명:</label><br>
-    <textarea id="policyDescription" name="policyDescription" maxlength="1000" required></textarea>
-    <span>최대 100글자</span>
-    <br><br>
+    <div class="form-group">
+        <label for="policyDescription">정책 설명:</label>
+        <textarea id="policyDescription" name="policyDescription" maxlength="1000" required></textarea>
+        <span class="note">최대 1000 글자</span>
+    </div>
 
-    <button type="submit">Submit</button>
+    <button type="submit">등록하기</button>
 </form>
 
 <script>
