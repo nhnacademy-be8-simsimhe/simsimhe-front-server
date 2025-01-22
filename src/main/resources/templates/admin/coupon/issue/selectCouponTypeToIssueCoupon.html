@@ -3,80 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <title>쿠폰 타입 선택</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f7f6;
+            color: #5a5a5a;
+            margin: 0;
+            padding: 20px;
         }
-        h1, h2 {
-            color: #333;
+        h1 {
+            text-align: center;
+            color: #e87576;
+            margin-bottom: 30px;
         }
         .form-step {
-            background-color: #fff;
+            background-color: white;
             padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         th, td {
-            padding: 12px;
             border: 1px solid #ddd;
-            text-align: left;
+            padding: 12px;
+            text-align: center;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #f8e9e9;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #fef2f2;
         }
         .pagination {
             display: flex;
             justify-content: center;
             align-items: center;
             margin-top: 20px;
+            list-style: none;
+            padding: 0;
         }
-        .pagination a, .pagination span {
-            margin: 0 5px;
-            padding: 8px 12px;
+        .pagination a {
             text-decoration: none;
-            color: #007BFF;
-            border: 1px solid #ddd;
-            border-radius: 3px;
+            color: #e87576;
+            padding: 8px 12px;
+            border: 1px solid #e87576;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+        .pagination a:hover {
+            background-color: #e87576;
+            color: white;
         }
         .pagination .disabled {
             color: #ccc;
-            border-color: #ccc;
             pointer-events: none;
         }
-        .pagination .active {
-            background-color: #007BFF;
+        .pagination .active a {
+            background-color: #e87576;
             color: white;
-            border-color: #007BFF;
-        }
-        .button-group {
-            margin-top: 20px;
         }
         .button-group button {
-            padding: 8px 12px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #e87576;
+            color: white;
             font-size: 1em;
             cursor: pointer;
-            border: none;
-            border-radius: 3px;
-            background-color: #28a745;
-            color: white;
         }
         .button-group button:hover {
-            background-color: #218838;
+            background-color: #d76464;
         }
-        /* 반응형 디자인 */
         @media (max-width: 800px) {
             table, th, td {
                 font-size: 0.9em;
             }
-            .pagination a, .pagination span {
+            .pagination a {
                 padding: 6px 8px;
                 margin: 0 3px;
             }
@@ -104,7 +116,6 @@
         </tr>
         </thead>
         <tbody>
-        <!-- couponTypePage.content : PageResponseDto<CouponTypeResponseDto>.content 라고 가정 -->
         <tr th:each="type : ${couponTypePage.content}">
             <td th:text="${type.couponTypeId}">1</td>
             <td th:text="${type.couponTypeName}">쿠폰 타입명</td>
@@ -115,7 +126,6 @@
             <td th:text="${type.couponTypes.name}">ALL / BOOK / CATEGORY</td>
             <td th:text="${type.couponTargetName != null ? type.couponTargetName : '-'}">-</td>
             <td>
-                <!-- 예시: 선택 버튼 -> /admin/couponTypes/confirm?couponTypeId=... -->
                 <form th:action="@{/admin/coupons/issue}" method="get">
                     <input type="hidden" name="couponTypeId" th:value="${type.couponTypeId}" />
                     <input type="hidden" name="couponTypeName" th:value="${type.getCouponTypeName()}">
@@ -124,32 +134,24 @@
             </td>
         </tr>
         <tr th:if="${#lists.isEmpty(couponTypePage.content)}">
-            <td colspan="10">표시할 쿠폰 타입이 없습니다.</td>
+            <td colspan="9">표시할 쿠폰 타입이 없습니다.</td>
         </tr>
         </tbody>
     </table>
 
-    <!-- 페이지네이션 컨트롤 -->
     <div class="pagination">
-        <!-- 이전 페이지 링크 -->
         <span th:if="${!couponTypePage.first}">
-            <a th:href="@{/couponTypes/list(page=${couponTypePage.number - 1}, size=${couponTypePage.size})}">
-                이전
-            </a>
+            <a th:href="@{/couponTypes/list(page=${couponTypePage.number - 1}, size=${couponTypePage.size})}">이전</a>
         </span>
         <span th:if="${couponTypePage.first}" class="disabled">이전</span>
 
-        <!-- 현재 페이지 정보 -->
         <span>
             페이지 <span th:text="${couponTypePage.number + 1}">1</span>
             / <span th:text="${couponTypePage.totalPages}">3</span>
         </span>
 
-        <!-- 다음 페이지 링크 -->
         <span th:if="${!couponTypePage.last}">
-            <a th:href="@{/couponTypes/list(page=${couponTypePage.number + 1}, size=${couponTypePage.size})}">
-                다음
-            </a>
+            <a th:href="@{/couponTypes/list(page=${couponTypePage.number + 1}, size=${couponTypePage.size})}">다음</a>
         </span>
         <span th:if="${couponTypePage.last}" class="disabled">다음</span>
     </div>
