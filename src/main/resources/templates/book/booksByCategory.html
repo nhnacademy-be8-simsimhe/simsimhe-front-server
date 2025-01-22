@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>:books: 심심이의 서재 - 카테고리 목록</title>
+    <title>심심이의 서재 - 카테고리 목록</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -220,7 +220,7 @@
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{'/books/category/' + ${categoryId} + '?page=' + (${currentPage} - 1) + '&size=' + ${size} + '&sort=' + ${sort}}">:arrow_backward:
+                   th:href="@{'/books/category/' + ${categoryId} + '?page=' + (${currentPage} - 1) + '&size=' + ${size} + '&sort=' + ${sort}}">◀︎
                     이전</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
@@ -232,7 +232,7 @@
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                 <a class="page-link"
                    th:href="@{'/books/category/' + ${categoryId} + '?page=' + (${currentPage} + 1) + '&size=' + ${size} + '&sort=' + ${sort}}">다음
-                    :arrow_forward:</a>
+                    ▶︎</a>
             </li>
         </ul>
     </nav>

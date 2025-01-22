@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order List</title>
+</head>
+<body>
+<h1>Order List</h1>
+
+<!-- 주문 목록 테이블 -->
+<table border="1">
+    <thead>
+    <tr>
+        <th>Order ID</th>
+        <th>Order Number</th>
+        <th>Total Price</th>
+        <th>Detail</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${pageResponse.data}">
+        <td th:text="${order.orderId}"></td>
+        <td th:text="${order.orderNumber}"></td>
+        <td th:text="${order.totalPrice}"></td>
+        <td>
+            <a th:href="@{/admin/orders/{orderId}(orderId=${order.orderId})}">
+                View Detail
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이지네이션 -->
+<div>
+  <span>
+    Page:
+    <b th:text="${pageResponse.currentPage}"></b>
+    /
+    <b th:text="${pageResponse.totalPage}"></b>
+  </span>
+    <div>
+    <span th:each="i : ${#numbers.sequence(pageResponse.startPage, pageResponse.endPage)}">
+      <a th:href="@{/admin/orders(page=${i})}"
+         th:text="${i}"
+         th:style="'margin:5px; text-decoration:none;' + (i == ${pageResponse.currentPage} ? 'color:red;' : 'color:blue;')">
+      </a>
+    </span>
+    </div>
+</div>
+
+</body>
+</html>

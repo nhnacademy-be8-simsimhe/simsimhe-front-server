@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>:pushpin: 사용자 위시리스트</title>
+    <title> 사용자 위시리스트</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -188,7 +188,7 @@
     </div>
 
     <!-- :book: 위시리스트 -->
-    <h4 class="text-center mb-4 text-primary" th:if="${message == null}">:pushpin: Wishlist</h4>
+    <h4 class="text-center mb-4 text-primary" th:if="${message == null}">❤️ Wishlist</h4>
     <div class="row" th:if="${books != null and not #lists.isEmpty(books)}">
         <div class="col-md-3 mb-4" th:each="book : ${books}">
             <div class="card book-card h-100">
