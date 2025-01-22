@@ -60,6 +60,48 @@
     textarea {
       resize: none;
     }
+
+    textarea:focus {
+      border-color: #F86D72; /* 활성화 시 테두리색 변경 */
+      outline: none; /* 기본 아웃라인 제거 */
+    }
+
+    .register-btn {
+      padding: 8px 16px;
+      border: 1px solid #F86D72;
+      background-color: white; /* 비활성화 상태 색상 */
+      color: #F86D72;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: background-color 0.3s, color 0.3s;
+      white-space: nowrap;
+    }
+
+    .register-btn.active{
+      background-color: #F86D72; /* 활성화 상태 색상 (빨간색) */
+      color: #F6F6F6;
+    }
+
+    .register-btn:hover{
+      background-color: #F6F6F6; /* 비활성화 버튼 hover 색상 */
+    }
+
+    .comment-input {
+      display: flex; /* Flexbox 활성화 */
+      align-items: center; /* 세로축 정렬 */
+      gap: 10px; /* 요소 간 간격 */
+    }
+
+    textarea.form-control:focus {
+      outline: none;
+      box-shadow: none; /* Bootstrap의 기본 파란색 그림자 제거 */
+      border: 2px solid red; /* 빨간색 테두리 적용 */
+    }
+
+
+
+
   </style>
 </head>
 <body>
@@ -87,7 +129,7 @@
   <form class="comment-input" th:action="@{/reviews/{reviewId}/comments(reviewId=${reviewId})}" method="post">
     <textarea class="form-control" name="content" rows="2" placeholder="댓글 입력"></textarea>
     <div class="text-end mt-2">
-      <button type="submit" class="btn btn-primary">등록</button>
+      <button type="submit" class="register-btn" >등록</button>
     </div>
   </form>
 
