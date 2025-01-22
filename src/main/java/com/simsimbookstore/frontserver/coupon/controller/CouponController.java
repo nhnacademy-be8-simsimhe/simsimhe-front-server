@@ -2,7 +2,6 @@ package com.simsimbookstore.frontserver.coupon.controller;
 
 import com.simsimbookstore.frontserver.coupon.dto.CouponResponseDto;
 import com.simsimbookstore.frontserver.coupon.dto.PageResponseDto;
-import com.simsimbookstore.frontserver.coupon.dto.UserCouponDiscountResponseDto;
 import com.simsimbookstore.frontserver.coupon.service.CouponService;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CouponController {
     private final CouponService couponService;
 
-    @GetMapping("/users/coupons")
+    @GetMapping("/user/coupons")
     public String getUserUnUsedCoupons(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size,
@@ -33,18 +32,6 @@ public class CouponController {
         PageResponseDto<CouponResponseDto> unusedCoupon = couponService.getUnusedCoupon(userId, page, size);
         model.addAttribute("unusedCoupon", unusedCoupon);
         return "users/myPage/coupons";
-    }
-
-    @GetMapping("/users/coupon-discount")
-    public String getUserCouponDiscount(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                        @RequestParam(defaultValue = "0") int page,
-                                        @RequestParam(defaultValue = "10") int size,
-                                        Model model) {
-        Long userId = customUserDetails.getUserId();
-        PageResponseDto<UserCouponDiscountResponseDto> userCouponDiscount = couponService.getUserCouponDiscount(userId, page, size);
-        model.addAttribute("userCouponDiscount", userCouponDiscount);
-        return "users/myPage/couponDiscounts";
-
     }
 
 

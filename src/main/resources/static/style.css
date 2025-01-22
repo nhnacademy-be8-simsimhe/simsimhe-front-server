@@ -1273,10 +1273,7 @@ th{
   filter: grayscale(0%);
   opacity: 1;
 }
-.main-logo{
-  width: 180px;
-  height: auto;
-}
+
 /* 4.8 Instagram
 /*----------------------------------------------*/
 .instagram-item .icon-overlay {
