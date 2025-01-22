@@ -3,7 +3,113 @@
 <head>
     <title th:text="${book.title} + ' - 상세정보'">Book Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!--    <link rel="stylesheet" href="/style.css">-->
     <style>
+
+
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            height: 100px !important; /* 네비게이션 바 높이 증가 */
+            padding: 15px 0 !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        /* :white_check_mark: 로고 크기 조정 */
+        .navbar-brand img {
+            height: 60px !important; /* 네비게이션 바 높이에 맞게 조정 */
+        }
+
+        /* :white_check_mark: 네비게이션 항목 크기 줄이기 */
+        .navbar-nav .nav-link {
+            font-size: 1.4rem !important; /* :white_check_mark: 너무 크던 폰트 크기 조정 */
+            font-weight: 600 !important;
+            padding: 10px 20px !important;
+            color: #333 !important;
+        }
+
+        /* :white_check_mark: 네비게이션 항목 간격 조정 */
+        .navbar-nav {
+            gap: 15px !important; /* :white_check_mark: 메뉴 간격 줄이기 */
+        }
+
+        /* :white_check_mark: 드롭다운 항목 크기 조정 */
+        .dropdown-menu .dropdown-item {
+            font-size: 1.2rem !important; /* :white_check_mark: 드롭다운 폰트 크기 줄이기 */
+        }
+
+        /* :white_check_mark: 햄버거 메뉴 크기 조정 */
+        .navbar-toggler {
+            border: none !important;
+            outline: none !important;
+            font-size: 1.6rem !important; /* :white_check_mark: 크기 조금 줄이기 */
+            padding: 10px !important;
+        }
+
+        /* :white_check_mark: 모바일에서도 크기 유지 */
+        @media (max-width: 992px) {
+            .navbar {
+                height: 90px !important; /* :white_check_mark: 모바일에서 높이 조정 */
+                padding: 20px 0 !important;
+            }
+
+            .navbar-nav .nav-link {
+                font-size: 1.6rem !important; /* :white_check_mark: 모바일에서도 적절한 크기 */
+                padding: 15px !important;
+            }
+
+            .navbar-brand img {
+                height: 50px !important; /* :white_check_mark: 모바일에서 로고 크기 조정 */
+            }
+        }
+
+
+        /* :white_check_mark: 도서 카드 스타일 */
+        .book-card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .book-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .book-card .card-body {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .book-card h6 {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .book-card p {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .book-card .btn {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            padding: 10px;
+        }
+
+
+
+
+
 
         .review-container {
             display: flex;
@@ -249,12 +355,105 @@
         }
 
 
+        .search-form {
+            position: relative;
+            width: 200%;
+            margin: 0 auto; /* 중앙 정렬 */
+            display: flex;
+            justify-content: center; /* 내부 요소를 중앙 정렬 */
+        }
+
+        .search-form input[type="search"].search-field {
+            border: none;
+            background: #f1f1f1; /* 배경색 */
+            width: 100%; /* 입력창 너비 */
+            border-radius: 50px; /* 둥근 테두리 */
+            padding: 10px 20px; /* 내부 패딩 */
+            padding-right: 45px; /* 버튼 공간 확보 */
+            box-sizing: border-box; /* 박스 크기 계산 */
+        }
+
+        .search-form input[type="search"].search-field:focus {
+            border-color: #af9aaa; /* 포커스 시 테두리 색상 */
+            outline: none; /* 포커스 시 외곽선 제거 */
+        }
+
+        .search-form button {
+            position: absolute;
+            top: 50%;
+            right: 20px; /* 입력창 내부 오른쪽 여백 */
+            transform: translateY(-50%); /* 세로 정렬 */
+            background: transparent;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .search-form button svg {
+            width: 24px; /* 아이콘 크기 */
+            height: 24px;
+            color: #272727; /* 아이콘 색상 */
+        }
+
+
 
 
     </style>
 </head>
 <body>
-<div th:replace="~{reviews/searchNav.html}"></div>
+<!--<div th:replace="~{reviews/searchNav.html}"></div>-->
+
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="/images/main-logo2.png" class="logo main-logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item search-box">
+                    <form role="search" method="get" class="search-form" action="/search">
+                        <input type="search" id="search-form" class="search-field" placeholder="Type and press enter" value=""
+                               name="keyword" required/>
+                        <button type="submit" class="search-submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="me-1">
+                                <path fill-rule="evenodd"
+                                      d="M11.5 2.75a8.75 8.75 0 1 0 0 17.5a8.75 8.75 0 0 0 0-17.5M1.25 11.5c0-5.66 4.59-10.25 10.25-10.25S21.75 5.84 21.75 11.5c0 2.56-.939 4.902-2.491 6.698l3.271 3.272a.75.75 0 1 1-1.06 1.06l-3.272-3.271A10.21 10.21 0 0 1 11.5 21.75c-5.66 0-10.25-4.59-10.25-10.25"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </form>
+                </li>
+
+<!--                <li class="nav-item"><a class="nav-link active" href="/">🏠 Home</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link" href="/users/myPage/user/userInfo">📙 My Page</a></li>-->
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                <!-- 오른쪽 홈 버튼 -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        <i class="bi bi-house-door-fill"></i> 홈
+                    </a>
+                </li>
+                <!-- 오른쪽 장바구니 버튼 -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/carts/customer">
+                        <i class="bi bi-cart-fill"></i> 장바구니
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+
+
 <input type="hidden" id="loginUserId" th:value="${loginUserId}" />
 <div class="container mt-5">
     <!-- 도서 제목 -->
