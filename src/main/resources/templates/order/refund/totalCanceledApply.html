@@ -79,20 +79,18 @@
         <label>전체 환불 신청</label>
       </div>
 
-      <form method="post" th:action="'/shop/users/orders/detail/' + ${orderNumber} + '/refund'">
+      <form method="post" th:action="@{/shop/users/orders/{orderNumber}/cancel(orderNumber=${orderNumber})}">
       <div class="form-group">
         <label>상품 이름
-<!--          <input type="text" readonly name="orderName" th:text="${orderName}">-->
           <span th:text="${orderName}"></span>
         </label>
         <label>수량
-<!--          <input type="text" readonly name="quantity" th:text="${quantity}">-->
           <span th:text="${quantity}"></span>
         </label>
         <label>환불 사유
-        <!-- for="canceledReason" -->
           <input type="text" id="canceledReason" name="canceledReason" required placeholder="환불 사유를 입력해주세요">
         </label>
+        <input type="hidden" name="orderBookId" th:value="${orderBookId}" />
       </div>
 
         <div class="button-group">

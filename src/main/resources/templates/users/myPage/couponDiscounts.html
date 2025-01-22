@@ -2,107 +2,126 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>쿠폰 할인 내역</title>
+    <title>사용자 쿠폰 할인 목록</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f7f6;
+            color: #5a5a5a;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 50px;
         }
         h1 {
-            color: #333;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #e87576;
         }
         table {
-            width: 100%;
-            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
         }
         th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
+            padding: 15px;
+            text-align: center;
         }
         th {
-            background-color: #f4f4f4;
+            background-color: #f8e9e9 !important;
+            font-weight: bold;
+        }
+        tbody tr:nth-child(1) {
+            background-color: #fff;
         }
         tr:nth-child(even) {
-            background-color: #fafafa;
+            background-color: #fef2f2;
         }
+
         .pagination {
-            margin-top: 20px;
             display: flex;
             justify-content: center;
-            list-style: none;
-            padding: 0;
-        }
-        .pagination li {
-            margin: 0 5px;
+            margin-top: 20px;
         }
         .pagination a {
-            display: block;
-            padding: 8px 12px;
+            color: #e87576;
             text-decoration: none;
-            color: #007bff;
-            border: 1px solid #ddd;
+            padding: 8px 12px;
+            margin: 0 5px;
             border-radius: 4px;
+            border: 1px solid #ddd;
         }
-        .pagination .active a {
-            background-color: #007bff;
+        .pagination a.active {
+            background-color: #e87576;
             color: white;
-            border-color: #007bff;
         }
-        .pagination .disabled a {
-            color: #ccc;
+        .pagination a.disabled {
             pointer-events: none;
-            border-color: #ddd;
+            color: #ccc;
         }
     </style>
 </head>
 <body>
-<h1>사용자 쿠폰 할인 목록</h1>
-<table>
-    <thead>
-    <tr>
-        <th>쿠폰 이름</th>
-        <th>책 제목</th>
-        <th>할인 금액</th>
-        <th>사용 날짜</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="coupon : ${userCouponDiscount.content}">
-        <td th:text="${coupon.couponName}">쿠폰 이름</td>
-        <td th:text="${coupon.bookTitle}">책 제목</td>
-        <td th:text="${#numbers.formatDecimal(coupon.discountPrice, 1, 'COMMA', 0, 'POINT')} + '원'">할인 금액</td>
-        <td th:text="${#temporals.format(coupon.useDate, 'yyyy-MM-dd HH:mm')}">사용 날짜</td>
-    </tr>
-    <tr th:if="${#lists.isEmpty(userCouponDiscount.content)}">
-        <td colspan="4">쿠폰 할인 내역이 없습니다.</td>
-    </tr>
-    </tbody>
-</table>
+<div class="container">
+    <div th:replace="~{users/myPage/myPageNav.html}"></div>
 
-<!-- 페이징 네비게이션 -->
-<ul class="pagination">
-    <!-- 이전 페이지 링크 -->
-    <li th:classappend="${userCouponDiscount.first} ? 'disabled'">
-        <a th:href="@{/users/coupon-discount(page=${userCouponDiscount.number - 1}, size=${userCouponDiscount.size})}"
-           th:if="${!userCouponDiscount.first}">이전</a>
-        <a th:if="${userCouponDiscount.first}" href="#">이전</a>
-    </li>
+    <h1>사용자 쿠폰 할인 목록</h1>
 
-    <!-- 페이지 번호 링크 -->
-    <li th:each="i : ${#numbers.sequence(0, userCouponDiscount.totalPages - 1)}"
-        th:classappend="${i == userCouponDiscount.number} ? 'active'">
-        <a th:href="@{/users/coupon-discount(page=${i}, size=${userCouponDiscount.size})}"
-           th:text="${i + 1}">1</a>
-    </li>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>쿠폰 이름</th>
+                <th>책 제목</th>
+                <th>할인 금액</th>
+                <th>사용 날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="coupon, iterStat : ${userCouponDiscount.content}" th:classappend="${iterStat.index == 0} ? 'highlight' : ''">
+                <td th:text="${coupon.couponName}">쿠폰 이름</td>
+                <td th:text="${coupon.bookTitle}">책 제목</td>
+                <td th:text="${#numbers.formatDecimal(coupon.discountPrice, 1, 'COMMA', 0, 'POINT')} + '원'">할인 금액</td>
+                <td th:text="${#temporals.format(coupon.useDate, 'yyyy-MM-dd HH:mm')}">사용 날짜</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(userCouponDiscount.content)}">
+                <td colspan="4">쿠폰 할인 내역이 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <!-- 다음 페이지 링크 -->
-    <li th:classappend="${userCouponDiscount.last} ? 'disabled'">
-        <a th:href="@{/users/coupon-discount(page=${userCouponDiscount.number + 1}, size=${userCouponDiscount.size})}"
-           th:if="${!userCouponDiscount.last}">다음</a>
-        <a th:if="${userCouponDiscount.last}" href="#">다음</a>
-    </li>
-</ul>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!-- 이전 페이지 링크 -->
+            <li th:classappend="${userCouponDiscount.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/users/coupon-discount(page=${userCouponDiscount.number - 1}, size=${userCouponDiscount.size})}"
+                   th:if="${!userCouponDiscount.first}">이전</a>
+                <a class="page-link" th:if="${userCouponDiscount.first}" href="#">이전</a>
+            </li>
+
+            <!-- 페이지 번호 링크 -->
+            <li th:each="i : ${#numbers.sequence(0, userCouponDiscount.totalPages - 1)}"
+                th:classappend="${i == userCouponDiscount.number} ? 'active'">
+                <a class="page-link" th:href="@{/users/coupon-discount(page=${i}, size=${userCouponDiscount.size})}"
+                   th:text="${i + 1}">1</a>
+            </li>
+
+            <!-- 다음 페이지 링크 -->
+            <li th:classappend="${userCouponDiscount.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/users/coupon-discount(page=${userCouponDiscount.number + 1}, size=${userCouponDiscount.size})}"
+                   th:if="${!userCouponDiscount.last}">다음</a>
+                <a class="page-link" th:if="${userCouponDiscount.last}" href="#">다음</a>
+            </li>
+        </ul>
+    </nav>
+</div>
 </body>
 </html>

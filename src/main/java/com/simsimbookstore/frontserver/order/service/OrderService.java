@@ -1,9 +1,6 @@
 package com.simsimbookstore.frontserver.order.service;
 
-import com.simsimbookstore.frontserver.order.client.OrderCanceledClient;
-import com.simsimbookstore.frontserver.order.client.OrderClient;
-import com.simsimbookstore.frontserver.order.client.OrderDetailClient;
-import com.simsimbookstore.frontserver.order.client.OrderHistoryClient;
+import com.simsimbookstore.frontserver.order.client.*;
 import com.simsimbookstore.frontserver.order.dto.*;
 import com.simsimbookstore.frontserver.util.PageResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +19,7 @@ public class OrderService {
     private final OrderHistoryClient orderHistoryClient;
     private final OrderDetailClient orderDetailClient;
     private final OrderCanceledClient orderCanceledClient;
+    private final OrderRefundClient orderRefundClient;
 
     @Transactional
     public List<BookListResponseDto> doGuestOrder(List<BookListRequestDto> dtos) {
@@ -54,7 +52,12 @@ public class OrderService {
     }
 
     // 결제 취소 신청
-    public void applyCanceled(String orderNumber, Long userId, String canceledReason) {
-        orderCanceledClient.applyCanceled(orderNumber, userId, canceledReason);
+    public void applyCanceled(String orderNumber, Long userId, CancelRequestDto cancelRequestDto) {
+        orderCanceledClient.applyCanceled(orderNumber, userId, cancelRequestDto);
+    }
+
+    // 주문 취소 신청
+    public void applyRefund(Long userId, String orderNumber, ReturnRequestDto returnRequestDto) {
+        orderRefundClient.applyRefund(userId, orderNumber, returnRequestDto);
     }
 }

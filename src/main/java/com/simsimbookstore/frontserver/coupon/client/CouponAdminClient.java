@@ -1,5 +1,6 @@
 package com.simsimbookstore.frontserver.coupon.client;
 
+import com.simsimbookstore.frontserver.config.AuthenticationFeignConfig;
 import com.simsimbookstore.frontserver.coupon.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "coupon-admin-api-server", url = "http://localhost:8000/api/admin")
+@FeignClient(name = "coupon-admin-api-server", url = "http://localhost:8000/api/admin",configuration = AuthenticationFeignConfig.class)
 public interface CouponAdminClient {
     @PostMapping("/couponPolicies")
     public CouponPolicyResponseDto createCouponPolicy(@RequestBody CouponPolicyRequestDto requestDto);
