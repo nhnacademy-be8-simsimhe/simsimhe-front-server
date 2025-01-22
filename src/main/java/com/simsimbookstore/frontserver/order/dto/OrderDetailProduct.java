@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDetailProduct {
+    private Long orderBookId;
     private String bookTitle;  // ㅇㅇ 외 1건 > book_id로 book 테이블의 title 가져오기
     private int quantity;
     private BigDecimal originalPrice;  // 판매 금액

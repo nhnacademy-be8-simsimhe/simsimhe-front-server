@@ -4,8 +4,6 @@ import com.simsimbookstore.frontserver.order.dto.OrderFacadeRequestDto;
 import com.simsimbookstore.frontserver.order.dto.RetryOrderRequestDto;
 import com.simsimbookstore.frontserver.payment.client.PaymentClient;
 import com.simsimbookstore.frontserver.payment.dto.ConfirmResponseDto;
-import com.simsimbookstore.frontserver.payment.dto.SuccessRequestDto;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
