@@ -198,9 +198,9 @@ public class BookGetController {
         model.addAttribute("totalPages", booksByTag.getTotalPage()); // 총 페이지 수
         model.addAttribute("size", size);                 // 한 페이지에 표시할 항목 수
         model.addAttribute("sort", sort);                 // 현재 정렬 기준
-        model.addAttribute("tags",tags);
-        model.addAttribute("tagName",tagName);
-        model.addAttribute("groupedCategories",groupedCategories);
+        model.addAttribute("tagName", tagName);
+        model.addAttribute("groupedCategories", groupedCategories);
+        model.addAttribute("tags", tags);
 
         return "book/bookListByTag"; // 태그별 도서 목록 뷰
     }
