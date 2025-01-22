@@ -152,7 +152,7 @@
         <td th:text="${orderList.discountPrice}"></td>
         <td th:text="${orderList.packageName} + '(' + ${orderList.packagePrice} + ')'"></td>
         <td th:text="${orderList.couponName} + '(' + ${orderList.couponPrice} + ')'"></td>
-        <td class="status-badge" th:text="${orderList.orderBookState}"></td>
+        <td class="status-badge" th:text="${orderDetail.deliveryState}"></td>
       </tr>
       </tbody>
     </table>
@@ -240,19 +240,17 @@
   </div>
 
   <div style="text-align: center;">
-    <form method="get" th:action="'/shop/users/orders/' + ${orderNumber} + '/refund'">
+    <form method="get" th:action="'/shop/users/orders/detail/' + ${orderNumber} + '/refund'">
       <div th:each="item : ${orderProductInfo}">
-        <input type="hidden" name="orderBookId" th:value="${item.orderBookId}" />
         <input type="hidden" name="orderName" th:value="${item.bookTitle}" />
         <input type="hidden" name="quantity" th:value="${item.quantity}" />
         <input type="hidden" name="orderBookState" th:value="${item.orderBookState}" />
       </div>
-      <input type="hidden" name="deliveryId" th:value="${orderDetail.deliveryId}" />
       <input type="hidden" name="deliveryState" th:value="${orderDetail.deliveryState}" />
       <input type="hidden" name="orderState" th:value="${orderDetail.orderState}" />
-      <button class="btn btn-refund" type="submit" value="전체 환불 신청"> 환불 신청 </button>
-    <button class="btn btn-secondary" onclick="goBack()">목록으로</button>
+      <button class="btn btn-refund" type="submit" value="환불 신청"> 환불 신청 </button>
     </form>
+    <button class="btn btn-secondary" onclick="goBack()">목록으로</button>
   </div>
 </div>
 

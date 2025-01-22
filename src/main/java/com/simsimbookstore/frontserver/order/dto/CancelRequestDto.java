@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CancelRequestDto {
     private String cancelReason;
-    private Long orderBookId;
     private LocalDateTime refundedAt;
 
     public CancelRequestDto() {

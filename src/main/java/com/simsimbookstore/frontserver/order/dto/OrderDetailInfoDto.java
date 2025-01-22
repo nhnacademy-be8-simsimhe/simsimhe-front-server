@@ -26,7 +26,6 @@ public class OrderDetailInfoDto {
     private BigDecimal originalTotalPrice;
 
     // delivery
-    private Long deliveryId;
     private String receiverName;
     private String receiverPhoneNumber;
     private Integer trackingNumber;

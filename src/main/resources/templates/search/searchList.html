@@ -30,6 +30,7 @@
             color: #fff;
         }
 
+        /*페이지네이션*/
         .pagination .page-item.active .page-link {
             background-color: #007bff;
             border-color: #007bff;
@@ -63,6 +64,48 @@
             border-color: #0056b3;
             color: #e0e0e0 !important; /* hover 시 글씨 색상 */
         }
+
+
+
+        .book-card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .book-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .book-card .card-body {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .book-card h6 {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .book-card p {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .book-card .btn {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
@@ -90,9 +133,31 @@
     </form>
 
     <!-- 도서 목록 -->
+
+
+
+<!--    <div class="row">-->
+<!--        <div class="col-md-3 mb-4" th:each="book : ${books}">-->
+<!--            <div class="card book-card h-100">-->
+<!--                <img th:src="${book.imagePath}" class="card-img-top">-->
+<!--                <div class="card-body">-->
+<!--                    <h6 th:text="${book.title ?: '제목 미정'}">도서 제목</h6>-->
+<!--                    <p class="card-title text-truncate fw-bold">출판사: <span-->
+<!--                            th:text="${book.publisher ?: '미정'}"></span></p>-->
+<!--                    <p>-->
+<!--                        <span class="fw-bold text-primary"-->
+<!--                              th:text="${book.saleprice != null ? book.saleprice : book.price}"></span> 원-->
+<!--                    </p>-->
+<!--                    <a class="btn w-100" th:href="@{'/books/' + ${book.bookId}}">🔎 상세보기</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
     <div class="row">
         <div class="col-md-3 mb-4" th:each="book : ${searchBooks}">
-            <div class="card h-100">
+            <div class="card book-card h-100">
                 <img th:src="${book.bookImage}" class="card-img-top rounded" alt="도서 이미지"
                      th:alt="'이미지 없음 - ' + ${book.title}"
                      style="width: 100%; height: 200px; object-fit: cover;">
