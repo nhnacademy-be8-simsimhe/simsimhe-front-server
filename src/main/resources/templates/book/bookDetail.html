@@ -108,42 +108,6 @@
             color: #f5c518; /* 마우스를 올릴 때 색상 */
         }
 
-        /*로그인 이동 모달창 스타일 지정*/
-        .custom-modal {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            max-width: 400px;
-            margin: auto;
-        }
-        .custom-modal-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .custom-modal-buttons {
-            display: flex;
-            justify-content: space-between;
-        }
-        .custom-modal-button {
-            width: 48%;
-            padding: 10px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 5px;
-        }
-        .cancel-button {
-            background-color: #e0e0e0;
-            color: black;
-        }
-        .redirect-button {
-            background-color: #6f42c1;
-            color: white;
-        }
-
-
         /*.styled-button {*/
         /*    font-size: inherit; !* 부모 요소의 폰트 크기 따름 *!*/
         /*    font-weight: normal; !* 글꼴 굵기: 보통 *!*/
@@ -254,7 +218,7 @@
     </style>
 </head>
 <body>
-<!--<div th:replace="~{reviews/searchNav.html}"></div>-->
+<div th:replace="~{reviews/searchNav.html}"></div>
 <input type="hidden" id="loginUserId" th:value="${loginUserId}" />
 <div class="container mt-5">
     <!-- 도서 제목 -->
