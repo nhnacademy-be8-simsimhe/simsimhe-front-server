@@ -158,7 +158,7 @@ public class BookGetController {
         List<BookListResponse> recommendBooks = bookGetService.getRecommendBooks(bookId, categoryIdList);
 
         // 해당 도서 리뷰 조회
-        Page<ReviewLikeCountDTO> reviews = reviewService.getAllReviewsOrderByRecent(bookId, loginUserId, 0, 10, "latest");
+        Page<ReviewLikeCountDTO> reviews = reviewService.getAllReviewsOrderByRecent(bookId, loginUserId, 0, 10,"latest");
 
         model.addAttribute("book", book);
         model.addAttribute("recommendBooks", recommendBooks);
