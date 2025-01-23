@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -78,11 +79,14 @@ public class OrderRefundController {
                                @PathVariable String orderNumber,
                                @RequestParam String canceledReason,
                                @RequestParam Integer quantity,
-                               @RequestParam boolean damaged,
+                               @RequestParam(required = false) boolean damaged,
                                @RequestParam Long orderBookId,
                                @RequestParam Long deliveryId) {
         Long userId = customUserDetails.getUserId();
 
+        if (Objects.isNull(damaged)) {
+            damaged = false;
+        }
         ReturnRequestDto returnRequestDto = new ReturnRequestDto(orderBookId, canceledReason, quantity, damaged, deliveryId);
 
         orderService.applyRefund(userId, orderNumber, returnRequestDto);
