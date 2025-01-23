@@ -58,6 +58,7 @@ public class UserInfoController {
     @GetMapping("/points")
     public String pointsHistory(@RequestParam(defaultValue = "1") int page,
                                 @RequestParam(defaultValue = "15") int size,
+                                HttpServletRequest request,
                                 Model model,
                                 @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         Long userId = customUserDetails.getUserId();
@@ -67,6 +68,7 @@ public class UserInfoController {
 
 
         model.addAttribute("pointHistoryBody", pointHistory);
+        model.addAttribute("requestURI", request.getRequestURI());
         return "users/myPage/points";
     }
 }

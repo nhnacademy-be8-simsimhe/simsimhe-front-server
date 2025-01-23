@@ -5,6 +5,7 @@ import com.simsimbookstore.frontserver.order.dto.OrderHistoryResponseDto;
 import com.simsimbookstore.frontserver.order.service.OrderService;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import com.simsimbookstore.frontserver.util.PageResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +26,7 @@ public class OrderHistoryController {
                                    @RequestParam(defaultValue = "15") int size,
                                    Model model) {
 
+
         if (customUserDetails == null) {
             return "redirect:/";
         }
@@ -35,7 +37,6 @@ public class OrderHistoryController {
 
         model.addAttribute("orderHistories", orderHistoryPage); // 이름 확인
         model.addAttribute("userId", userId);
-
         return "order/history/order_history"; // Thymeleaf 템플릿 이름
     }
 
