@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>전체 결제 취소</title>
+  <title>전체 상품 반환 신청 (구매자)</title>
   <style>
     .modal {
       display: block;
@@ -88,9 +88,12 @@
             <span th:text="${quantity}"></span>
           </label>
           <label>환불 사유
+            <!-- for="canceledReason" -->
             <input type="text" id="canceledReason" name="canceledReason" required placeholder="환불 사유를 입력해주세요">
           </label>
+          <input type="hidden" name="quantity" th:value="${quantity}" />
           <input type="hidden" name="orderBookId" th:value="${orderBookId}" />
+          <input type="hidden" name="deliveryId" th:value="${deliveryId}" />
         </div>
 
         <div class="button-group">
