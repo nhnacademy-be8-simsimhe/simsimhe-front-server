@@ -1277,6 +1277,11 @@ th{
   width: 180px;
   height: auto;
 }
+
+.main-logo-small{
+  width: 100px;
+  height: auto;
+}
 /* 4.8 Instagram
 /*----------------------------------------------*/
 .instagram-item .icon-overlay {
