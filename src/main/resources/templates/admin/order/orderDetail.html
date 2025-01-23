@@ -36,6 +36,7 @@
       <option value="IN_DELIVERY">IN_DELIVERY</option>
       <option value="COMPLETED">COMPLETED</option>
       <option value="RETURNED">RETURNED</option>
+      <option value="ORDER_CANCELED">ORDER_CANCELED</option>
       <option value="PAYMENT_CANCELED">PAYMENT_CANCELED</option>
     </select>
     <button type="submit">Update</button>
@@ -73,12 +74,13 @@
           <!-- orderId를 숨김필드로 함께 전달, 업데이트 완료 후 해당 주문 상세로 돌아가기 위함 -->
           <input type="hidden" name="orderId" th:value="${detail.orderResponseDto.orderId}"/>
 
-          <select name="newOrderState">
+          <select name="newOrderBookState">
             <option value="PENDING">PENDING</option>
             <option value="DELIVERY_READY">DELIVERY_READY</option>
             <option value="IN_DELIVERY">IN_DELIVERY</option>
             <option value="COMPLETED">COMPLETED</option>
             <option value="RETURNED">RETURNED</option>
+            <option value="CANCELED">CANCELED</option>
             <option value="ORDER_CANCELED">ORDER_CANCELED</option>
             <option value="PAYMENT_CANCELED">PAYMENT_CANCELED</option>
           </select>
