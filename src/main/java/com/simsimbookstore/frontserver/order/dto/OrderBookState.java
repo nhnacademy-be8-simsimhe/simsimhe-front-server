@@ -12,5 +12,6 @@ public enum OrderBookState {
     COMPLETED,        // 완료
     RETURNED,         // 반품
     PAYMENT_CANCELED,          // 결제취소
+    CANCELED,
     ORDER_CANCELED
 }
