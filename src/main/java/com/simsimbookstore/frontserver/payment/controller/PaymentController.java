@@ -1,11 +1,13 @@
 package com.simsimbookstore.frontserver.payment.controller;
 
+import com.simsimbookstore.frontserver.cart.service.CartService;
 import com.simsimbookstore.frontserver.order.dto.OrderFacadeRequestDto;
 import com.simsimbookstore.frontserver.order.dto.RetryOrderRequestDto;
 import com.simsimbookstore.frontserver.payment.dto.ConfirmResponseDto;
 import com.simsimbookstore.frontserver.payment.service.PaymentService;
 import com.simsimbookstore.frontserver.security.userDetails.CustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +22,7 @@ import java.math.BigDecimal;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final CartService cartService;
 
     @PostMapping
     @RequestMapping("/shop/payment")
@@ -32,8 +35,14 @@ public class PaymentController {
     public String successUrl(@RequestParam String paymentKey,
                              @RequestParam String orderId,
                              @RequestParam BigDecimal amount,
+                             @AuthenticationPrincipal CustomUserDetails customUserDetails,
+                             HttpServletRequest request,
+                             HttpServletResponse response,
                              Model model) {
         ResponseEntity<ConfirmResponseDto> confirmYN = paymentService.confirm(paymentKey, orderId, amount);
+        //장바구니 비우기
+        String customerId = cartService.getOrCreateCustomerId(customUserDetails, request, response);
+        cartService.deleteCart(customerId);
 
         if (confirmYN.getBody() != null) {
             if (confirmYN.getStatusCode().is2xxSuccessful()) {
